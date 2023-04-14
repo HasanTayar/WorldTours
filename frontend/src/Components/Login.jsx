@@ -1,32 +1,18 @@
 import { useState , useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import '../css/login.css';
-
-function Login() {
-   
+function Login({ setIsLoggedIn, setUser }) {
+   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUserState] = useState([]);
+  const [localUser, setLocalUser] = useState([]);
   const [error, setError] = useState("");
   const [showPasswordInput, setShowPasswordInput] = useState(false);
-  const [uploadsFolder, setUploadsFolder] = useState('');
-
-  useEffect(() => {
-    const getUploadsFolder = async () => {
-      try {
-        const response = await fetch('/api/uploads');
-        const { uploadsFolder } = await response.json();
-        setUploadsFolder(uploadsFolder);
-      } catch (error) {
-        console.error('Error fetching uploads folder:', error);
-      }
-    };
-  
-    getUploadsFolder();
-  }, []);
-  
-  const handleLogin = async (email, password) => {
+  const photoFile = '../userPhoto/';
+  const handleLogin = async (e , email, password) => {
+    e.preventDefault();
     try {
-      const response = await fetch('/api/users/login', {
+      const response = await fetch('/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -35,13 +21,16 @@ function Login() {
       });
       const { token, user } = await response.json();
       localStorage.setItem('token', token);
-      setUser(user);
-      setUserType(user.isOrganizer ? 'organizer' : 'user'); // check user type and set userType state accordingly
-      setIsLoggedIn(true);
+      setUser(user); // Update the user state in the App component
+      setIsLoggedIn(true); // Update the isLoggedIn state in the App component
+      navigate('/', { replace: true }); // Navigate to the homepage
     } catch (error) {
       setError(error.response.data.message);
     }
   };
+  
+  
+
   
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
@@ -57,7 +46,7 @@ function Login() {
       const data = await response.json();
   
       if (data.user) {
-        setUserState(data.user);
+        setLocalUser(data.user);
         setShowPasswordInput(true);
       } else {
         setError('No user found. Please sign up first.');
@@ -67,7 +56,6 @@ function Login() {
       setError('An error occurred while fetching user data.');
     }
   };
-  console.table(user);
   const handleResetPassword = async () => {
     try {
       await axios.post("http://your-api-url.com/resetPassword", { email });
@@ -105,9 +93,9 @@ function Login() {
           <form onSubmit={handleLogin}>
             <div className="mb-3">
               <p>
-                Welcome back, {user.firstName} {user.lastName}!
+                Welcome back, {localUser.firstName} {localUser.lastName}!
               </p>
-              <img src={`${uploadsFolder}/${user.photo}`} alt="Profile" width="100" height="100" />
+              <img src={`${photoFile}/${localUser.photo}`} alt="Profile" width="100" height="100" />
 
             </div>
             <div className="mb-3">

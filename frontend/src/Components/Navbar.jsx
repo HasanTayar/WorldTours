@@ -1,9 +1,10 @@
 import '../css/Navbar.css';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 
-const Navbar = ({ isLoggedIn, onLogout, user }) => {
+const Navbar = ({ isLoggedIn, user , onLogout  }) => {
   const location = useLocation();
-
+  console.table(user);
+ 
   const isActive = (path) => {
     return location.pathname === path ? 'active' : '';
   };
@@ -26,14 +27,14 @@ const Navbar = ({ isLoggedIn, onLogout, user }) => {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav ms-auto">
+        <ul className="navbar-nav ms-auto">
             <li className="nav-item">
               <NavLink className={`nav-link ${isActive('/about')}`} to="/about">
                 About
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" activeclassname="active" to="/chat">
+              <NavLink className={`nav-link ${isActive('/chat')}`} to="/chat">
                 Chat
               </NavLink>
             </li>
@@ -48,7 +49,7 @@ const Navbar = ({ isLoggedIn, onLogout, user }) => {
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  {user.photo && (
+                  {user && user.photo && (
                     <img
                       src={user.photo}
                       alt="User"
@@ -56,13 +57,13 @@ const Navbar = ({ isLoggedIn, onLogout, user }) => {
                       style={{ width: '30px', height: '30px' }}
                     />
                   )}
-                  {user.firstName} {user.lastName}
+                  {user && user.firstName} {user && user.lastName}
                 </a>
                 <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                   <Link className="dropdown-item" to="/profile">
                     Profile
                   </Link>
-                  {user.is_organizer && (
+                  {user && user.is_organizer && (
                     <Link className="dropdown-item" to="/add-tour">
                       Add Tour
                     </Link>
@@ -78,7 +79,7 @@ const Navbar = ({ isLoggedIn, onLogout, user }) => {
               </li>
             ) : (
               <li className="nav-item">
-                <NavLink className="nav-link" activeclassname  ="active" to="/login">
+                <NavLink className={`nav-link ${isActive('/login')}`} to="/login">
                   Login
                 </NavLink>
               </li>

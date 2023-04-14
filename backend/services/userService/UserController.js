@@ -20,7 +20,7 @@ exports.signup = async (req, res) => {
   console.log('req.file:', req.file);
 
   try {
-    const { email, firstName, lastName, password } = req.body;
+    const { email, firstName, lastName, password , phoneNumber } = req.body;
     const user = new User({
       email,
       firstName,

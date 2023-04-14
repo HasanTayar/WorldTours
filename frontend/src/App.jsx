@@ -9,23 +9,26 @@ import RegisterForm from './Components/SignupForm';
 import Login from './Components/Login';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+    setUser(null);
   };
 
   return (
     <Router>
       <div className="App">
-        <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+        <Navbar isLoggedIn={isLoggedIn} user={user} onLogout={handleLogout} />
         <div className="container mt-4">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<RegisterForm />} />
             <Route path="/verification" element={<VerificationCode />} />
-            <Route path="/login" element={<Login/>} /> 
-
-
+            <Route
+              path="/login"
+              element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />}
+            />
             {/* Add other routes as needed */}
           </Routes>
         </div>
