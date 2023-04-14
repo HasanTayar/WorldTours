@@ -43,7 +43,7 @@ function VerificationCode(props) {
   };
   const resendVerificationCode = async () => {
     try {
-      const response = await fetch('/api/resend-verification-code', {
+      const response = await fetch('/api/resendVerificationCode', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ function VerificationCode(props) {
 
   const changeEmail = async (newEmail) => {
     try {
-      const response = await fetch('/api/update-email', {
+      const response = await fetch('/api/updateEmail', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

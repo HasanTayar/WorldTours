@@ -1,15 +1,20 @@
-import { useState , useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import '../css/login.css';
+import "../css/Login.css";
 function Login({ setIsLoggedIn, setUser }) {
-   const navigate = useNavigate();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [localUser, setLocalUser] = useState([]);
   const [error, setError] = useState("");
   const [showPasswordInput, setShowPasswordInput] = useState(false);
-  const photoFile = '../userPhoto/';
-  const handleLogin = async (e , email, password) => {
+  const [unvEmail, setUnvEmail] = useState("");
+  const photoFile = "../userPhoto/";
+
+  function handleSignupClick() {
+    navigate('/register');
+  }
+  async function handleLogin(e, email, password) {
     e.preventDefault();
     try {
       const response = await fetch('/api/login', {
@@ -19,22 +24,35 @@ function Login({ setIsLoggedIn, setUser }) {
         },
         body: JSON.stringify({ email, password }),
       });
-      const { token, user } = await response.json();
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+      }
+
+      const responseData = await response.json();
+      const { token, user } = responseData;
       localStorage.setItem('token', token);
       setUser(user); // Update the user state in the App component
+      setUnvEmail(user.email);
       setIsLoggedIn(true); // Update the isLoggedIn state in the App component
+      console.table(responseData);
       navigate('/', { replace: true }); // Navigate to the homepage
     } catch (error) {
-      setError(error.response.data.message);
+      setError(error.message);
     }
-  };
-  
-  
+  }
+  if (error == 'Your email has not been verified. Please verify your email before logging in.') {
+    setTimeout(() =>
+      navigate("/verification", { state: { email } })
+      , 3000)
+  }
 
-  
-  const handleEmailSubmit = async (e) => {
+
+
+  async function handleEmailSubmit(e) {
     e.preventDefault();
-  
+
     try {
       const response = await fetch(`/api/user/${encodeURIComponent(email)}`, {
         method: 'GET',
@@ -42,9 +60,9 @@ function Login({ setIsLoggedIn, setUser }) {
           'Content-Type': 'application/json',
         },
       });
-  
+
       const data = await response.json();
-  
+
       if (data.user) {
         setLocalUser(data.user);
         setShowPasswordInput(true);
@@ -55,7 +73,7 @@ function Login({ setIsLoggedIn, setUser }) {
       console.error('Error fetching user:', error);
       setError('An error occurred while fetching user data.');
     }
-  };
+  }
   const handleResetPassword = async () => {
     try {
       await axios.post("http://your-api-url.com/resetPassword", { email });
@@ -67,66 +85,97 @@ function Login({ setIsLoggedIn, setUser }) {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <div className="Login" style={{ minWidth: '500px' }}>
-        <h1>Login</h1>
-        {error && <div className="alert alert-danger">{error}</div>}
-        {!showPasswordInput ? (
-          <form onSubmit={handleEmailSubmit}>
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label">
-                Email:
-              </label>
-              <input
-                type="email"
-                className="form-control"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <button type="submit" className="btn btn-primary">
-              Next
-            </button>
-          </form>
-        ) : (
-          <form onSubmit={handleLogin}>
-            <div className="mb-3">
-              <p>
-                Welcome back, {localUser.firstName} {localUser.lastName}!
-              </p>
-              <img src={`${photoFile}/${localUser.photo}`} alt="Profile" width="100" height="100" />
+    <div className="login-container">
+      <div className="login-content">
+        <div className="login-form">
+          {error && <div className="alert alert-danger">{error}</div>}
+          {!showPasswordInput ? (
+            <form onSubmit={handleEmailSubmit}>
+              <div className="mb-3">
+                <label htmlFor="email" className="form-label">
+                  Email:
+                </label>
+                <input
+                  type="email"
+                  className="form-control"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <button type="submit" className="btn btn-primary">
+                Next
+              </button>
+              <div className="login-footer">
+                <p>Don't have an account? Sign up now!</p>
+                <button
+                  type="button"
+                  className="btn btn-secondary signup-button"
+                  onClick={handleSignupClick}
+                >
+                  Sign Up
+                </button>
 
-            </div>
-            <div className="mb-3">
-              <label htmlFor="password" className="form-label">
-                Password:
-              </label>
-              <input
-                type="password"
-                className="form-control"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <button type="submit" className="btn btn-primary">
-              Login
-            </button>
-            <button
-              type="button"
-              className="btn btn-link"
-              onClick={handleResetPassword}
-            >
-              Forgot password?
-            </button>
-          </form>
-        )}
+              </div>
+            </form>
+          ) : (
+            <form onSubmit={(e) => handleLogin(e, email, password)}>
+              <div className="user-profile mb-3">
+                <img
+                  className="profile-image"
+                  src={`${photoFile}/${localUser.photo}`}
+                  alt="Profile"
+                />
+                <div className="welcome-text">
+                  <p>
+                    <strong>Welcome back,</strong>
+                  </p>
+                  <h2>
+                    {localUser.firstName} {localUser.lastName}!
+                  </h2>
+                </div>
+              </div>
+              <div className="mb-3">
+                <label htmlFor="password" className="form-label">
+                  Password:
+                </label>
+                <input
+                  type="password"
+                  className="form-control"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+              <button type="submit" className="btn btn-primary">
+                Login
+              </button>
+              <button
+                type="button"
+                className="btn btn-link"
+                onClick={handleResetPassword}
+              >
+                Forgot password?
+              </button>
+            </form>
+          )}
+
+        </div>
+        <div className="login-image">
+          <img
+            src="https://source.unsplash.com/random/800x600?travel"
+            alt="Travel"
+          />
+        </div>
+
       </div>
+
     </div>
   );
-};
-  
-  
-  export default Login;
-  
+
+
+
+}
+
+export default Login;
+

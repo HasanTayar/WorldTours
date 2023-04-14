@@ -1,6 +1,7 @@
+import '../css/signup.css';
 import { useState } from "react";
 import { useNavigate , useLocation } from "react-router-dom";
-
+import Spinner from "react-bootstrap/Spinner";
 function getPasswordStrength(password) {
     let strength = 0;
     if (/[a-z]/.test(password)) strength += 1;
@@ -21,8 +22,10 @@ function RegisterForm() {
     const [success, setSuccess] = useState("");
     const [userPhoto, setUserPhoto] = useState(null);
     const [previewPhoto, setPreviewPhoto] = useState('https://via.placeholder.com/150');
+    const [loading, setLoading] = useState(false);
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         if (password !== confirmPassword) {
             setError("Passwords do not match");
             return;
@@ -45,7 +48,7 @@ function RegisterForm() {
         if (userPhoto) {
             formData.append("photo", userPhoto);
         }else{
-            formData.append("photo" , 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png');
+            formData.append("photo" , 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/271deea8-e28c-41a3-aaf5-2913f5f48be6/de7834s-6515bd40-8b2c-4dc6-a843-5ac1a95a8b55.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI3MWRlZWE4LWUyOGMtNDFhMy1hYWY1LTI5MTNmNWY0OGJlNlwvZGU3ODM0cy02NTE1YmQ0MC04YjJjLTRkYzYtYTg0My01YWMxYTk1YThiNTUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.BopkDn1ptIwbmcKHdAOlYHyAOOACXW0Zfgbs0-6BY-E');
         }
         const requestOptions = {
             method: 'POST',
@@ -60,9 +63,13 @@ function RegisterForm() {
             const data = await response.json();
             console.log(data);
             setSuccess(data.message);
-            navigate("/verification", { state: { email } });
+            setTimeout(() => {
+                setLoading(false); // Set loading to false when done
+                navigate("/verification", { state: { email } });
+            }, 4000); 
 
         } catch (error) {
+            setLoading(false); // Set loading to false if there's an error
             console.log(error);
         }
     };
@@ -89,7 +96,7 @@ function RegisterForm() {
                 <div className="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 " style={{minWidth: "500px"}}>
                     <div className="card shadow-lg p-4">
                         <form onSubmit={handleSubmit} className="card-body">
-                            <h2 className="text-center mb-4">Sign Up</h2>
+                        <h2 className="text-center mb-4">Sign Up</h2>
                             <div className="d-flex justify-content-center">
                                 {previewPhoto ? (
                                     <div
@@ -232,18 +239,23 @@ function RegisterForm() {
                                     {success}
                                 </div>
                             )}
-                            <button type="submit" className="btn btn-primary">
-                                Register
+                            <button type="submit" className="btn btn-primary" disabled={loading}>
+                                {loading ? (
+                                    <Spinner animation="border" role="status" size="sm">
+                                        <span className="visually-hidden">Loading...</span>
+                                    </Spinner>
+                                ) : (
+                                    "Register"
+                                )}
                             </button>
                             <div className="text-center mt-3">
                                 Already have an account? <a href="/login">Login here</a>
                             </div>
-                           
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     );
-                            }
+}
 export default RegisterForm;
