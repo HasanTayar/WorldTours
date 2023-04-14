@@ -1,0 +1,249 @@
+import { useState } from "react";
+import { useNavigate , useLocation } from "react-router-dom";
+
+function getPasswordStrength(password) {
+    let strength = 0;
+    if (/[a-z]/.test(password)) strength += 1;
+    if (/[A-Z]/.test(password)) strength += 1;
+    if (/\d/.test(password)) strength += 1;
+    if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+    return strength;
+}
+function RegisterForm() {
+    const navigate = useNavigate();
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
+    const [userPhoto, setUserPhoto] = useState(null);
+    const [previewPhoto, setPreviewPhoto] = useState('https://via.placeholder.com/150');
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (password !== confirmPassword) {
+            setError("Passwords do not match");
+            return;
+        }
+        if (!/[A-Z]/.test(password)) {
+            setError("Password must contain at least one capital letter");
+            return;
+        }
+        if (password.length < 8 || password.length > 16) {
+            setError("Password must be between 8 and 16 characters");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("firstName", firstName);
+        formData.append("lastName", lastName);
+        formData.append("email", email);
+        formData.append("phoneNumber", phoneNumber);
+        formData.append("password", password);
+        if (userPhoto) {
+            formData.append("photo", userPhoto);
+        }else{
+            formData.append("photo" , 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png');
+        }
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+            },
+            body: formData,
+        };
+
+        try {
+            const response = await fetch('/api/signup', requestOptions);
+            const data = await response.json();
+            console.log(data);
+            setSuccess(data.message);
+            navigate("/verification", { state: { email } });
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handlePhotoChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setUserPhoto(file);
+            setPreviewPhoto(URL.createObjectURL(file));
+        } else {
+            setUserPhoto(null);
+            setPreviewPhoto(null);
+        }
+    };
+
+    const passwordStrength = getPasswordStrength(password);
+
+    return (
+        <div
+            className="container d-flex justify-content-center align-items-center"
+            style={{ minHeight: "calc(100vh - 60px)", marginTop: "60px" }}
+        >
+            <div className="row">
+                <div className="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 " style={{minWidth: "500px"}}>
+                    <div className="card shadow-lg p-4">
+                        <form onSubmit={handleSubmit} className="card-body">
+                            <h2 className="text-center mb-4">Sign Up</h2>
+                            <div className="d-flex justify-content-center">
+                                {previewPhoto ? (
+                                    <div
+                                         className="position-relative">
+                                        <img
+                                            src={previewPhoto}
+                                            alt="User"
+                                            className="img-thumbnail rounded-circle"
+                                            style={{ maxWidth: "150px", maxHeight: "150px", objectFit: "cover" }} />
+                                        <div className="position-absolute top-0 end-0">
+                                            <label htmlFor="user-photo-input" className="btn btn-secondary btn-sm">
+                                                Change Photo
+                                            </label>
+                                            <input
+                                                id="user-photo-input"
+                                                type="file"
+                                                className="d-none"
+                                                name="userPhoto"
+                                                onChange={handlePhotoChange}
+                                                accept="image/*" />
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="position-relative">
+                                        <img
+                                            src={defaultUserPhoto}
+                                            alt="Default User"
+                                            className="img-thumbnail rounded-circle"
+                                            style={{ maxWidth: "150px", maxHeight: "150px", objectFit: "cover" }} />
+                                        <div className="position-absolute top-0 end-0">
+                                            <label htmlFor="user-photo-input" className="btn btn-secondary btn-sm">
+                                                Upload Photo
+                                            </label>
+                                            <input
+                                                id="user-photo-input"
+                                                type="file"
+                                                className="d-none"
+                                                name="userPhoto"
+                                                onChange={handlePhotoChange}
+                                                accept="image/*" />
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="first-name-input" className="form-label">
+                                    First Name:
+                                </label>
+                                <input
+                                    id="first-name-input"
+                                    type="text"
+                                    className="form-control"
+                                    name="firstName"
+                                    value={firstName}
+                                    onChange={(e) => setFirstName(e.target.value)}
+                                    required />
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="last-name-input" className="form-label">
+                                    Last Name:
+                                </label>
+                                <input
+                                    id="last-name-input"
+                                    type="text"
+                                    className="form-control"
+                                    name="lastName"
+                                    value={lastName}
+                                    onChange={(e) => setLastName(e.target.value)}
+                                    required />
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="email-input" className="form-label">
+                                    Email:
+                                </label>
+                                <input
+                                    id="email-input"
+                                    type="email"
+                                    className="form-control"
+                                    name="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required />
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="phone-number-input" className="form-label">
+                                    Phone Number:
+                                </label>
+                                <input
+                                    id="phone-number-input"
+                                    type="tel"
+                                    className="form-control"
+                                    name="phoneNumber"
+                                    value={phoneNumber}
+                                    onChange={(e) => setPhoneNumber(e.target.value)}
+                                    pattern="[0-9]{10}"
+                                    required />
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="password-input" className="form-label">
+                                    Password:
+                                </label>
+
+                                <input
+                                    id="password-input"
+                                    type="password"
+                                    className="form-control"
+                                    name="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required />
+                                <div className="progress mt-2">
+                                    <div
+                                        className={`progress-bar ${passwordStrength < 2 ? "bg-danger" : passwordStrength < 4 ? "bg-warning" : "bg-success"}`}
+                                        role="progressbar"
+                                        style={{ width: `${(passwordStrength / 4) * 100}%` }}
+                                        aria-valuemin="0"
+                                        aria-valuemax="100"
+                                    ></div>
+                                </div>
+                            </div><div className="mb-3">
+                                <label htmlFor="confirm-password-input" className="form-label">
+                                    Confirm Password:
+                                </label>
+                                <input
+                                    id="confirm-password-input"
+                                    type="password"
+                                    className="form-control"
+                                    name="confirmPassword"
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    required />
+                            </div>
+                            {error && (
+                                <div className="alert alert-danger" role="alert">
+                                    {error}
+                                </div>
+                            )}
+                            {success && (
+                                <div className="alert alert-success" role="alert">
+                                    {success}
+                                </div>
+                            )}
+                            <button type="submit" className="btn btn-primary">
+                                Register
+                            </button>
+                            <div className="text-center mt-3">
+                                Already have an account? <a href="/login">Login here</a>
+                            </div>
+                           
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+                            }
+export default RegisterForm;

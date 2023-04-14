@@ -1,0 +1,11 @@
+/* Add this CSS class to your CSS file or in a <style> block */
+.profile-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .Login {
+    width: 100%;
+    min-width: 20em; /* Will be AT LEAST 20em wide */
+  }
