@@ -16,14 +16,19 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
+const UPLOADS_FOLDER = process.env.UPLOADS_FOLDER || 'uploads';
+app.get('/api/uploads', (req, res) => {
+  res.json({ uploadsFolder: 'http://localhost:5000/uploads' });
+});
 
 app.use(cors());
 app.use(express.json()); // parse JSON data in the request body
+app.use('/uploads', express.static(UPLOADS_FOLDER));
 app.post('/signup', upload.single('photo'), UserController.signup);
 app.post('/verify-email', UserController.verifyEmail);
 app.post('/login', UserController.login);
 app.put('/update-profile', UserController.updateProfile);
-app.get('/user/:userId', UserController.getUserDetails);
+app.get('/user/:userEmail', UserController.getUserDetails);
 app.put('/set-admin', UserController.setAdmin);
 app.post('/resendVerificationCode' , UserController.resendVerificationCode);
 app.post('/updateEmail' , UserController.updateEmail);

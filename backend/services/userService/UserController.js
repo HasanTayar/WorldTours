@@ -26,6 +26,7 @@ exports.signup = async (req, res) => {
       firstName,
       lastName,
       password,
+      phoneNumber,
       photo: req.file.filename, // add the filename to the user object
       verified: false,
     });
@@ -145,9 +146,9 @@ exports.updateProfile = async (req, res) => {
 
 exports.getUserDetails = async (req, res) => {
   try {
-    const { email } = req.params;
+    const { userEmail } = req.params;
 
-    const user = await User.findOne({email});
+    const user = await User.findOne({ email: decodeURIComponent(userEmail) });
 
     if (!user) {
       return res.status(404).send({ message: 'User not found' });
