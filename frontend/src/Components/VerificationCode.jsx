@@ -12,7 +12,8 @@ function VerificationCode(props) {
   const [isEmailFormVisible, setIsEmailFormVisible] = useState(false);
   const [newEmail, setNewEmail] = useState('');
   const [confirmNewEmail, setConfirmNewEmail] = useState('');
-
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(''); 
   const handleChange = (e) => {
     const { value } = e.target;
     if (value.length <= 6) {
@@ -20,7 +21,7 @@ function VerificationCode(props) {
     }
   };
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent page refresh on form submission
+    e.preventDefault();
     try {
       const response = await fetch('/api/verify-email', {
         method: 'POST',
@@ -31,16 +32,22 @@ function VerificationCode(props) {
       });
 
       if (response.ok) {
-        alert('Email verified');
-        navigate('/login');
+        setSuccess('Email verified');
+        setError('');
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000);
       } else {
-        alert('Verification failed');
+        setError('Verification failed');
+        setSuccess('');
       }
     } catch (error) {
       console.error(error);
-      alert('Verification failed');
+      setError('Verification failed');
+      setSuccess('');
     }
   };
+
   const resendVerificationCode = async () => {
     try {
       const response = await fetch('/api/resendVerificationCode', {
@@ -50,18 +57,21 @@ function VerificationCode(props) {
         },
         body: JSON.stringify({ email }),
       });
-
+  
       if (response.ok) {
-        alert('Verification code resent successfully');
+        setSuccess('Verification code resent successfully');
+        setError('');
       } else {
-        alert('Failed to resend verification code');
+        setError('Failed to resend verification code');
+        setSuccess('');
       }
     } catch (error) {
       console.error(error);
-      alert('Failed to resend verification code');
+      setError('Failed to resend verification code');
+      setSuccess('');
     }
   };
-
+  
   const changeEmail = async (newEmail) => {
     try {
       const response = await fetch('/api/updateEmail', {
@@ -71,31 +81,37 @@ function VerificationCode(props) {
         },
         body: JSON.stringify({ email, newEmail }),
       });
-
+  
       if (response.ok) {
-        alert('Email updated successfully');
-
+        setSuccess('Email updated successfully');
+        setError('');
       } else {
-        alert(response.error);
+        setError('Failed to update email');
+        setSuccess('');
       }
     } catch (error) {
       console.error(error);
-      alert('Failed to update email');
+      setError('Failed to update email');
+      setSuccess('');
     }
   };
-
+  
   const toggleEmailForm = () => {
+    setError('');
     setIsEmailFormVisible(!isEmailFormVisible);
   };
+  
 
   const handleEmailChange = () => {
     if (newEmail === confirmNewEmail) {
       changeEmail(newEmail);
       setIsEmailFormVisible(false);
     } else {
-      alert("Emails don't match.");
+      setError("Emails don't match.");
+      setSuccess('');
     }
   };
+  
 
   const handleNewEmailChange = (e) => {
     setNewEmail(e.target.value);
@@ -106,13 +122,25 @@ function VerificationCode(props) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="d-flex flex-column align-items-center verification-code-container">
-        <h2>Verify your email address</h2>
-        <p>
-          We've sent a verification code to {email}. Please enter the code below.
-        </p>
-        <div className="form-inline my-4">
+    <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+      <form onSubmit={handleSubmit}>
+        <div className="d-flex flex-column align-items-center verification-code-container">
+          <h2>Verify your email address</h2>
+          <p>
+            We've sent a verification code to {email}. Please enter the code below.
+          </p>
+          {error && (
+            <div className="alert alert-danger" role="alert">
+              {error}
+            </div>
+          )}
+          {success && (
+            <div className="alert alert-success" role="alert">
+              {success}
+            </div>
+          )}
+
+<div className="form-inline my-4">
           <input
             type="text"
             className="form-control verification-code-input"
@@ -164,10 +192,11 @@ function VerificationCode(props) {
             </button>
           </div>
         )}
-      </div>
-    </form>
+        </div>
+      </form>
+    </div>
   );
-  
 }
+
 
 export default VerificationCode;

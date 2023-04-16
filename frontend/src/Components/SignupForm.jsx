@@ -1,6 +1,6 @@
 import '../css/signup.css';
 import { useState } from "react";
-import { useNavigate , useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
 function getPasswordStrength(password) {
     let strength = 0;
@@ -47,13 +47,13 @@ function RegisterForm() {
         formData.append("password", password);
         if (userPhoto) {
             formData.append("photo", userPhoto);
-        }else{
-            formData.append("photo" , 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/271deea8-e28c-41a3-aaf5-2913f5f48be6/de7834s-6515bd40-8b2c-4dc6-a843-5ac1a95a8b55.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI3MWRlZWE4LWUyOGMtNDFhMy1hYWY1LTI5MTNmNWY0OGJlNlwvZGU3ODM0cy02NTE1YmQ0MC04YjJjLTRkYzYtYTg0My01YWMxYTk1YThiNTUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.BopkDn1ptIwbmcKHdAOlYHyAOOACXW0Zfgbs0-6BY-E');
+        } else {
+            formData.append("photo", 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/271deea8-e28c-41a3-aaf5-2913f5f48be6/de7834s-6515bd40-8b2c-4dc6-a843-5ac1a95a8b55.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzI3MWRlZWE4LWUyOGMtNDFhMy1hYWY1LTI5MTNmNWY0OGJlNlwvZGU3ODM0cy02NTE1YmQ0MC04YjJjLTRkYzYtYTg0My01YWMxYTk1YThiNTUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.BopkDn1ptIwbmcKHdAOlYHyAOOACXW0Zfgbs0-6BY-E');
         }
         const requestOptions = {
             method: 'POST',
             headers: {
-              'Accept': 'application/json',
+                'Accept': 'application/json',
             },
             body: formData,
         };
@@ -66,7 +66,7 @@ function RegisterForm() {
             setTimeout(() => {
                 setLoading(false); // Set loading to false when done
                 navigate("/verification", { state: { email } });
-            }, 4000); 
+            }, 4000);
 
         } catch (error) {
             setLoading(false); // Set loading to false if there's an error
@@ -88,24 +88,20 @@ function RegisterForm() {
     const passwordStrength = getPasswordStrength(password);
 
     return (
-        <div
-            className="container d-flex justify-content-center align-items-center"
-            style={{ minHeight: "calc(100vh - 60px)", marginTop: "60px" }}
-        >
-            <div className="row">
-                <div className="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 " style={{minWidth: "500px"}}>
-                    <div className="card shadow-lg p-4">
-                        <form onSubmit={handleSubmit} className="card-body">
-                        <h2 className="text-center mb-4">Sign Up</h2>
+        <div className="container">
+          <div className="row">
+            <div className="col-12 col-md-6">
+            <form onSubmit={handleSubmit} className="card-body">
+                            <h2 className="text-center mb-4">Sign Up</h2>
                             <div className="d-flex justify-content-center">
                                 {previewPhoto ? (
-                                    <div
-                                         className="position-relative">
+                                    <div className="position-relative">
                                         <img
                                             src={previewPhoto}
                                             alt="User"
                                             className="img-thumbnail rounded-circle"
-                                            style={{ maxWidth: "150px", maxHeight: "150px", objectFit: "cover" }} />
+                                            style={{ maxWidth: "150px", maxHeight: "150px", objectFit: "cover" }}
+                                        />
                                         <div className="position-absolute top-0 end-0">
                                             <label htmlFor="user-photo-input" className="btn btn-secondary btn-sm">
                                                 Change Photo
@@ -116,7 +112,8 @@ function RegisterForm() {
                                                 className="d-none"
                                                 name="userPhoto"
                                                 onChange={handlePhotoChange}
-                                                accept="image/*" />
+                                                accept="image/*"
+                                            />
                                         </div>
                                     </div>
                                 ) : (
@@ -125,7 +122,8 @@ function RegisterForm() {
                                             src={defaultUserPhoto}
                                             alt="Default User"
                                             className="img-thumbnail rounded-circle"
-                                            style={{ maxWidth: "150px", maxHeight: "150px", objectFit: "cover" }} />
+                                            style={{ maxWidth: "150px", maxHeight: "150px", objectFit: "cover" }}
+                                        />
                                         <div className="position-absolute top-0 end-0">
                                             <label htmlFor="user-photo-input" className="btn btn-secondary btn-sm">
                                                 Upload Photo
@@ -136,7 +134,8 @@ function RegisterForm() {
                                                 className="d-none"
                                                 name="userPhoto"
                                                 onChange={handlePhotoChange}
-                                                accept="image/*" />
+                                                accept="image/*"
+                                            />
                                         </div>
                                     </div>
                                 )}
@@ -152,7 +151,8 @@ function RegisterForm() {
                                     name="firstName"
                                     value={firstName}
                                     onChange={(e) => setFirstName(e.target.value)}
-                                    required />
+                                    required
+                                />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="last-name-input" className="form-label">
@@ -165,7 +165,8 @@ function RegisterForm() {
                                     name="lastName"
                                     value={lastName}
                                     onChange={(e) => setLastName(e.target.value)}
-                                    required />
+                                    required
+                                />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="email-input" className="form-label">
@@ -178,7 +179,8 @@ function RegisterForm() {
                                     name="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    required />
+                                    required
+                                />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="phone-number-input" className="form-label">
@@ -192,13 +194,13 @@ function RegisterForm() {
                                     value={phoneNumber}
                                     onChange={(e) => setPhoneNumber(e.target.value)}
                                     pattern="[0-9]{10}"
-                                    required />
+                                    required
+                                />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="password-input" className="form-label">
                                     Password:
                                 </label>
-
                                 <input
                                     id="password-input"
                                     type="password"
@@ -206,7 +208,8 @@ function RegisterForm() {
                                     name="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    required />
+                                    required
+                                />
                                 <div className="progress mt-2">
                                     <div
                                         className={`progress-bar ${passwordStrength < 2 ? "bg-danger" : passwordStrength < 4 ? "bg-warning" : "bg-success"}`}
@@ -216,7 +219,8 @@ function RegisterForm() {
                                         aria-valuemax="100"
                                     ></div>
                                 </div>
-                            </div><div className="mb-3">
+                            </div>
+                            <div className="mb-3">
                                 <label htmlFor="confirm-password-input" className="form-label">
                                     Confirm Password:
                                 </label>
@@ -227,7 +231,8 @@ function RegisterForm() {
                                     name="confirmPassword"
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
-                                    required />
+                                    required
+                                />
                             </div>
                             {error && (
                                 <div className="alert alert-danger" role="alert">
@@ -251,11 +256,22 @@ function RegisterForm() {
                             <div className="text-center mt-3">
                                 Already have an account? <a href="/login">Login here</a>
                             </div>
+
                         </form>
-                    </div>
-                </div>
             </div>
+            <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
+              <div>
+                <img
+                  src="https://source.unsplash.com/random/800x600?travel"
+                  alt="Random travel photo"
+                  className="img-thumbnail rounded"
+                  style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "cover" }}
+                />
+              </div>
+            </div>
+          </div>
         </div>
-    );
+      );
+      
 }
 export default RegisterForm;

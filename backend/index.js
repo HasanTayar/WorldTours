@@ -29,7 +29,8 @@ app.get('/user/:userEmail', UserController.getUserDetails);
 app.put('/set-admin', UserController.setAdmin);
 app.post('/resendVerificationCode' , UserController.resendVerificationCode);
 app.post('/updateEmail' , UserController.updateEmail);
-
+app.post('/forgot-password', UserController.resetPassword);
+app.post('/reset-password' , UserController.updatePassword);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

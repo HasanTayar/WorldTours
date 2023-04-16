@@ -1,29 +1,68 @@
-.card {
-    border-radius: 20px;
-    overflow: hidden;
-}
-
-.card-body {
-    background-color: #f8f9fa;
+/* Container */
+.container {
     padding: 2rem;
-}
-
-.btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
-}
-
-.btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    border-color: #6c757d;
-}
-
-.btn-secondary:hover {
-    background-color: #545b62;
-    border-color: #545b62;
-}
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  
+  .col-12 {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-basis: 100%;
+    max-width: 100%;
+    padding: 0.5rem;
+    box-sizing: border-box;
+  }
+  
+  .col-md-6 {
+    flex-basis: 50%;
+    max-width: 50%;
+  }
+  
+  .card {
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    height: 100%;
+  }
+  
+  .card-body {
+    padding: 2rem;
+  }
+  
+  .img-thumbnail {
+    border-radius: 0.5rem;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .form-control {
+    border-radius: 0.25rem;
+  }
+  
+  .btn {
+    border-radius: 0.25rem;
+  }
+  
+  .progress {
+    border-radius: 0.25rem;
+  }
+  
+  @media (max-width: 991.98px) {
+    .container {
+      padding: 1rem;
+    }
+    .col-md-6 {
+      flex-basis: 100%;
+      max-width: 100%;
+    }
+  }
+  

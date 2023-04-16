@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/Login.css";
+
 function Login({ setIsLoggedIn, setUser }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -8,14 +9,16 @@ function Login({ setIsLoggedIn, setUser }) {
   const [localUser, setLocalUser] = useState([]);
   const [error, setError] = useState("");
   const [showPasswordInput, setShowPasswordInput] = useState(false);
-  const [unvEmail, setUnvEmail] = useState("");
   const photoFile = "../userPhoto/";
 
   function handleSignupClick() {
     navigate('/register');
   }
+
   async function handleLogin(e, email, password) {
     e.preventDefault();
+    setError(""); 
+
     try {
       const response = await fetch('/api/login', {
         method: 'POST',
@@ -33,25 +36,24 @@ function Login({ setIsLoggedIn, setUser }) {
       const responseData = await response.json();
       const { token, user } = responseData;
       localStorage.setItem('token', token);
-      setUser(user); // Update the user state in the App component
-      setUnvEmail(user.email);
-      setIsLoggedIn(true); // Update the isLoggedIn state in the App component
+      setUser(user);
+      setIsLoggedIn(true);
       console.table(responseData);
-      navigate('/', { replace: true }); // Navigate to the homepage
+      navigate('/', { replace: true });
     } catch (error) {
       setError(error.message);
     }
   }
-  if (error == 'Your email has not been verified. Please verify your email before logging in.') {
+
+  if (error === 'Your email has not been verified. Please verify your email before logging in.') {
     setTimeout(() =>
-      navigate("/verification", { state: { email } })
-      , 3000)
+    navigate("/verification", { state: { email } })
+    , 3000)
   }
-
-
 
   async function handleEmailSubmit(e) {
     e.preventDefault();
+    setError(""); 
 
     try {
       const response = await fetch(`/api/user/${encodeURIComponent(email)}`, {
@@ -74,10 +76,25 @@ function Login({ setIsLoggedIn, setUser }) {
       setError('An error occurred while fetching user data.');
     }
   }
+
   const handleResetPassword = async () => {
+    setError(""); 
     try {
-      await axios.post("http://your-api-url.com/resetPassword", { email });
-      setError("A new password has been sent to your email.");
+      const response = await fetch('/api/forgot-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+      console.table(response);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+      }
+
+      const responseData = await response.json();
+      setError(responseData.message);
     } catch (error) {
       console.error("Error resetting password:", error);
       setError("An error occurred while resetting your password.");
@@ -100,7 +117,10 @@ function Login({ setIsLoggedIn, setUser }) {
                   className="form-control"
                   id="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setError(""); 
+                  }}
                 />
               </div>
               <button type="submit" className="btn btn-primary">
@@ -115,7 +135,6 @@ function Login({ setIsLoggedIn, setUser }) {
                 >
                   Sign Up
                 </button>
-
               </div>
             </form>
           ) : (
@@ -144,7 +163,10 @@ function Login({ setIsLoggedIn, setUser }) {
                   className="form-control"
                   id="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setError(""); 
+                  }}
                 />
               </div>
               <button type="submit" className="btn btn-primary">
@@ -154,28 +176,22 @@ function Login({ setIsLoggedIn, setUser }) {
                 type="button"
                 className="btn btn-link"
                 onClick={handleResetPassword}
-              >
-                Forgot password?
-              </button>
-            </form>
-          )}
-
+                >
+                  Forgot password?
+                </button>
+              </form>
+            )}
+          </div>
+          <div className="login-image">
+            <img
+              src="https://source.unsplash.com/random/800x600?travel"
+              alt="Travel"
+            />
+          </div>
         </div>
-        <div className="login-image">
-          <img
-            src="https://source.unsplash.com/random/800x600?travel"
-            alt="Travel"
-          />
-        </div>
-
       </div>
-
-    </div>
-  );
-
-
-
-}
-
-export default Login;
-
+    );
+  }
+  
+  export default Login;
+  

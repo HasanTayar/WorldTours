@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './Components/Navbar';
@@ -7,6 +6,8 @@ import Home from './Components/Home';
 import VerificationCode from './Components/VerificationCode';
 import RegisterForm from './Components/SignupForm';
 import Login from './Components/Login';
+import UpdateForgottenPassword from './Components/updateForgtenPassword';
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
@@ -25,11 +26,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<RegisterForm />} />
             <Route path="/verification" element={<VerificationCode />} />
-            <Route
-              path="/login"
-              element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />}
-            />
-            {/* Add other routes as needed */}
+            <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />}/>
+            <Route path="/reset-password" element={<UpdateForgottenPassword/>}/>
           </Routes>
         </div>
       </div>
