@@ -17,9 +17,11 @@ The frontend is built with React and includes the following components:
 - `Home`
 - `Navbar`
 - `SignupForm`
-- `VerificationCode`
+- `verify`
 - `Login`
 - `updateForgtenPassword`
+- `Profile`
+- `Settings`
 
 The project uses Vite for development and is configured with the following settings:
 
