@@ -4,13 +4,12 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import qs from 'qs';
 
 const UpdateForgottenPassword = () => {
-    const { search } = useLocation();
-    const { token } = qs.parse(search, { ignoreQueryPrefix: true });
+  const { search } = useLocation();
+  const { token } = qs.parse(search, { ignoreQueryPrefix: true });
   const navigate = useNavigate();
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
-    console.log(token);
   useEffect(() => {
     if (message === 'Password updated successfully.') {
       setTimeout(() => {
@@ -33,7 +32,7 @@ const UpdateForgottenPassword = () => {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ token, password: newPassword }),
+            body: JSON.stringify({ token,  newPassword }),
           });
       console.table(response);
       if (!response.ok) {
@@ -43,6 +42,12 @@ const UpdateForgottenPassword = () => {
   
       const responseData = await response.json();
       setMessage(responseData.message);
+      if(message == "Password successfully reset. You can now log in with your new password.")
+      setTimeout(
+        ()=>{
+          navigate('/login');
+        }, 3000
+      );
     } catch (error) {
       setMessage('An error occurred while updating your password. Please try again.');
     }

@@ -61,16 +61,10 @@ function RegisterForm() {
         try {
             const response = await fetch('/api/signup', requestOptions);
             const data = await response.json();
-            console.log(data);
             setSuccess(data.message);
-            setTimeout(() => {
-                setLoading(false); // Set loading to false when done
-                navigate("/verification", { state: { email } });
-            }, 4000);
 
         } catch (error) {
             setLoading(false); // Set loading to false if there's an error
-            console.log(error);
         }
     };
 

@@ -18,7 +18,7 @@ function Login({ setIsLoggedIn, setUser }) {
   async function handleLogin(e, email, password) {
     e.preventDefault();
     setError(""); 
-
+  
     try {
       const response = await fetch('/api/login', {
         method: 'POST',
@@ -27,46 +27,53 @@ function Login({ setIsLoggedIn, setUser }) {
         },
         body: JSON.stringify({ email, password }),
       });
-
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message);
-      }
-
+      } 
+      
       const responseData = await response.json();
-      const { token, user } = responseData;
-      localStorage.setItem('token', token);
-      setUser(user);
-      setIsLoggedIn(true);
-      console.table(responseData);
-      navigate('/', { replace: true });
-    } catch (error) {
+      const { token } = responseData;
+localStorage.setItem('token', token);
+// Call getUserByToken to fetch user data
+const userResponse = await fetch('/api/getLoginInUser', {
+  method: 'GET',
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
+if (!userResponse.ok) {
+  const errorData = await userResponse.json();
+  throw new Error(errorData.message);
+}
+
+const userData = await userResponse.json();
+setUser(userData);
+setIsLoggedIn(true);
+console.table(responseData);
+navigate('/', { replace: true });
+} catch (error) {
       setError(error.message);
     }
   }
-
-  if (error === 'Your email has not been verified. Please verify your email before logging in.') {
-    setTimeout(() =>
-    navigate("/verification", { state: { email } })
-    , 3000)
-  }
+  
 
   async function handleEmailSubmit(e) {
     e.preventDefault();
     setError(""); 
-
+  
     try {
-      const response = await fetch(`/api/user/${encodeURIComponent(email)}`, {
+      const response = await fetch(`/api/user/${email}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
       });
-
+  
       const data = await response.json();
-
-      if (data.user) {
-        setLocalUser(data.user);
+  
+      if (data) {
+        setLocalUser(data);
         setShowPasswordInput(true);
       } else {
         setError('No user found. Please sign up first.');
@@ -76,6 +83,7 @@ function Login({ setIsLoggedIn, setUser }) {
       setError('An error occurred while fetching user data.');
     }
   }
+  
 
   const handleResetPassword = async () => {
     setError(""); 

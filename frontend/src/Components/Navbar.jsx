@@ -69,14 +69,11 @@ const Navbar = ({ isLoggedIn, user, onLogout }) => {
                     <Link className="dropdown-item" to="/profile">
                       Profile
                     </Link>
-                    {user.is_organizer && (
+                    {user.isOrganizer && (
                       <Link className="dropdown-item" to="/add-tour">
                         Add Tour
                       </Link>
                     )}
-                    <Link className="dropdown-item" to="/settings">
-                      Settings
-                    </Link>
                     <div className="dropdown-divider"></div>
                     <button className="dropdown-item" onClick={onLogout}>
                       Logout
