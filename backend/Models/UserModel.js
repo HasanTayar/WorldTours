@@ -1,5 +1,5 @@
 // models/User.js
-const {mongoose}  = require('mongoose');
+const mongoose  = require('mongoose');
 const { Decimal128 } = mongoose.Schema.Types;
 
 const UserSchema = new mongoose.Schema({

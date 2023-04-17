@@ -11,9 +11,16 @@ import ProtectedRoute from './Components/ProtectedRoute';
 
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    const token = localStorage.getItem('token');
+    return token !== null;
+  });
+  const [user, setUser] = useState(()=>{
+    const token = localStorage.getItem('token');
+    return token !== null;
+  });
   const [storedToken, setToken] = useState(null);
+  console.log(isLoggedIn);
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUser(null);
@@ -35,7 +42,6 @@ function App() {
           setUser(userData);
           setIsLoggedIn(true);
         })
-        
     }
   }, []);
 
@@ -50,12 +56,7 @@ function App() {
             <Route path="/users/verify/" element={<Verify />} />
             <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />} />
             <Route path="/users/reset-password" element={<UpdateForgottenPassword />} />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute isLoggedIn={isLoggedIn} user={user}>
-                  <UserProfile user={user} />
-                </ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute isLoggedIn={isLoggedIn} user={user}><UserProfile user={user} /></ProtectedRoute>} />
           </Routes>
         </div>
       </div>

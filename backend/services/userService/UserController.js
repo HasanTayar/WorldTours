@@ -1,5 +1,5 @@
 require('dotenv').config();
-const User = require('./UserModel');
+const User = require('../../Models/UserModel');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -152,7 +152,7 @@ exports.forgotPassword = async (req, res) => {
 //handle restPassword
 exports.resetPassword = async (req, res) => {
   try {
-    console.log(req);
+    console.log(req.body);
     const { token, newPassword } = req.body;
 
     // Check if newPassword is provided
@@ -162,15 +162,18 @@ exports.resetPassword = async (req, res) => {
     }
     
     const user = await User.findOne({ resetPasswordToken: token });
-    console.group("Find the User:", User.findOne({ resetPasswordToken: token }), "The User Details", user);
+    console.log("User:", user);
 
     if (!user) {
+      console.log("!user:",1);
       res.status(400).send({ message: 'Password reset token is invalid or has expired.' });
     } else {
       const now = new Date();
       const resetPasswordExpires = new Date(user.resetPasswordExpires);
-
+      console.log(resetPasswordExpires);
+      console.log(resetPasswordExpires < now);
       if (resetPasswordExpires < now) {
+        console.log("!user:",2);
         res.status(400).send({ message: 'Password reset token is invalid or has expired.' });
       } else {
         const hashedPassword = await bcrypt.hash(newPassword, 10);
@@ -183,6 +186,7 @@ exports.resetPassword = async (req, res) => {
       }
     }
   } catch (error) {
+    console.log("!user:",3);
     console.error(error);
     res.status(500).send({ message: 'An error occurred while resetting your password. Please try again.' });
   }
@@ -212,24 +216,29 @@ exports.getUserProfile = async (req, res) => {
 //to update user profile
 exports.updateUserProfile = async (req, res) => {
   try {
-    const userId = req.user._id;
-    const updates = req.body;
-    if (req.file) {
-      updates.photo = req.file.filename;
-    }
-    console.log("WTF!");
-    const user = await User.findByIdAndUpdate(userId, updates, { new: true });
-
+    const user = await User.findById(req.user.id);
     if (!user) {
-      res.status(404).send({ message: 'User not found.' });
-    } else {
-      res.status(200).send(user);
+      return res.status(404).json({ message: 'User not found' });
     }
-  } catch (error) {
-    console.error(error);
-    res.status(500)    .send({ message: 'An error occurred while updating the user profile. Please try again.' });
+    
+    const updatedData = req.body;
+    if (updatedData.photo && typeof updatedData.photo === 'object' && Object.keys(updatedData.photo).length === 0) {
+      delete updatedData.photo;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(req.user.id, updatedData, {
+      new: true,
+      runValidators: true,
+    });
+
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
   }
 };
+
+
 //To delte user
 exports.deleteUserProfile = async (req, res) => {
   try {

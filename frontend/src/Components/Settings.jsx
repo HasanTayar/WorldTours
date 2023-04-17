@@ -1,12 +1,15 @@
 // components/Settings.js
 import { useState } from 'react';
 import { Card, ListGroup, Tab, Row, Col, Form, Button } from 'react-bootstrap';
-import { useForm } from 'react-hook-form';
+import { useForm  , Controller } from 'react-hook-form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import '../css/Settings.css';
+import GoogleLocation from './GoogleLoaction';
+import axios from 'axios';
 
 const photoURL = '../userPhoto/';
+const authToken = localStorage.getItem('token');
 
 const Settings = ({ user }) => {
   const [activeTab, setActiveTab] = useState('account');
@@ -15,15 +18,34 @@ const Settings = ({ user }) => {
     handleSubmit,
     formState: { errors },
     watch,
+    control,
   } = useForm();
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
 
-  const onSubmitAccount = (data) => {
-    console.log(data);
-    // Implement your update account API call here
+const onSubmitAccount = (data) => {
+  console.log(data);
+  console.log('authToken:', authToken); // Add this line to check authToken
+
+  axios.put('/api/update-profile', data, {
+    headers: {
+      'Authorization': `Bearer ${authToken}`
+    }
+  })
+    .then((res) => {
+      console.log(res);
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
+
+  
+  const handleLocationSelect = (place) => {
+    console.log('Selected location:', place);
   };
 
   const onSubmitPassword = (data) => {
@@ -67,7 +89,7 @@ const Settings = ({ user }) => {
             <Tab.Pane eventKey="account" active={activeTab === 'account'}>
               <Card>
                 <Card.Body>
-                  <Form onSubmit={handleSubmit(onSubmitAccount)}>
+                <Form onSubmit={handleSubmit(onSubmitAccount)}>
                     <Row className="align-items-center">
                       <Col xs={4}>
                         <div className="text-center">
@@ -102,6 +124,18 @@ const Settings = ({ user }) => {
                             type="text"
                             defaultValue={user.firstName}
                             {...register('firstName', { required: true })}
+                          />
+                          {errors.firstName && (
+                            <p className="text-danger">First name is required.</p>
+                          )}
+                        </Form.Group>
+                        <Form.Group controlId="formFirstName">
+                          <Form.Label>id:
+                          </Form.Label>
+                          <Form.Control
+                            type="text"
+                            defaultValue={user._id}
+                            {...register('id', { required: true })}
                           />
                           {errors.firstName && (
                             <p className="text-danger">First name is required.</p>
@@ -154,13 +188,20 @@ const Settings = ({ user }) => {
                               />
                             </Form.Group>
                             <Form.Group controlId="formLocation">
-                              <Form.Label>Location</Form.Label>
-                              <Form.Control
-                                type="text"
-                                defaultValue={user.location}
-                                {...register('location')}
-                              />
-                            </Form.Group>
+        <Form.Label>Location</Form.Label>
+        <Controller
+          name="location"
+          control={control}
+          defaultValue={user.location}
+          render={({ field }) => (
+            <GoogleLocation
+              field={field}
+              onLocationSelect={handleLocationSelect}
+            />
+          )}
+        />
+      </Form.Group>
+
                             {/* Other organizer fields can be added here */}
                           </>
                         )}
@@ -185,7 +226,7 @@ const Settings = ({ user }) => {
               {/* Password settings form */}
               <Card>
                 <Card.Body>
-                  <Form onSubmit={handleSubmit(onSubmitPassword)}>
+                {/* <Form onSubmit={handleSubmit(onSubmitPassword)}>
                     <Form.Group controlId="formCurrentPassword">
                       <Form.Label>Current Password</Form.Label>
                       <Form.Control
@@ -224,17 +265,17 @@ const Settings = ({ user }) => {
                       )}
                     </Form.Group>
                     <Button type="submit" className="mt-3">
-                        Update Password
-                      </Button>
-                    </Form>
-                  </Card.Body>
-                </Card>
-              </Tab.Pane>
-            </Tab.Content>
-          </Col>
-        </Row>
-      </div>
-    );
-                      }
-    export default Settings; 
+                      Update Password
+                    </Button>
+                  </Form> */}
+                </Card.Body>
+              </Card>
+            </Tab.Pane>
+          </Tab.Content>
+        </Col>
+      </Row>
+    </div>
+  );
+}
+export default Settings;
 
