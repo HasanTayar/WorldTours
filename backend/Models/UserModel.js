@@ -15,38 +15,39 @@ const UserSchema = new mongoose.Schema({
   verificationCode: String,
   resetPasswordToken: String,
   resetPasswordExpires: Date,
-  bio: { type: String },
+  bio: { type: String },// for admin or orgainzer
   rating: { type: Decimal128 },
-  location: String,
-  languages: [String],
-  toursOrganized: Number,
-  pastTourLocations: [String],
-  upcomingTours: [
+  location: String,// for admin or orgainzer
+  languages: [String],// for admin or orgainzer
+  toursOrganized: Number,// for  orgainzer depnds from tours schema
+  pastTourLocations: [String],// for  orgainzer depnds from touors schema 
+  upcomingTours: [// for  orgainzer depnds from tours schema 
     {
       location: String,
       startDate: Date,
       endDate: Date,
     },
   ],
-  reviews: [
-    {
-      reviewer: String,
-      text: String,
-      rating: Number,
-      date: Date,
-    },
-  ],
-  socialMediaLinks: {
+  reviews: [// for  orgainzer
+  {
+    reviewer: { type: String, required: true },
+    text: { type: String, required: true },
+    rating: { type: Decimal128, required: true },
+    date: { type: Date, required: true },
+  },
+],
+  socialMediaLinks: {// for admin or orgainzer
     facebook: String,
     instagram: String,
     twitter: String,
   },
-  certifications: [String],
-  specialties: [String],
-  contactInfo: {
-    email: String,
+  certifications: [String],// for admin or orgainzer
+  specialties: [String],// for admin or orgainzer
+  contactInfo: {// for admin or orgainzer
+    contactEmail: String,
     phone: String,
   },
+  createdAt: { type: Date, default: Date.now },
 });
 
 const User = mongoose.model('User', UserSchema);

@@ -125,7 +125,7 @@ exports.forgotPassword = async (req, res) => {
       res.status(404).send({ message: 'User not found.' });
     } else {
       const resetToken = crypto.randomBytes(20).toString('hex');
-      const resetTokenExpiration = Date(Date.now() + 3600000); // 1 hour from now
+      const resetTokenExpiration = new Date(Date.now() + 3600000);// 1 hour from now
       user.resetPasswordToken = resetToken;
       user.resetPasswordExpires = resetTokenExpiration;
       await user.save();
@@ -149,6 +149,7 @@ exports.forgotPassword = async (req, res) => {
     res.status(500).send({ message: 'An error occurred while sending the password reset email. Please try again.' });
   }
 };
+
 //handle restPassword
 exports.resetPassword = async (req, res) => {
   try {
@@ -157,40 +158,43 @@ exports.resetPassword = async (req, res) => {
 
     // Check if newPassword is provided
     if (!newPassword) {
-      res.status(400).send({ message: 'New password is required.' });
-      return;
+      return res.status(400).send({ message: 'New password is required.' });
     }
     
     const user = await User.findOne({ resetPasswordToken: token });
     console.log("User:", user);
 
     if (!user) {
-      console.log("!user:",1);
-      res.status(400).send({ message: 'Password reset token is invalid or has expired.' });
+      console.log("!user:", 1);
+      return res.status(400).send({ message: 'Password reset token is invalid or has expired.' });
     } else {
       const now = new Date();
       const resetPasswordExpires = new Date(user.resetPasswordExpires);
       console.log(resetPasswordExpires);
-      console.log(resetPasswordExpires < now);
-      if (resetPasswordExpires < now) {
-        console.log("!user:",2);
-        res.status(400).send({ message: 'Password reset token is invalid or has expired.' });
+      console.log(now < resetPasswordExpires);
+      if (now > resetPasswordExpires) {
+        console.log("!user:", 2);
+        return res.status(400).send({ message: 'Password reset token is invalid or has expired.' });
       } else {
         const hashedPassword = await bcrypt.hash(newPassword, 10);
+        console.log("Hashed password:", hashedPassword);
         user.password = hashedPassword;
-        user.resetPasswordToken = undefined;
-        user.resetPasswordExpires = undefined;
+        user.resetPasswordToken = null;
+        user.resetPasswordExpires = null;
         await user.save();
 
-        res.status(200).send({ message: 'Password successfully reset. You can now log in with your new password.' });
+        return res.status(200).send({ message: 'Password successfully reset. You can now log in with your new password.' });
       }
     }
   } catch (error) {
-    console.log("!user:",3);
-    console.error(error);
-    res.status(500).send({ message: 'An error occurred while resetting your password. Please try again.' });
+    console.log("!user:", 3);
+    console.error('Error in resetPassword function:', error);
+    return res.status(500).send({ message: 'An error occurred while resetting your password. Please try again.', errorDetails: error.message });
   }
 };
+
+
+
 
 //to return user details
 exports.getUserProfile = async (req, res) => {
@@ -206,9 +210,10 @@ exports.getUserProfile = async (req, res) => {
     } else {
       res.status(200).send(user);
     }
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: 'An error occurred while fetching the user profile. Please try again.' });
+ } catch (error) {
+    console.log("!user:", 3);
+    console.error('Error in resetPassword function:', error);
+    return res.status(500).send({ message: 'An error occurred while resetting your password. Please try again.', errorDetails: error.message });
   }
 };
 
