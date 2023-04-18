@@ -2,7 +2,7 @@ import '../css/UpdateForgottenPassword.css';
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import qs from 'qs';
-
+import axios from 'axios';
 const UpdateForgottenPassword = () => {
   const { search } = useLocation();
   const { token } = qs.parse(search, { ignoreQueryPrefix: true });
@@ -10,13 +10,7 @@ const UpdateForgottenPassword = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
-  useEffect(() => {
-    if (message === 'Password updated successfully.') {
-      setTimeout(() => {
-        navigate('/login');
-      }, 3000);
-    }
-  }, [message, navigate]);
+ 
 
   const updatePassword = async (e) => {
     e.preventDefault();
@@ -27,33 +21,24 @@ const UpdateForgottenPassword = () => {
     }
   
     try {
-        const response = await fetch('/api/reset-password', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ token,  newPassword }),
-          });
-      console.table(response);
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message);
-      }
+      const response = await axios.post('/api/reset-password', {
+        token,
+        newPassword,
+      });
   
-      const responseData = await response.json();
-      setMessage(responseData.message);
-      if(message == "Password successfully reset. You can now log in with your new password.")
-      setTimeout(
-        ()=>{
+      console.table(response);
+  
+      setMessage(response.data.message);
+      if (response.data.message === 'Password successfully reset. You can now log in with your new password.') {
+        setTimeout(() => {
           navigate('/login');
-        }, 3000
-      );
+        }, 3000);
+      }
     } catch (error) {
-      setMessage('An error occurred while updating your password. Please try again.');
+      setMessage(error.response.data.message || 'An error occurred while updating your password. Please try again.');
     }
   };
   
-
   return (
     <div className="container">
       <div className="row">

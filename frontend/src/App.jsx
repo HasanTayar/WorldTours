@@ -6,7 +6,7 @@ import Verify from './Components/verify'
 import RegisterForm from './Components/SignupForm';
 import Login from './Components/Login';
 import UpdateForgottenPassword from './Components/updateForgtenPassword';
-import UserProfile from './Components/Profile';
+import Profile from './Components/Profile';
 import ProtectedRoute from './Components/ProtectedRoute';
 
 
@@ -44,7 +44,6 @@ function App() {
         })
     }
   }, []);
-
   return (
     <Router>
       <div className="App">
@@ -56,7 +55,8 @@ function App() {
             <Route path="/users/verify/" element={<Verify />} />
             <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />} />
             <Route path="/users/reset-password" element={<UpdateForgottenPassword />} />
-            <Route path="/profile" element={<ProtectedRoute isLoggedIn={isLoggedIn} user={user}><UserProfile user={user} /></ProtectedRoute>} />
+            {/* <Route path="/profile" element={<ProtectedRoute isLoggedIn={isLoggedIn} user={user}><Profile user={user} /></ProtectedRoute>} /> */}
+            <Route path="/profile" element={<Profile user={user} />}></Route>
           </Routes>
         </div>
       </div>
