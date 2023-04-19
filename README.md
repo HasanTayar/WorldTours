@@ -1,6 +1,6 @@
 # WorldTours (v1)
 
-This project is a work-in-progress application called WorldTours (v1). It is built using a `React` frontend, an `Express(Node.js)` backend, and `MongoDB` as the database. This version focuses on the Tours frontend and backend.
+This project is a work-in-progress application called WorldTours (v1). It is built using a `React` frontend, an `Express(Node.js)` backend, and `MongoDB` as the database. This version focuses on the Users frontend and backend.
 
 ## Backend
 
