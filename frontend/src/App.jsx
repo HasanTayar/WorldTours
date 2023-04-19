@@ -8,7 +8,7 @@ import Login from './Components/Login';
 import UpdateForgottenPassword from './Components/updateForgtenPassword';
 import Profile from './Components/Profile';
 import ProtectedRoute from './Components/ProtectedRoute';
-
+import AddTour from './Components/AddTours';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -57,6 +57,7 @@ function App() {
             <Route path="/users/reset-password" element={<UpdateForgottenPassword />} />
             {/* <Route path="/profile" element={<ProtectedRoute isLoggedIn={isLoggedIn} user={user}><Profile user={user} /></ProtectedRoute>} /> */}
             <Route path="/profile" element={<Profile user={user} />}></Route>
+            <Route path="/addTour" element={<AddTour user={user}/>}></Route>
           </Routes>
         </div>
       </div>

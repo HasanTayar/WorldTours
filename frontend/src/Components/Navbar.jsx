@@ -70,7 +70,7 @@ const Navbar = ({ isLoggedIn, user, onLogout }) => {
                       Profile
                     </Link>
                     {user.isOrganizer && (
-                      <Link className="dropdown-item" to="/add-tour">
+                      <Link className="dropdown-item" to="/addTour">
                         Add Tour
                       </Link>
                     )}
