@@ -18,7 +18,7 @@ The frontend is built with React and includes the following components:
 - `Login`
 - `sign up`
 - `profile/profile settings`
-_ `home`
+- `home`
 - `verify`
 - `update forgetting password`
 
