@@ -8,6 +8,7 @@ The backend is built with Express and MongoDB. It includes the following files a
 
 - `UserController.js`: Contains the logic for user authentication, email verification, and profile updates.
 - `UserModel.js`: Defines the User schema for MongoDB.
+- `userRoutes.js`:Defines the API routes for Tours data and handles HTTP requests and responses.
 - `db.js`: Configures the connection to the MongoDB database.
 
 ## Frontend
