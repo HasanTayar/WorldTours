@@ -14,17 +14,8 @@ The backend is built with Express and MongoDB. It includes the following files a
 
 The frontend is built with React and includes the following components:
 
-- `Home`
-- `Navbar`
-- `ToursList`
-- `TourDetails`
-- `CreateTour`
-- `UpdateTour`
-- `DeleteTour`
-- `Login`
-- `Signup`
-- `ProtectedRoute`
-
+-`AddTour`
+-`GoogleLoaction`
 The project uses Vite for development and is configured with the following settings:
 
 - `vite.config.js`: Contains Vite configuration for the React plugin, server settings, and proxy settings.
