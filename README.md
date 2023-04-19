@@ -6,22 +6,21 @@ This project is a work-in-progress application called WorldTours (v2). It is bui
 
 The backend is built with Express and MongoDB. It includes the following files and directories:
 
-<<<<<<< HEAD
 - `ToursController.js`: Contains the logic for handling Tours data and database CRUD operations.
 - `ToursModel.js`: Defines the Tour schema for MongoDB.
-=======
+
 - `UserController.js`: Contains the logic for user authentication, email verification, and profile updates.
 - `UserModel.js`: Defines the User schema for MongoDB.
-- `userRoutes.js`:Defines the API routes for Tours data and handles HTTP requests and responses.
->>>>>>> 1c5e289e01cc26a3cf688076ea5137e5b7272e74
+- `userRoutes.js`:Defines the API routes for users data and handles HTTP requests and responses.
+
 - `db.js`: Configures the connection to the MongoDB database.
 
 ## Frontend
 
 The frontend is built with React and includes the following components:
 
--`AddTour`
--`GoogleLoaction`
+- `AddTour`
+- `GoogleLoaction`
 The project uses Vite for development and is configured with the following settings:
 
 - `vite.config.js`: Contains Vite configuration for the React plugin, server settings, and proxy settings.
