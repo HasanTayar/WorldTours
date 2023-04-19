@@ -15,12 +15,12 @@ The backend is built with Express and MongoDB. It includes the following files a
 
 The frontend is built with React and includes the following components:
 
--`Login`
--`sign up`
--`profile/profile settings`
-_`home`
--`verify`
--`update forgetting password`
+- `Login`
+- `sign up`
+- `profile/profile settings`
+_ `home`
+- `verify`
+- `update forgetting password`
 
 
 The project uses Vite for development and is configured with the following settings:
