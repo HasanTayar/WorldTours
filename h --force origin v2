@@ -1,0 +1,173 @@
+[33mcommit c743e1d491c7c34a3b433e3e9e5fe25205ef980a[m[33m ([m[1;36mHEAD -> [m[1;32mv2[m[33m, [m[1;31morigin/v1[m[33m, [m[1;32mv1[m[33m)[m
+Merge: 6e66284 1c5e289
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Wed Apr 19 16:22:25 2023 +0300
+
+    Resolve conflicts after pull
+
+[33mcommit 6e66284ed3bc732aaf35ca436f4835de754aa96b[m
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Wed Apr 19 16:14:28 2023 +0300
+
+    Update the readme to be for v2
+
+[33mcommit 1c5e289e01cc26a3cf688076ea5137e5b7272e74[m
+Merge: bd0e4bf dba0d54
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Wed Apr 19 16:11:58 2023 +0300
+
+    Merge branch 'v1' of https://github.com/HasanTayar/WorldTours into v1
+
+[33mcommit bd0e4bf73306e9d7f0d8f7837edde903cab8b31e[m
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Wed Apr 19 16:11:18 2023 +0300
+
+    Edit the v1 Only to be For the Users
+
+[33mcommit dba0d543040370077600561f0a86404426a703e0[m
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Wed Apr 19 16:04:47 2023 +0300
+
+    Update README.md
+
+[33mcommit a14e8b8e27bc18ff8cc654774fbfad2d5f7e5836[m
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Wed Apr 19 16:02:29 2023 +0300
+
+    Update README for v2 branch
+
+[33mcommit e00405f31199fa515d83a284a081f0b567bde1b0[m
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Wed Apr 19 15:58:16 2023 +0300
+
+    Delete README file from v2 branch
+
+[33mcommit c0f0b3113e815cf90820995f5626b44bcf7d7a09[m
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Wed Apr 19 15:54:05 2023 +0300
+
+    add README for v2 branch
+
+[33mcommit bf0d1f16a35729a94a3bd6f38257beab2136edf9[m
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Wed Apr 19 15:48:41 2023 +0300
+
+    Strat Working on v2
+
+[33mcommit fd865c17d59c77575fee60e0a14b457a64557bf0[m
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Tue Apr 18 22:40:00 2023 +0300
+
+    Done with all the Functions and checked if its working
+
+[33mcommit 5daa9de4d5d95bd10c998f5f5f853df0fa07641e[m
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Tue Apr 18 22:38:53 2023 +0300
+
+    finshed atm the user interface
+
+[33mcommit a175f015f821045e2ed1fccbd2c232737cb0bc1f[m
+Merge: a80aa5a d352aaf
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Mon Apr 17 18:26:07 2023 +0300
+
+    Merge branch 'v1' of https://github.com/HasanTayar/WorldTours into v1
+
+[33mcommit a80aa5abd522e86693c29f5877c3b9ad1a7e9293[m
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Mon Apr 17 18:25:56 2023 +0300
+
+    some changes
+
+[33mcommit d352aaf5ec92d4634b38a031756462dcb3940ffe[m
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Sun Apr 16 19:05:49 2023 +0300
+
+    Update README.md
+
+[33mcommit 246a9c5286927181d6322dfef00bc608a0101ce6[m
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Sun Apr 16 19:04:53 2023 +0300
+
+    Update README.md
+
+[33mcommit b327896142bddde6cbeab66c343a470a0f9ddf54[m
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Sun Apr 16 19:04:38 2023 +0300
+
+    updated the front end
+
+[33mcommit 52e3c92dc7f2e3760694182e22852c7bf2c65ab2[m
+Merge: ca31137 5cab48d
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Sun Apr 16 19:02:37 2023 +0300
+
+    Merge branch 'v1' of https://github.com/HasanTayar/WorldTours into v1
+
+[33mcommit ca31137aef000614b7df5ce261c70f09cc06f3b7[m
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Sun Apr 16 19:02:12 2023 +0300
+
+    a new update for the Shecma and added new components on frontend
+
+[33mcommit 5cab48d0528d3c4ffb801c6f36a588866c2c2b2b[m
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Sun Apr 16 04:20:08 2023 +0300
+
+    Update README.md
+
+[33mcommit 0f244142e8e25559e8661ecf9b3f0ab8c547c0f0[m
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Sun Apr 16 04:19:13 2023 +0300
+
+    Update the Backend upload a new components
+
+[33mcommit 6460cbfc4c99229b2beb5e6051337c77e362bbd5[m
+Merge: e0e4cc2 0cf7be8
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Sat Apr 15 02:44:34 2023 +0300
+
+    Merge branch 'v1' of https://github.com/HasanTayar/WorldTours into v1
+
+[33mcommit e0e4cc2c8b8d51378692df8475f1c223619e1c4d[m
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Sat Apr 15 02:43:43 2023 +0300
+
+    Updated The Backend to return a new error and sucsess msg , update the styled for Components
+
+[33mcommit 0cf7be8e306d05a535eff87a81108003a258252a[m
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Fri Apr 14 18:20:03 2023 +0300
+
+    Added a login system
+
+[33mcommit c47b0d0841bb7c31f14bfe1d4ab80805d2adb399[m
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Fri Apr 14 13:50:19 2023 +0300
+
+    Update the user backend , the front end Components to be worked with props for the datas
+
+[33mcommit 13dd1ce8dd1da3cf887b184c5b9699783d5700ee[m
+Merge: 6e7f54a 5f5bc51
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Fri Apr 14 11:21:18 2023 +0300
+
+    Merge branch 'v1' of https://github.com/HasanTayar/WorldTours into v1
+
+[33mcommit 6e7f54adc0cf6f9f3c7a03db7f89c9eb11641b63[m
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Fri Apr 14 11:19:15 2023 +0300
+
+    updated the login , and userService
+
+[33mcommit 5f5bc5184220c8e2993a9cb8ed078d0b8f7411ce[m
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Fri Apr 14 10:28:04 2023 +0300
+
+    Create LICENSE
+
+[33mcommit 42582283a65ca7d67bdec23a8e089f9d54091b91[m
+Author: HasanTayar <124785198+HasanTayar@users.noreply.github.com>
+Date:   Fri Apr 14 10:25:33 2023 +0300
+
+    first commit
