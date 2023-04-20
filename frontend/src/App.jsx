@@ -8,8 +8,8 @@ import Login from './Components/Login';
 import UpdateForgottenPassword from './Components/updateForgtenPassword';
 import Profile from './Components/Profile';
 import ProtectedRoute from './Components/ProtectedRoute';
-import AddTour from './Components/AddTours';
-
+import TourForm from './Components/AddTours';
+import { LoadScript } from '@react-google-maps/api';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     const token = localStorage.getItem('token');
@@ -44,7 +44,15 @@ function App() {
         })
     }
   }, []);
+  const googleMapsApiKey = 'AIzaSyDhDzbFCa7X0FwHS3aBCFGIpg1coS8UdjE';
+  const libraries = ['places'];
   return (
+    <LoadScript
+    googleMapsApiKey={googleMapsApiKey}
+    libraries={libraries}
+    onLoad={() => console.log('Google Maps API loaded')}
+    onError={(error) => console.error('Error loading Google Maps API:', error)}
+  >
     <Router>
       <div className="App">
         <Navbar isLoggedIn={isLoggedIn} user={user} onLogout={handleLogout} />
@@ -57,11 +65,12 @@ function App() {
             <Route path="/users/reset-password" element={<UpdateForgottenPassword />} />
             {/* <Route path="/profile" element={<ProtectedRoute isLoggedIn={isLoggedIn} user={user}><Profile user={user} /></ProtectedRoute>} /> */}
             <Route path="/profile" element={<Profile user={user} />}></Route>
-            <Route path="/addTour" element={<AddTour user={user}/>}></Route>
+            <Route path="/addTour" element={<TourForm user={user}/>}></Route>
           </Routes>
         </div>
       </div>
     </Router>
+    </LoadScript>
   );
 }
 

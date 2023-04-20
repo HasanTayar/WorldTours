@@ -5,7 +5,7 @@ import { faStar as faStarSolid, faStar as faStarRegular, faPencilAlt, faPlus, fa
 import { faStar as faStarOutline } from '@fortawesome/free-regular-svg-icons';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import { faFacebook, faInstagram, faTwitter } from '@fortawesome/free-brands-svg-icons';
-import GoogleLocation from './GoogleLoaction';
+import GooglePlaceAutocomplete from './GooglePlaceAutocomplete';
 import axios from 'axios';
 const photoURL = "../userPhoto/";
 const Profile = ({ user }) => {
@@ -102,7 +102,7 @@ const Profile = ({ user }) => {
           return (
             <Form.Group controlId="location">
               <Form.Label>Location</Form.Label>
-              <GoogleLocation
+              <GooglePlaceAutocomplete
                 onLocationSelect={(place) => handleLocationSelect(place)}
                 field={{ value: newLocation }}
                 className="form-control"

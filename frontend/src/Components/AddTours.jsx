@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import axios from 'axios';
-import GoogleLocation from './GoogleLoaction';
+import GooglePlaceAutocomplete from './GooglePlaceAutocomplete';
 import { Button, Form, Row, Col, Image } from 'react-bootstrap';
 
-function AddTour({user}) {
+export default function AddTour({ user }) {
   const { register, handleSubmit, control } = useForm();
   const { fields, append, remove } = useFieldArray({ control, name: 'days' });
 
@@ -12,6 +12,7 @@ function AddTour({user}) {
   const [previewImages, setPreviewImages] = useState([]);
   const [timelinePreview, setTimelinePreview] = useState(null);
   const [mainLocation, setMainLocation] = useState(null);
+
   const handleMainLocationSelect = (place) => {
     const newMainLocation = {
       locationName: place.name,
@@ -20,21 +21,44 @@ function AddTour({user}) {
     };
     setMainLocation(newMainLocation);
   };
+
   const token = localStorage.getItem('token');
-  const headers = {
-    'Authorization': `Bearer ${token}`
-  };
-  
-  const onSubmit = async (data) => {
+const headers = {
+  'Authorization': `Bearer ${token}`
+};
+
+const onSubmit = async (data) => {
+    console.groupCollapsed(data);
     try {
-      const response = await axios.post('/api/create-tour', data, { headers });
+      const formData = new FormData();
+      formData.append('organizerId', data.organizerId);
+      formData.append('name', data.name);
+      formData.append('desc', data.desc);
+      formData.append('mainLocation', JSON.stringify(mainLocation));
+
+      // Check if photoTimeline is undefined before using it
+      if (data.photoTimeline && data.photoTimeline[0]) {
+        formData.append('photoTimeline', data.photoTimeline[0]);
+      }
+
+      formData.append('days', JSON.stringify(data.days.map((day, index) => ({
+        dayName: day.dayName,
+        photo: Array.isArray(day.photo) && day.photo.length > 0 ? day.photo[0] : '', // Use default value if photo is an empty array
+        location: day.location,
+        desc: day.desc
+      }))));
+
+      formData.append('location', JSON.stringify(locations));
+
+      const response = await axios.post('/api/create-tour', formData, {
+        headers: { ...headers, 'Content-Type': 'multipart/form-data' },
+      });
       console.log(response);
     } catch (error) {
       console.error('Error adding tour:', error);
     }
   };
   
-
   const handleLocationSelect = (place, index) => {
     const updatedLocations = [...locations];
     updatedLocations[index] = {
@@ -63,32 +87,35 @@ function AddTour({user}) {
       reader.readAsDataURL(file);
     }
   };
-
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Form.Group controlId="organizerId">
-        <Form.Control {...register('organizerId')} 
-        defaultValue={user._id}
-        hidden />
+        <Form.Control
+          {...register('organizerId')}
+          defaultValue={user._id}
+          hidden
+        />
       </Form.Group>
-
+  
       <Form.Group controlId="name">
         <Form.Label>Tour Name</Form.Label>
         <Form.Control {...register('name')} required />
       </Form.Group>
-
+  
       <Form.Group controlId="desc">
         <Form.Label>Description</Form.Label>
         <Form.Control {...register('desc')} required />
       </Form.Group>
+  
       <Form.Group controlId="mainLocation">
-      <Form.Label>Main Location</Form.Label>
-      <GoogleLocation
-        onLocationSelect={handleMainLocationSelect}
-        field={{ ...register('mainLocation') }}
-        className="form-control"
-      />
-    </Form.Group>
+        <Form.Label>Main Location</Form.Label>
+        <GooglePlaceAutocomplete
+          onLocationSelect={handleMainLocationSelect}
+          field={{ ...register('mainLocation') }}
+          className="form-control"
+        />
+      </Form.Group>
+  
       <Form.Group controlId="photoTimeline">
         <Form.Label>Photo Timeline</Form.Label>
         <Form.Control
@@ -106,7 +133,7 @@ function AddTour({user}) {
           />
         )}
       </Form.Group>
-
+  
       {fields.map((field, index) => (
         <div key={field.id}>
           <h3 className="mt-3">Day {index + 1}</h3>
@@ -117,7 +144,6 @@ function AddTour({user}) {
               required
             />
           </Form.Group>
-
           <Form.Group controlId={`day-${index}-photo`}>
             <Form.Label>Photo</Form.Label>
             <Form.Control
@@ -132,44 +158,53 @@ function AddTour({user}) {
                 thumbnail
                 className="mt-3"
                 alt={`Day ${index + 1} Preview`}
-                />
-              )}
-            </Form.Group>
-  
-            <Form.Group controlId={`day-${index}-location`}>
-              <Form.Label>Location</Form.Label>
-              <GoogleLocation
-                onLocationSelect={(place) => handleLocationSelect(place, index)}
-                field={{ ...register(`days.${index}.location`) }}
-                className="form-control"
               />
-            </Form.Group>
+            )}
+          </Form.Group>
   
-            <Form.Group controlId={`day-${index}-desc`}>
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                {...register(`days.${index}.desc`)}
-                required
-              />
-            </Form.Group>
+          <Form.Group controlId={`day-${index}-location`}>
+            <Form.Label>Location</Form.Label>
+            <GooglePlaceAutocomplete
+              onLocationSelect={(place) => handleLocationSelect(place, index)}
+              field={{ ...register(`days.${index}.location`) }}
+              className="form-control"
+            />
+          </Form.Group>
   
-            <Button variant="danger" type="button" onClick={() => remove(index)}>
-              Remove Day
-            </Button>
-          </div>
-        ))}
+          <Form.Group controlId={`day-${index}-desc`}>
+            <Form.Label>Description</Form.Label>
+            <Form.Control {...register(`days.${index}.desc`)} required />
+          </Form.Group>
   
-        <Button className="mt-3" variant="success" type="button" onClick={() => append({})}>
-          Add Day
-        </Button>
+          <Button
+            variant="danger"
+            type="button"
+            onClick={() => remove(index)}
+          >
+            Remove Day
+          </Button>
+        </div>
+      ))}
   
-        <input type="hidden" value={JSON.stringify(locations)} {...register('location')} />
-        <Button className="mt-3" variant="primary" type="submit">
-          Submit
-        </Button>
-      </Form>
-    );
-  }
+      <Button
+        className="mt-3"
+        variant="success"
+        type="button"
+        onClick={() => append({})}
+      >
+        Add Day
+      </Button>
   
-  export default AddTour;
+      <input
+        type="hidden"
+        value={JSON.stringify(locations)}
+        {...register('location')}
+      />
   
+      <Button className="mt-3" variant="primary" type="submit">
+        Submit
+      </Button>
+    </Form>
+  );
+            }
+            

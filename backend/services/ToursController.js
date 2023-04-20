@@ -20,20 +20,45 @@ const updateIsPopular = async () => {
   };
 // Create a new tour
 exports.createTour = async (req, res) => {
+    console.log('req.body:', req.body);
+  
     try {
-      const { organizerId, name, desc, photoTimeline, days, location } = req.body;
+      const { organizerId, name, desc, days, location } = req.body;
   
       const tour = new Tour({
         organizerId,
         name,
         desc,
-        photoTimeline: typeof photoTimeline === 'string' ? photoTimeline : '',
-        days: days.map((day) => ({
-            ...day,
-            photo: typeof day.photo === 'string' ? day.photo : ''
+        photoTimeline: '',
+        days: JSON.parse(days).map((day) => ({
+          ...day,
+          photo: []
         })),
-        location: Array.isArray(location) ? location : []
+        location: JSON.parse(location)
       });
+  
+      // Save tour photo
+      const photoTimelineFile = req.files['photoTimeline'];
+  
+      if (photoTimelineFile) {
+        console.log('Processing photoTimeline:', photoTimelineFile);
+        tour.photoTimeline = `/toursPhotos/${photoTimelineFile[0].filename}`;
+      } else {
+        console.log('Invalid photoTimeline object:', photoTimelineFile);
+      }
+  
+      // Save day photos
+      for (let i = 0; i < tour.days.length; i++) {
+        const day = tour.days[i];
+        const dayPhotos = req.files[`days[${i}].photo`];
+  
+        if (dayPhotos) {
+          for (const photo of dayPhotos) {
+            console.log('Processing day photo:', photo);
+            day.photo.push(`/toursPhotos/${photo.filename}`);
+          }
+        }
+      }
   
       const savedTour = await tour.save();
       await updateIsPopular();
@@ -43,7 +68,10 @@ exports.createTour = async (req, res) => {
       res.status(500).send({ message: 'An error occurred while creating the tour. Please try again.' });
     }
   };
-
+  
+  
+  
+  
   
 // Get all tours
 exports.getAllTours = async (req, res) => {
@@ -158,4 +186,35 @@ exports.getToursByLocation = async (req, res) => {
     res.status(500).send({ message: 'Error fetching tours by user location' });
   }
 };
+// Upload photos for a tour
+exports.uploadTourPhotos = async (req, res) => {
+    try {
+      const { tourId } = req.params;
+      const tour = await Tour.findById(tourId);
+  
+      if (!tour) {
+        res.status(404).send({ message: 'Tour not found.' });
+        return;
+      }
+  
+      const newPhotos = req.files.map((file) => `${tourId}-${Date.now()}-${file.originalname}`);
+  
+      const filePaths = req.files.map((file) => file.path);
+  
+      tour.photoTimeline = [...tour.photoTimeline, ...filePaths];
+  
+      for (let i = 0; i < tour.days.length; i++) {
+        const day = tour.days[i];
+        day.photo = [...day.photo, ...filePaths];
+      }
+  
+      await tour.save();
+  
+      res.status(200).send({ message: 'Tour photos uploaded successfully.', newPhotos });
+    } catch (err) {
+      console.error('Error uploading tour photos:', err);
+      res.status(500).send({ message: 'Error uploading tour photos.' });
+    }
+  };
+  
 

@@ -5,7 +5,7 @@ import { useForm  , Controller } from 'react-hook-form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import '../css/Settings.css';
-import GoogleLocation from './GoogleLoaction';
+import GoogleLocation from './GoogleLocation';
 import axios from 'axios';
 
 const photoURL = '../userPhoto/';
