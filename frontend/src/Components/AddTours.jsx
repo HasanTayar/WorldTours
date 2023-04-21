@@ -1,55 +1,64 @@
 import React, { useState } from 'react';
-import { useForm, useFieldArray } from 'react-hook-form';
 import axios from 'axios';
 import GooglePlaceAutocomplete from './GooglePlaceAutocomplete';
-import { Button, Form, Row, Col, Image } from 'react-bootstrap';
+import { Form, FormGroup, Label, Button, Row, Col } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 
-export default function AddTour({ user }) {
-  const { register, handleSubmit, control } = useForm();
-  const { fields, append, remove } = useFieldArray({ control, name: 'days' });
+const TourForm = () => {
+  const [name, setName] = useState('');
+  const [desc, setDesc] = useState('');
+  const [days, setDays] = useState([{ dayName: '', desc: '', location: '', photo: null }]);
+  const [locations, setLocations] = useState([{ locationName: '', lat: 0, long: 0 }]);
+  const [timelinePhoto, setTimelinePhoto] = useState(null);
 
-  const [locations, setLocations] = useState([]);
-  const [previewImages, setPreviewImages] = useState([]);
-  const [timelinePreview, setTimelinePreview] = useState(null);
-  const [mainLocation, setMainLocation] = useState(null);
-
-  const handleMainLocationSelect = (place) => {
-    const newMainLocation = {
-      locationName: place.name,
-      long: place.geometry.location.lng(),
-      lat: place.geometry.location.lat(),
-    };
-    setMainLocation(newMainLocation);
+  const handleTimelinePhotoChange = (e) => {
+    setTimelinePhoto(e.target.files[0]);
   };
 
+  const handleDayPhotoChange = (index, e) => {
+    const file = e.target.files[0];
+    const newDays = [...days];
+    newDays[index].photo = file;
+    setDays(newDays);
+  };
+
+  const addDay = () => {
+    setDays([...days, { dayName: '', desc: '', location: '', photo: null }]);
+  };
+
+  const removeDay = (index) => {
+    setDays(days.filter((_, i) => i !== index));
+  };
+
+  const handleDayChange = (index, field, value) => {
+    const newDays = [...days];
+    newDays[index][field] = value;
+    setDays(newDays);
+  };
   const token = localStorage.getItem('token');
-const headers = {
-  'Authorization': `Bearer ${token}`
-};
-
-const onSubmit = async (data) => {
-    console.groupCollapsed(data);
+  const headers = {
+    'Authorization': `Bearer ${token}`
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('desc', desc);
+    formData.append('days', JSON.stringify(days));
+    formData.append('locations', JSON.stringify(locations));
+    formData.append('timelinePhoto', timelinePhoto);
+  
+    days.forEach((day, index) => {
+      formData.append(`dayPhotos[${index}]`, day.photo);
+    });
+  
+    // Add console.log statements to check the JSON strings
+    console.log('Days JSON:', JSON.stringify(days));
+    console.log('Locations JSON:', JSON.stringify(locations));
+  
     try {
-      const formData = new FormData();
-      formData.append('organizerId', data.organizerId);
-      formData.append('name', data.name);
-      formData.append('desc', data.desc);
-      formData.append('mainLocation', JSON.stringify(mainLocation));
-
-      // Check if photoTimeline is undefined before using it
-      if (data.photoTimeline && data.photoTimeline[0]) {
-        formData.append('photoTimeline', data.photoTimeline[0]);
-      }
-
-      formData.append('days', JSON.stringify(data.days.map((day, index) => ({
-        dayName: day.dayName,
-        photo: Array.isArray(day.photo) && day.photo.length > 0 ? day.photo[0] : '', // Use default value if photo is an empty array
-        location: day.location,
-        desc: day.desc
-      }))));
-
-      formData.append('location', JSON.stringify(locations));
-
       const response = await axios.post('/api/create-tour', formData, {
         headers: { ...headers, 'Content-Type': 'multipart/form-data' },
       });
@@ -59,152 +68,106 @@ const onSubmit = async (data) => {
     }
   };
   
-  const handleLocationSelect = (place, index) => {
-    const updatedLocations = [...locations];
-    updatedLocations[index] = {
-      locationName: place.name,
-      long: place.geometry.location.lng(),
-      lat: place.geometry.location.lat(),
-    };
-    setLocations(updatedLocations);
-  };
-
-  const handlePreview = (e, index = null) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      if (index === null) {
-        setTimelinePreview(reader.result);
-      } else {
-        const newPreviewImages = [...previewImages];
-        newPreviewImages[index] = reader.result;
-        setPreviewImages(newPreviewImages);
-      }
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  };
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      <Form.Group controlId="organizerId">
-        <Form.Control
-          {...register('organizerId')}
-          defaultValue={user._id}
-          hidden
+    <Form onSubmit={handleSubmit}>
+      <FormGroup>
+        <Label for="name">Tour Name</Label>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          placeholder="Enter tour name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
-      </Form.Group>
-  
-      <Form.Group controlId="name">
-        <Form.Label>Tour Name</Form.Label>
-        <Form.Control {...register('name')} required />
-      </Form.Group>
-  
-      <Form.Group controlId="desc">
-        <Form.Label>Description</Form.Label>
-        <Form.Control {...register('desc')} required />
-      </Form.Group>
-  
-      <Form.Group controlId="mainLocation">
-        <Form.Label>Main Location</Form.Label>
-        <GooglePlaceAutocomplete
-          onLocationSelect={handleMainLocationSelect}
-          field={{ ...register('mainLocation') }}
-          className="form-control"
+      </FormGroup>
+      <FormGroup>
+        <Label for="desc">Tour Description</Label>
+        <input
+          type="textarea"
+          name="desc"
+          id="desc"
+          placeholder="Enter tour description"
+          value={desc}
+          onChange={(e) => setDesc(e.target.value)}
         />
-      </Form.Group>
-  
-      <Form.Group controlId="photoTimeline">
-        <Form.Label>Photo Timeline</Form.Label>
-        <Form.Control
+      </FormGroup>
+      <FormGroup>
+        <Label for="timelinePhoto">Timeline Photo</Label>
+        <input
           type="file"
-          onChange={handlePreview}
-          {...register('photoTimeline')}
-          required
+          name="timelinePhoto"
+          id="timelinePhoto"
+          onChange={handleTimelinePhotoChange}
         />
-        {timelinePreview && (
-          <Image
-            src={timelinePreview}
-            thumbnail
-            className="mt-3"
-            alt="Photo Timeline Preview"
-          />
-        )}
-      </Form.Group>
-  
-      {fields.map((field, index) => (
-        <div key={field.id}>
-          <h3 className="mt-3">Day {index + 1}</h3>
-          <Form.Group controlId={`day-${index}-name`}>
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              {...register(`days.${index}.dayName`)}
-              required
+      </FormGroup>
+      {days.map((day, index) => (
+        <div key={index}>
+          <Row>
+            <Col>
+              <FormGroup>
+                <Label for={`dayName${index}`}>Day {index + 1} Name</Label>
+                <input
+                  type="text"
+                  name={`dayName${index}`}
+                  id={`dayName${index}`}
+                  placeholder={`Enter day ${index + 1} name`}
+                  value={day.dayName}
+                  onChange={(e) => handleDayChange(index, 'dayName', e.target.value)}
+                />
+              </FormGroup>
+            </Col>
+            <Col>
+              <FormGroup>
+                <Label for={`dayPhoto${index}`}>Day {index + 1} Photo</Label>
+                <input
+                  type="file"
+                  name={`dayPhoto${index}`}
+                  id={`dayPhoto${index}`}
+                  onChange={(e) => handleDayPhotoChange(index, e)}
+                />
+              </FormGroup>
+            </Col>
+          </Row>
+          <FormGroup>
+            <Label for={`dayDesc${index}`}>Day {index + 1} Description</Label>
+            <input
+              type="textarea"
+              name={`dayDesc${index}`}
+              id={`dayDesc${index}`}
+              placeholder={`Enter day ${index + 1} description`}
+              value={day.desc}
+              onChange={(e) => handleDayChange(index, 'desc', e.target.value)}
             />
-          </Form.Group>
-          <Form.Group controlId={`day-${index}-photo`}>
-            <Form.Label>Photo</Form.Label>
-            <Form.Control
-              type="file"
-              onChange={(e) => handlePreview(e, index)}
-              {...register(`days.${index}.photo`)}
-              required
-            />
-            {previewImages[index] && (
-              <Image
-                src={previewImages[index]}
-                thumbnail
-                className="mt-3"
-                alt={`Day ${index + 1} Preview`}
-              />
-            )}
-          </Form.Group>
-  
-          <Form.Group controlId={`day-${index}-location`}>
-            <Form.Label>Location</Form.Label>
+          </FormGroup>
+          <FormGroup>
+            <Label for={`dayLocation${index}`}>Day {index + 1} Location</Label>
             <GooglePlaceAutocomplete
-              onLocationSelect={(place) => handleLocationSelect(place, index)}
-              field={{ ...register(`days.${index}.location`) }}
-              className="form-control"
+              id={`dayLocation${index}`}
+              onLocationSelect={(locationData) => {
+                handleDayChange(index, 'location', locationData.location);
+                setLocations([...locations, locationData]);
+              }}
             />
-          </Form.Group>
-  
-          <Form.Group controlId={`day-${index}-desc`}>
-            <Form.Label>Description</Form.Label>
-            <Form.Control {...register(`days.${index}.desc`)} required />
-          </Form.Group>
-  
-          <Button
-            variant="danger"
-            type="button"
-            onClick={() => remove(index)}
-          >
-            Remove Day
-          </Button>
+          </FormGroup>
+          {days.length > 1 && (
+            <Button color="danger" onClick={() => removeDay(index)}>
+              <FontAwesomeIcon icon={faTimes} /> Remove Day {index + 1}
+            </Button>
+          )}
+          <hr />
         </div>
       ))}
-  
-      <Button
-        className="mt-3"
-        variant="success"
-        type="button"
-        onClick={() => append({})}
-      >
-        Add Day
+      <Button color="primary" onClick={addDay}>
+        <FontAwesomeIcon icon={faPlus} /> Add Day
       </Button>
-  
-      <input
-        type="hidden"
-        value={JSON.stringify(locations)}
-        {...register('location')}
-      />
-  
-      <Button className="mt-3" variant="primary" type="submit">
-        Submit
+      <hr />
+      <Button type="submit" color="success">
+        Save Tour
       </Button>
     </Form>
   );
-            }
-            
+};
+
+export default TourForm;
+

@@ -20,54 +20,55 @@ const updateIsPopular = async () => {
   };
 // Create a new tour
 exports.createTour = async (req, res) => {
-    console.log('req.body:', req.body);
-  
-    try {
-      const { organizerId, name, desc, days, location } = req.body;
-  
-      const tour = new Tour({
-        organizerId,
-        name,
-        desc,
-        photoTimeline: '',
-        days: JSON.parse(days).map((day) => ({
-          ...day,
-          photo: []
-        })),
-        location: JSON.parse(location)
-      });
-  
-      // Save tour photo
-      const photoTimelineFile = req.files['photoTimeline'];
-  
-      if (photoTimelineFile) {
-        console.log('Processing photoTimeline:', photoTimelineFile);
-        tour.photoTimeline = `/toursPhotos/${photoTimelineFile[0].filename}`;
-      } else {
-        console.log('Invalid photoTimeline object:', photoTimelineFile);
-      }
-  
-      // Save day photos
-      for (let i = 0; i < tour.days.length; i++) {
-        const day = tour.days[i];
-        const dayPhotos = req.files[`days[${i}].photo`];
-  
-        if (dayPhotos) {
-          for (const photo of dayPhotos) {
-            console.log('Processing day photo:', photo);
-            day.photo.push(`/toursPhotos/${photo.filename}`);
-          }
+  console.log('req.body:', req.body);
+
+  try {
+    const { organizerId, name, desc, days, location } = req.body;
+
+    const tour = new Tour({
+      organizerId,
+      name,
+      desc,
+      photoTimeline: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png', // Set a default value here
+      days: days ? JSON.parse(days).map((day) => ({
+        ...day,
+        photo: day.photo ? day.photo : [] // If day.photo is undefined or falsy, set it to an empty array
+      })) : [] ,
+      location: location ? JSON.parse(location) : null
+    });
+
+    // Save tour photo
+    const photoTimelineFile = req.files['photoTimeline'];
+
+    if (photoTimelineFile) {
+      console.log('Processing photoTimeline:', photoTimelineFile);
+      tour.photoTimeline = `/toursPhotos/${photoTimelineFile[0].filename}`;
+    } else {
+      console.log('Invalid photoTimeline object:', photoTimelineFile);
+    }
+
+    // Save day photos
+    for (let i = 0; i < tour.days.length; i++) {
+      const day = tour.days[i];
+      const dayPhotos = req.files[`days[${i}].photo`];
+
+      if (dayPhotos) {
+        for (const photo of dayPhotos) {
+          console.log('Processing day photo:', photo);
+          day.photo.push(`/toursPhotos/${photo.filename}`);
         }
       }
-  
-      const savedTour = await tour.save();
-      await updateIsPopular();
-      res.status(201).send({ message: 'Tour created successfully.', tour: savedTour });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send({ message: 'An error occurred while creating the tour. Please try again.' });
     }
-  };
+
+    const savedTour = await tour.save();
+    await updateIsPopular();
+    res.status(201).send({ message: 'Tour created successfully.', tour: savedTour });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: 'An error occurred while creating the tour. Please try again.' });
+  }
+};
+
   
   
   

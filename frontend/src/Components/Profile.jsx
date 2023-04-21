@@ -9,6 +9,7 @@ import GooglePlaceAutocomplete from './GooglePlaceAutocomplete';
 import axios from 'axios';
 const photoURL = "../userPhoto/";
 const Profile = ({ user }) => {
+    
     const [activeSetting, setActiveSetting] = useState('publicView');
     const {
       email = user ? user.email : '',
@@ -385,13 +386,13 @@ const Profile = ({ user }) => {
                                                 <Form.Control
                                                     type="text"
                                                     placeholder="Enter your Email to Contact"
-                                                    defaultValue={user.contactInfo.contactEmail}
+                                                    defaultValue={user.contactInfo ? user.contactInfo.contactEmail : ''}
                                                     onChange={(e) => setNewContactInfo({ ...contactInfo, contactEmail : e.target.value })}
                                                 />
                                                   <Form.Control
                                                     type="text"
                                                     placeholder="Enter your phone to Contact"
-                                                    defaultValue={user.contactInfo.phone}
+                                                    defaultValue={user.contactInfo ? user.contactInfo.phone : ''}
                                                     onChange={(e) => setNewContactInfo({ ...contactInfo, phone : e.target.value })}
                                                 />
                                             </Form.Group>
@@ -498,8 +499,8 @@ const Profile = ({ user }) => {
                                             <Card className="mb-3">
                                                 <Card.Body>
                                                     <Card.Title>contact</Card.Title>
-                                                    <Card.Text>{user.contactInfo.contactEmail}</Card.Text>
-                                                    <Card.Text>{user.contactInfo.phone}</Card.Text>
+                                                    <Card.Text>{user.contactInfo ? user.contactInfo.contactEmail : ''}</Card.Text>
+                                                    <Card.Text>{user.contactInfo ? user.contactInfo.phone : ''}</Card.Text>
                                                 </Card.Body>
                                             </Card>
                                             <Card className="mb-3">

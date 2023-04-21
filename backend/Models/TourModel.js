@@ -15,7 +15,7 @@ const TourSchema = new mongoose.Schema({
     days: [
       {
         dayName: String,
-        photo: String,
+        photo: [String],
         location: String,
         desc: String,
       },
@@ -23,8 +23,8 @@ const TourSchema = new mongoose.Schema({
     locations: [
       {
         locationName: String,
-        long: Number,
-        lat: Number,
+        long: String,
+        lat: String,
       },
     ],
     createdAt: { type: Date, default: Date.now },

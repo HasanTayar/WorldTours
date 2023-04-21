@@ -1,5 +1,5 @@
 const express = require('express');
-const UserController = require('./UserController');
+const UserController = require('../services/UserController');
 const multer = require('multer');
 const passport = require('passport');
 

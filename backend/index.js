@@ -4,8 +4,8 @@ const express = require('express');
 const db = require('./db');
 const app = express();
 const PORT = process.env.PORT || 5000;
-const UserRoutes = require('./services/userRoutes'); // <-- Add this line
-const TourRoutes = require('./services/tourRoutes');
+const UserRoutes = require('./Routers/userRoutes');
+const TourRoutes = require('./Routers/tourRoutes');
 const passport = require('passport');
 const passportConfig = require('./passport');
 
