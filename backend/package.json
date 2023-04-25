@@ -27,6 +27,7 @@
     "nodemailer": "^6.9.1",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
+    "socket.io": "^4.6.1",
     "twilio": "^4.10.0"
   },
   "devDependencies": {
