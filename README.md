@@ -1,13 +1,13 @@
-# WorldTours (v3)
+# WorldTours (v4)
 
-This project is a work-in-progress application called WorldTours (v3). It is built using a `React` frontend, an `Express(Node.js)` backend, and `MongoDB` as the database. This version focuses on the Order frontend and backend.
+This project is a work-in-progress application called WorldTours (v4). It is built using a `React` frontend, an `Express(Node.js)` backend, and `MongoDB` as the database. This version focuses on the Chat system frontend and backend.
 
 ## Backend
 
 The backend is built with Express and MongoDB. It includes the following files and directories:
 
-- `OrdersController.js`: Contains the logic for handling Orders data and database CRUD operations.
-- `OrdersModel.js`: Defines the Order schema for MongoDB.
+- `ChatsController.js`: Contains the logic for handling chat data and database CRUD operations.
+- `ChatsModel.js`: Defines the chat schema for MongoDB.
 
 - `UserController.js`: Contains the logic for user authentication, email verification, and profile updates.
 - `UserModel.js`: Defines the User schema for MongoDB.
@@ -19,8 +19,8 @@ The backend is built with Express and MongoDB. It includes the following files a
 
 The frontend is built with React and includes the following components:
 
-- `OrderForm`
-- `PaymentForm`
+- `ChatBox`
+- `ChatList`
 
 The project uses Vite for development and is configured with the following settings:
 
