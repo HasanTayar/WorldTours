@@ -1,15 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './Components/Navbar';
 import Home from './Components/Home';
 import Verify from './Components/verify'
 import RegisterForm from './Components/SignupForm';
 import Login from './Components/Login';
-import UpdateForgottenPassword from './Components/updateForgtenPassword';
+import UpdateForgottenPassword from './Components/updateForgetsPassword';
 import Profile from './Components/Profile';
 import ProtectedRoute from './Components/ProtectedRoute';
-import TourForm from './Components/AddTours';
+import CreateTourForm from './Components/CreateTour';
+import ChatPage from './Components/ChatClient';
 import { LoadScript } from '@react-google-maps/api';
+import TourList from './Components/TourList';
+import TourDetails from './Components/TourDetails';
+import OrganizerDetails from './Components/OrganizerDetails';
+const token = localStorage.getItem('token');
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     const token = localStorage.getItem('token');
@@ -24,7 +30,7 @@ function App() {
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUser(null);
-    localStorage.removeItem('token'); // Remove token from local storage on logout
+    localStorage.removeItem('token'); 
   };
 
   useEffect(() => {
@@ -62,10 +68,13 @@ function App() {
             <Route path="/register" element={<RegisterForm />} />
             <Route path="/users/verify/" element={<Verify />} />
             <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />} />
-            <Route path="/users/reset-password" element={<UpdateForgottenPassword />} />
-            {/* <Route path="/profile" element={<ProtectedRoute isLoggedIn={isLoggedIn} user={user}><Profile user={user} /></ProtectedRoute>} /> */}
-            <Route path="/profile" element={<Profile user={user} />}></Route>
-            <Route path="/addTour" element={<TourForm user={user}/>}></Route>
+            <Route path="/users/reset-passwtoursord/" element={<UpdateForgottenPassword />} />
+            <Route path="/profile" element={<ProtectedRoute isLoggedIn={isLoggedIn} user={user}><Profile user={user} /></ProtectedRoute>} />
+            <Route path="/add-new-tours/" element={<CreateTourForm user={user} />}></Route>
+            <Route path="/chat/" element={<ChatPage currentUser={user}/>}></Route>
+            <Route path="/tours/" element={<TourList/>}></Route>
+            <Route path="/tour/:tourId" element={<TourDetails />} />
+            <Route path="/tour/:tourId" element={<OrganizerDetails />} />
           </Routes>
         </div>
       </div>

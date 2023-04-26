@@ -8,13 +8,13 @@ const tourSchema = new mongoose.Schema({
   desc: { type: String, required: true },
   photoTimeline: { type: String, required: true },
   isPopular: { type: Boolean, default: false },
+  price:{type: String , required : true },
   rating: { type: mongoose.Schema.Types.Decimal128, min: 0, max: 5 },
   orderCount: { type: Number, default: 0 },
   days: [
     {
       dayName: String,
       photo: [String],
-      location: String,
       desc: String,
     },
   ],
@@ -29,9 +29,6 @@ const tourSchema = new mongoose.Schema({
 
 });
 
-tourSchema.post(['save', 'findOneAndUpdate', 'findOneAndDelete'], async function () {
-  await updateIsPopular();
-});
 
 const Tour = mongoose.model('Tour', tourSchema);
 

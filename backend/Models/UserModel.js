@@ -10,7 +10,6 @@ const UserSchema = new mongoose.Schema({
   isVerified: { type: Boolean, default: false },
   isAdmin: { type: Boolean, default: false },
   isOrganizer: { type: Boolean, default: false },
-  organizerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Tour' },
   verificationCode: String,
   resetPasswordToken: String,
   resetPasswordExpires: Date,
@@ -18,15 +17,6 @@ const UserSchema = new mongoose.Schema({
   rating: { type: mongoose.Schema.Types.Decimal128, min: 0, max: 5 },
   location: String,
   languages: [String],
-  toursOrganized: Number,
-  pastTourLocations: [String],
-  upcomingTours: [
-    {
-      location: String,
-      startDate: Date,
-      endDate: Date,
-    },
-  ],
   reviews: [
     {
       reviewer: { type: String, required: true },
@@ -35,11 +25,6 @@ const UserSchema = new mongoose.Schema({
       date: { type: Date, required: true },
     },
   ],
-  socialMediaLinks: {
-    facebook: String,
-    instagram: String,
-    twitter: String,
-  },
   certifications: [String],
   specialties: [String],
   contactInfo: {

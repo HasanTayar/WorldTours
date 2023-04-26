@@ -336,6 +336,24 @@ exports.getAllUsers = async (req, res) => {
     res.status(500).send({ message: 'An error occurred while fetching users. Please try again.' });
   }
 };
+exports.getUserById = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    if (!userId) {
+      return res.status(400).send({ message: 'User ID is required.' });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      res.status(404).send({ message: 'User not found.' });
+    } else {
+      res.status(200).send(user);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: 'An error occurred while fetching the user. Please try again.' });
+  }
+};
 
 
 

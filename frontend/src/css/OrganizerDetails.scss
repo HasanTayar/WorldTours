@@ -1,0 +1,48 @@
+.organizer-details {
+    cursor: pointer;
+    color: #007bff;
+    font-weight: bold;
+    text-decoration: underline;
+    &:hover {
+      text-decoration: none;
+    }
+    .react-datepicker__day--selected {
+        background-color: orange !important;
+      }
+  
+    .modal {
+      .modal-body {
+        .d-flex {
+          .rounded-circle {
+            object-fit: cover;
+            border: 2px solid #007bff;
+          }
+        }
+  
+        h4 {
+          margin-bottom: 0.5rem;
+        }
+  
+        p {
+          margin-bottom: 0.5rem;
+        }
+      }
+  
+      .modal-footer {
+        .btn-primary {
+          background-color: #007bff;
+          border-color: #007bff;
+          transition: all 0.3s;
+  
+          &:hover,
+          &:focus,
+          &:active {
+            background-color: #0056b3;
+            border-color: #0056b3;
+          }
+        }
+      }
+    }
+  }
+ 
+  

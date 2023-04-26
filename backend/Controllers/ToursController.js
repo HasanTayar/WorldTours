@@ -1,9 +1,10 @@
-const Tour = require('../Models/TourModel');  
+const Tour = require('../Models/TourModel');
+
 const updateIsPopular = async () => {
   try {
     const topTours = await Tour.find().sort({ orderCount: -1 }).limit(5);
     const topTourIds = topTours.map(tour => tour._id);
-
+    this.isPopular = this.name.toLowerCase().includes("popular");
     await Tour.updateMany(
       { _id: { $in: topTourIds } },
       { $set: { isPopular: true } }
@@ -17,44 +18,44 @@ const updateIsPopular = async () => {
     console.error('Error updating isPopular field:', err);
   }
 };
-// Create a new tour
+
 exports.createTour = async (req, res) => {
-  console.log('req.body:', req.body);
-
   try {
-    const { organizerId, name, desc, days, location } = req.body;
-
+    console.log(req.body);
+    const { organizerId, name, desc, days, locations } = req.body;
+    const parsedOrganizerId = JSON.parse(organizerId);
     const tour = new Tour({
-      organizerId,
+      organizerId: parsedOrganizerId,
       name,
       desc,
-      photoTimeline: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png', // Set a default value here
+      photoTimeline: '',
       days: days ? JSON.parse(days).map((day) => ({
         ...day,
-        photo: day.photo ? day.photo : [] // If day.photo is undefined or falsy, set it to an empty array
-      })) : [] ,
-      location: location ? JSON.parse(location) : null
+        photo: day.photo ? JSON.parse(day.photo) : []
+      })) : [],
+      locations: locations ? JSON.parse(locations) : null
     });
+    
 
-    // Save tour photo
-    const photoTimelineFile = req.files['photoTimeline'];
+    if (req.files && req.files.length > 0) {
+      const photoTimelineFile = req.files.find(file => file.fieldname === 'timelinePhoto');
 
-    if (photoTimelineFile) {
-      console.log('Processing photoTimeline:', photoTimelineFile);
-      tour.photoTimeline = `/toursPhotos/${photoTimelineFile[0].filename}`;
-    } else {
-      console.log('Invalid photoTimeline object:', photoTimelineFile);
-    }
+      if (photoTimelineFile) {
+        console.log('Processing photoTimeline:', photoTimelineFile);
+        tour.photoTimeline = `/toursPhotos/${photoTimelineFile.filename}`;
+      } else {
+        console.log('Invalid photoTimeline object:', photoTimelineFile);
+      }
 
-    // Save day photos
-    for (let i = 0; i < tour.days.length; i++) {
-      const day = tour.days[i];
-      const dayPhotos = req.files[`days[${i}].photo`];
+      for (let i = 0; i < tour.days.length; i++) {
+        const day = tour.days[i];
+        const dayPhotos = req.files.filter(file => file.fieldname === `dayPhotos[${i}]`);
 
-      if (dayPhotos) {
-        for (const photo of dayPhotos) {
-          console.log('Processing day photo:', photo);
-          day.photo.push(`/toursPhotos/${photo.filename}`);
+        if (dayPhotos) {
+          for (const photo of dayPhotos) {
+            console.log('Processing day photo:', photo);
+            day.photo.push(`/toursPhotos/${photo.filename}`);
+          }
         }
       }
     }
@@ -68,10 +69,8 @@ exports.createTour = async (req, res) => {
   }
 };
 
-  
-  
-  
-  
+
+
   
 // Get all tours
 exports.getAllTours = async (req, res) => {
@@ -83,6 +82,38 @@ exports.getAllTours = async (req, res) => {
     res.status(500).send({ message: 'An error occurred while fetching tours. Please try again.' });
   }
 };
+exports.searchTours = async (req, res) => {
+  try {
+    const { price, rating, location } = req.query;
+
+    let query = {};
+
+    if (price) {
+      query.price = price;
+    }
+    if (rating) {
+      query.rating = rating;
+    }
+    if (location) {
+      query.locations = { $elemMatch: { locationName: location } };
+    }
+
+    const tours = await Tour.find(query);
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        tours
+      }
+    });
+  } catch (error) {
+    res.status(404).json({
+      status: 'fail',
+      message: error
+    });
+  }
+};
+
 
 // Get a specific tour by ID
 exports.getTourById = async (req, res) => {
@@ -188,33 +219,38 @@ exports.getToursByLocation = async (req, res) => {
 };
 // Upload photos for a tour
 exports.uploadTourPhotos = async (req, res) => {
-    try {
-      const { tourId } = req.params;
-      const tour = await Tour.findById(tourId);
-  
-      if (!tour) {
-        res.status(404).send({ message: 'Tour not found.' });
-        return;
-      }
-  
-      const newPhotos = req.files.map((file) => `${tourId}-${Date.now()}-${file.originalname}`);
-  
-      const filePaths = req.files.map((file) => file.path);
-  
-      tour.photoTimeline = [...tour.photoTimeline, ...filePaths];
-  
-      for (let i = 0; i < tour.days.length; i++) {
-        const day = tour.days[i];
-        day.photo = [...day.photo, ...filePaths];
-      }
-  
-      await tour.save();
-  
-      res.status(200).send({ message: 'Tour photos uploaded successfully.', newPhotos });
-    } catch (err) {
-      console.error('Error uploading tour photos:', err);
-      res.status(500).send({ message: 'Error uploading tour photos.' });
+  try {
+    const { tourId } = req.params;
+    const tour = await Tour.findById(tourId);
+
+    if (!tour) {
+      res.status(404).send({ message: 'Tour not found.' });
+      return;
     }
-  };
+
+    const newPhotos = req.files.map((file) => `/toursPhotos/${file.filename}`);
+
+    tour.photoTimeline = [...tour.photoTimeline, ...newPhotos];
+
+    for (let i = 0; i < tour.days.length; i++) {
+      const day = tour.days[i];
+      day.photo = [...day.photo, ...newPhotos];
+    }
+
+    await tour.save();
+
+    res.status(200).send({ message: 'Tour photos uploaded successfully.', newPhotos });
+  } catch (err) {
+    console.error('Error uploading tour photos:', err);
+    res.status(500).send({ message: 'Error uploading tour photos.' });
+  }
+};
+
+
+
+
+
   
+
+
 

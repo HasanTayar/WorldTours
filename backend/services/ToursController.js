@@ -1,23 +1,4 @@
-const Tour = require('../Models/TourModel');
-
-const updateIsPopular = async () => {
-    try {
-      const topTours = await Tour.find().sort({ orderCount: -1 }).limit(5);
-      const topTourIds = topTours.map(tour => tour._id);
-  
-      await Tour.updateMany(
-        { _id: { $in: topTourIds } },
-        { $set: { isPopular: true } }
-      );
-  
-      await Tour.updateMany(
-        { _id: { $nin: topTourIds } },
-        { $set: { isPopular: false } }
-      );
-    } catch (err) {
-      console.error('Error updating isPopular field:', err);
-    }
-  };
+const Tour = require('../Models/TourModel');  
 // Create a new tour
 exports.createTour = async (req, res) => {
   console.log('req.body:', req.body);

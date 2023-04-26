@@ -30,5 +30,6 @@ router.delete('/delete-profile', UserController.deleteUserProfile);
 router.get('/getLoginInUser', UserController.getUserByToken);
 router.get('/admins', UserController.getAdmins);
 router.get('/users', passport.authenticate('jwt', { session: false }), UserController.getAllUsers);
+router.get('/user/id/:userId', UserController.getUserById);
 
 module.exports = router;

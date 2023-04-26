@@ -3,31 +3,31 @@ import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import qs from 'qs';
 import axios from 'axios';
-const UpdateForgottenPassword = () => {
+function UpdateForgottenPassword() {
   const { search } = useLocation();
   const { token } = qs.parse(search, { ignoreQueryPrefix: true });
   const navigate = useNavigate();
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
- 
+
 
   const updatePassword = async (e) => {
     e.preventDefault();
-  
+
     if (newPassword !== confirmPassword) {
       setMessage('Passwords do not match. Please try again.');
       return;
     }
-  
+
     try {
       const response = await axios.post('/api/reset-password', {
         token,
         newPassword,
       });
-  
+
       console.table(response);
-  
+
       setMessage(response.data.message);
       if (response.data.message === 'Password successfully reset. You can now log in with your new password.') {
         setTimeout(() => {
@@ -38,7 +38,7 @@ const UpdateForgottenPassword = () => {
       setMessage(error.response.data.message || 'An error occurred while updating your password. Please try again.');
     }
   };
-  
+
   return (
     <div className="container">
       <div className="row">
@@ -53,8 +53,7 @@ const UpdateForgottenPassword = () => {
                 id="newPassword"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                required
-              />
+                required />
             </div>
             <div className="mb-3">
               <label htmlFor="confirmPassword" className="form-label">Confirm Password:</label>
@@ -64,8 +63,7 @@ const UpdateForgottenPassword = () => {
                 id="confirmPassword"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
+                required />
             </div>
             <button type="submit" className="btn btn-primary">Update Password</button>
           </form>
@@ -74,6 +72,6 @@ const UpdateForgottenPassword = () => {
       </div>
     </div>
   );
-};
+}
 
 export default UpdateForgottenPassword;

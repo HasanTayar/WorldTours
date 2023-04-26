@@ -1,8 +1,8 @@
 import "../css/Navbar.css";
 import { Link, NavLink, useLocation } from "react-router-dom";
-
-const Navbar = ({ isLoggedIn, user, onLogout }) => {
-  const photoFile = "../userPhoto/";
+const token = localStorage.getItem("token");
+export default function Navbar({ isLoggedIn, user, onLogout }) {
+  const photoFile = "/userPhoto/";
   const location = useLocation();
 
   const isActive = (path) => {
@@ -38,7 +38,7 @@ const Navbar = ({ isLoggedIn, user, onLogout }) => {
                 Tours
               </NavLink>
             </li>
-            
+
             {isLoggedIn && user ? (
               <><li className="nav-item">
                 <NavLink className={`nav-link ${isActive("/chat")}`} to="/chat">
@@ -69,11 +69,10 @@ const Navbar = ({ isLoggedIn, user, onLogout }) => {
                     <Link className="dropdown-item" to="/profile">
                       Profile
                     </Link>
-                    {user.isOrganizer && (
-                      <Link className="dropdown-item" to="/addTour">
+                      <Link className="dropdown-item" to="/add-new-tours/">
                         Add Tour
                       </Link>
-                    )}
+                    
                     <div className="dropdown-divider"></div>
                     <button className="dropdown-item" onClick={onLogout}>
                       Logout
@@ -95,6 +94,4 @@ const Navbar = ({ isLoggedIn, user, onLogout }) => {
       </div>
     </nav>
   );
-};
-
-export default Navbar;
+}

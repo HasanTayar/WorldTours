@@ -1,7 +1,8 @@
 import React, { useRef } from 'react';
 import { Autocomplete } from '@react-google-maps/api';
+import { FormGroup, FormLabel, FormControl } from 'react-bootstrap';
 
-const GooglePlaceAutocomplete = ({ onLocationSelect, field, className }) => {
+const GooglePlaceAutocomplete = ({ onLocationSelect, field, className, label, controlId }) => {
   const autocompleteRef = useRef(null);
 
   const onLoad = (autocomplete) => {
@@ -17,9 +18,12 @@ const GooglePlaceAutocomplete = ({ onLocationSelect, field, className }) => {
   };
 
   return (
-    <Autocomplete onLoad={onLoad} onPlaceChanged={handlePlaceSelect}>
-      <input type="text" {...field} className={className} />
-    </Autocomplete>
+    <FormGroup controlId={controlId}>
+      {label && <FormLabel>{label}</FormLabel>}
+      <Autocomplete onLoad={onLoad} onPlaceChanged={handlePlaceSelect}>
+        <FormControl as="input" type="text" {...field} className={className} />
+      </Autocomplete>
+    </FormGroup>
   );
 };
 
