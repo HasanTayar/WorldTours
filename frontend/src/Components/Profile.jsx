@@ -34,12 +34,10 @@ const Profile = ({ user }) => {
     const [newBio, setNewBio] = useState(bio);
     const [newLocation, setNewLocation] = useState(location);
     const [newLanguages, setNewLanguages] = useState(languages);
-    const [newPastTourLocations, setNewPastTourLocations] = useState(pastTourLocations);
     const [newSocialMediaLinks, setNewSocialMediaLinks] = useState(socialMediaLinks);
     const [newCertifications, setNewCertifications] = useState(certifications);
     const [newSpecialties, setNewSpecialties] = useState(specialties);
-    const [newContactInfo, setNewContactInfo] = useState(contactInfo);
-    const [userPhoto, setUserPhoto] = useState(user.photo ? user.photo : null);
+     const [userPhoto, setUserPhoto] = useState(user.photo ? user.photo : null);
     const [previewPhoto, setPreviewPhoto] = useState('https://via.placeholder.com/150');
     const handlePhotoChange = (e) => {
         const file = e.target.files[0];
@@ -157,7 +155,6 @@ const Profile = ({ user }) => {
             socialMediaLinks: newSocialMediaLinks ? newSocialMediaLinks : socialMediaLinks,
             certifications: newCertifications ? newCertifications : certifications,
             specialties: newSpecialties ? newSpecialties : specialties,
-            contactInfo: newContactInfo ? newContactInfo : contactInfo,
             createdAt: createdAt,
           };
           console.log('updatedUser', updatedUser);
