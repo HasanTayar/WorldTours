@@ -1,0 +1,27 @@
+.order-page {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  background-color: #f8f9fa;
+}
+
+.order-page h2 {
+  margin-bottom: 1.5rem;
+}
+
+.order-page ul {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 1.5rem;
+}
+
+.order-page ul li {
+  margin-bottom: 0.5rem;
+}
+
+.order-page button[type='submit'] {
+  width: 100%;
+  margin-top: 1.5rem;
+}

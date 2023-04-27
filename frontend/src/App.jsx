@@ -14,6 +14,7 @@ import { LoadScript } from '@react-google-maps/api';
 import TourList from './Components/TourList';
 import TourDetails from './Components/TourDetails';
 import OrganizerDetails from './Components/OrganizerDetails';
+import Order from './Components/Order.jsx';
 const token = localStorage.getItem('token');
 
 function App() {
@@ -75,6 +76,7 @@ function App() {
             <Route path="/tours/" element={<TourList/>}></Route>
             <Route path="/tour/:tourId" element={<TourDetails />} />
             <Route path="/tour/:tourId" element={<OrganizerDetails />} />
+            <Route path="/Booking/tour/:tourId" element={<Order/>} />
           </Routes>
         </div>
       </div>

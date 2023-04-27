@@ -12,7 +12,8 @@ const TourDetails = () => {
   const [organizer, setOrganizer] = useState({});
   const [showOrganizerPopup, setShowOrganizerPopup] = useState(false);
   const [activeDayIndex, setActiveDayIndex] = useState(0);
-
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [price , setPrice] = useState(0);
   useEffect(() => {
     const fetchTourAndOrganizer = async () => {
       try {
@@ -38,8 +39,11 @@ const TourDetails = () => {
   };
 
   const handleBookNowClick = () => {
-    navigate(`/order/${tourId}`);
+    navigate(`/Booking/tour/${tourId}?/&tourId=${tourId}&selectedDate=${selectedDate}&price=${tour.price}&tourDays=${tour.days.length}`);
   };
+  
+  
+  
 
   return (
     <div className={styles["tour-details"]}>
@@ -87,10 +91,14 @@ const TourDetails = () => {
         />
         <div className={styles["date-picker"]}>
         <div className="date-picker">
-  <CustomDatePicker
-    tourDays={tour.days ? tour.days.length : 0}
-    onSelectDate={(date) => console.log('Selected date:', date)}
-  />
+        <CustomDatePicker
+          tourDays={tour.days ? tour.days.length : 0}
+          onSelectDate={(date) => {
+          setSelectedDate(date);
+          console.log(date);
+  }}
+/>
+
 </div>
         </div>
         <button className={styles["book-now"]} onClick={handleBookNowClick}>

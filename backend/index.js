@@ -13,6 +13,8 @@ const PORT = process.env.PORT || 5000;
 const UserRoutes = require('./Routers/userRoutes');
 const TourRoutes = require('./Routers/tourRoutes');
 const ChatRoutes = require('./Routers/ChatRoutes');
+const OrderRoutes = require('./Routers/OrderRoutes');
+const PaymentRoutes = require('./Routers/paymentRouter');
 const passport = require('passport');
 const passportConfig = require('./passport');
 
@@ -25,7 +27,8 @@ app.use(express.json());
 app.use(UserRoutes);
 app.use(TourRoutes);
 app.use(ChatRoutes);
-
+app.use(OrderRoutes);
+app.use(PaymentRoutes);
 io.on('connection', (socket) => {
   console.log('a user connected');
 

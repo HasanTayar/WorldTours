@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const orderController = require('../controllers/OrderController');
-
-router.post('/order', orderController.createOrder);
+const orderController = require('../Controllers/OrderController');
+const passport = require('passport');
+router.post('/order', passport.authenticate('jwt', { session: false }), orderController.createOrder);
 
 module.exports = router;

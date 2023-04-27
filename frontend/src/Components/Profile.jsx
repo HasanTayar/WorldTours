@@ -3,7 +3,7 @@ import { Container, Row, Col, Card, Button, Form, Image, Navbar, Nav } from 'rea
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar as faStarSolid, faStar as faStarRegular, faPencilAlt, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faStarOutline } from '@fortawesome/free-regular-svg-icons';
-import { faCamera } from '@fortawesome/free-solid-svg-icons';
+import Payment from './Payment';
 import { faFacebook, faInstagram, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import GooglePlaceAutocomplete from './GooglePlaceAutocomplete';
 import axios from 'axios';
@@ -381,21 +381,7 @@ const Profile = ({ user }) => {
                                                     Separate multiple Specialties with commas (e.g. "Ability to Listen , Attention to Details .. ")
                                                 </Form.Text>
                                             </Form.Group>
-                                            <Form.Group  controlId="contatInfo">
-                                            <Form.Label>Contact info</Form.Label>
-                                                <Form.Control
-                                                    type="text"
-                                                    placeholder="Enter your Email to Contact"
-                                                    defaultValue={user.contactInfo ? user.contactInfo.contactEmail : ''}
-                                                    onChange={(e) => setNewContactInfo({ ...contactInfo, contactEmail : e.target.value })}
-                                                />
-                                                  <Form.Control
-                                                    type="text"
-                                                    placeholder="Enter your phone to Contact"
-                                                    defaultValue={user.contactInfo ? user.contactInfo.phone : ''}
-                                                    onChange={(e) => setNewContactInfo({ ...contactInfo, phone : e.target.value })}
-                                                />
-                                            </Form.Group>
+                                     
                                         </>
                                     )}
                                 </div>
@@ -435,6 +421,8 @@ const Profile = ({ user }) => {
                        
                     </Form>
                 );
+                case 'PaymentMethods':
+                    return(<Payment id={user._id}/>);
             default:
                 return (
                     <Container fluid className="py-4">
@@ -530,6 +518,7 @@ const Profile = ({ user }) => {
                             <Nav.Link eventKey="publicView">Public View</Nav.Link>
                             <Nav.Link eventKey="accountSettings">Account Settings</Nav.Link>
                             <Nav.Link eventKey="passwordSettings">Password Settings</Nav.Link>
+                            <Nav.Link eventKey="PaymentMethods">Payment Settings</Nav.Link>
                         </Nav>
                     </Navbar>
                 </Col>
