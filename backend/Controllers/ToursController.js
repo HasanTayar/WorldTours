@@ -4,7 +4,6 @@ const updateIsPopular = async () => {
   try {
     const topTours = await Tour.find().sort({ orderCount: -1 }).limit(5);
     const topTourIds = topTours.map((tour) => tour._id);
-    this.isPopular = this.name.toLowerCase().includes("popular");
     await Tour.updateMany(
       { _id: { $in: topTourIds } },
       { $set: { isPopular: true } }
@@ -22,7 +21,7 @@ const updateIsPopular = async () => {
 exports.createTour = async (req, res) => {
   try {
     console.log(req.body);
-    const { organizerId, name, desc, days, locations, tags } = req.body;
+    const { organizerId, name, desc, days, locations, tags  , price} = req.body;
 
     const parsedOrganizerId = JSON.parse(organizerId);
     const tour = new Tour({
@@ -30,6 +29,7 @@ exports.createTour = async (req, res) => {
       name,
       desc,
       photoTimeline: "",
+      price,
       days: days
         ? JSON.parse(days).map((day) => ({
             ...day,
