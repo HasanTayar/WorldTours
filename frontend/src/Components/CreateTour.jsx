@@ -1,24 +1,71 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import GooglePlaceAutocomplete from './GooglePlaceAutocomplete';
-import { Container, Row, Col, Form, Button, Card, FormGroup, FormControl, FormLabel, InputGroup } from 'react-bootstrap';
+import {
+  Container,
+  Row,
+  Col,
+  Form,
+  Button,
+  Card,
+  FormGroup,
+  FormControl,
+  FormLabel,
+  InputGroup,
+} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faImages, faMinus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import '../css/createtour.scss';
 
+const Day = ({ index, handleDayInputChange, handleDayPhotoChange, handleLocationSelect, removeDay }) => {
+  return (
+    <div>
+      <FormGroup>
+        <FormLabel>{`Day ${index + 1} Name`}</FormLabel>
+        <FormControl type="text" name="dayName" onChange={(e) => handleDayInputChange(e, index)} />
+      </FormGroup>
+
+      <GooglePlaceAutocomplete
+        controlId={`location-day-${index + 1}`}
+        label={`Day ${index + 1} Location`}
+        onLocationSelect={(location) => handleLocationSelect(location, index + 1)}
+      />
+      <FormGroup>
+        <FormLabel>{`Day ${index + 1} Description`}</FormLabel>
+        <FormControl as="textarea" name="desc" onChange={(e) => handleDayInputChange(e, index)} />
+      </FormGroup>
+      <FormGroup>
+        <FormLabel>{`Day ${index + 1} Photo`}</FormLabel>
+        <InputGroup>
+          <InputGroup.Text>
+            <FontAwesomeIcon icon={faImages} />
+          </InputGroup.Text>
+          <FormControl type="file" name="dayPhoto" onChange={(e) => handleDayPhotoChange(e, index)} />
+        </InputGroup>
+      </FormGroup>
+      <Button className="mb-3" variant="danger" type="button" onClick={removeDay}>
+        <FontAwesomeIcon icon={faTrash} />
+        Remove Day
+      </Button>
+    </div>
+  );
+};
 const CreateTour = ({ user }) => {
   const [formData, setFormData] = useState({
     organizerId: user._id,
     name: '',
     desc: '',
-    price:'',
+    price: '',
     days: [],
     locations: [],
+    tags: [],
   });
-
+  const [tags, setTags] = useState([]);
   const [dayCount, setDayCount] = useState(1);
   const [timelinePhoto, setTimelinePhoto] = useState(null);
   const [dayPhotos, setDayPhotos] = useState([]);
-
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
@@ -37,6 +84,15 @@ const CreateTour = ({ user }) => {
     updatedDayPhotos[index] = file;
     setDayPhotos(updatedDayPhotos);
   };
+  const addTag = (tag) => {
+    if (!tags.includes(tag)) {
+      setTags([...tags, tag]);
+    }
+  };
+  const removeTag = (tagToRemove) => {
+    setTags(tags.filter((tag) => tag !== tagToRemove));
+  };
+
 
   const handleLocationSelect = (location, index) => {
     const { name } = location;
@@ -53,24 +109,34 @@ const CreateTour = ({ user }) => {
     try {
       const data = new FormData();
       for (const key in formData) {
-        data.append(key, JSON.stringify(formData[key]));
+        if (key === 'tags') {
+          formData[key].forEach((tag) => {
+            data.append('tags[]', tag);
+          });
+        } else {
+          data.append(key, JSON.stringify(formData[key]));
+        }
       }
       data.append('timelinePhoto', timelinePhoto);
-
+   
       dayPhotos.forEach((photo, index) => {
         data.append(`dayPhotos[${index}]`, photo);
       });
-
+  
       const response = await axios.post('/api/create-tour', data, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log('Tour created successfully:', response.data);
+      setSuccessMessage('Tour created successfully!');
+      setErrorMessage('');
     } catch (error) {
       console.error('Error creating tour:', error);
+      setSuccessMessage('');
+      setErrorMessage('Something went wrong. Please try again.');
     }
   };
+  
 
   const addDay = () => {
     setDayCount(dayCount + 1);
@@ -85,6 +151,8 @@ const CreateTour = ({ user }) => {
         <Col xs={12} md={8}>
           <Card className="mt-4">
             <Card.Body>
+            {successMessage && <Alert variant="success">{successMessage}</Alert>}
+              {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
               <h2 className="text-center mb-4">Create Tour</h2>
               <Form onSubmit={handleSubmit} encType="multipart/form-data">
                 <FormGroup>
@@ -109,79 +177,93 @@ const CreateTour = ({ user }) => {
                   controlId="location"
                   label="Location"
                   onLocationSelect={(location) => handleLocationSelect(location, 0)}
+                />
+                <FormGroup>
+                  <FormLabel>Tour Description</FormLabel>
+                  <FormControl
+                    as="textarea"
+                    name="desc"
+                    value={formData.desc}
+                    onChange={handleInputChange}
                   />
-                  <FormGroup>
-                    <FormLabel>Tour Description</FormLabel>
+                </FormGroup>
+                <FormGroup>
+                  <FormLabel>Timeline Photo</FormLabel>
+                  <InputGroup>
+                    <InputGroup.Text><FontAwesomeIcon icon={faImages} /></InputGroup.Text>
                     <FormControl
-                      as="textarea"
-                      name="desc"
-                      value={formData.desc}
-                      onChange={handleInputChange}
+                      type="file"
+                      name="timelinePhoto"
+                      onChange={(e) => setTimelinePhoto(e.target.files[0])}
                     />
-                  </FormGroup>
-                  <FormGroup>
-                    <FormLabel>Timeline Photo</FormLabel>
+                  </InputGroup>
+                </FormGroup>
+                <FormGroup>
+                  <FormLabel>Tags</FormLabel>
+                  <InputGroup>
+                    <FormControl
+                      type="text"
+                      name="tagInput"
+                      placeholder="Enter a tag"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ',') {
+                          e.preventDefault();
+                          addTag(e.target.value.trim());
+                          e.target.value = '';
+                        }
+                      }}
+                    />
                     <InputGroup>
-                      <InputGroup.Text><FontAwesomeIcon icon={faImages} /></InputGroup.Text>
-                      <FormControl
-                        type="file"
-                        name="timelinePhoto"
-                        onChange={(e) => setTimelinePhoto(e.target.files[0])}
-                      />
-                    </InputGroup>
-                  </FormGroup>
-                  {[...Array(dayCount)].map((_, index) => (
-                    <div key={index}>
-                      <FormGroup>
-                        <FormLabel>{`Day ${index + 1} Name`}</FormLabel>
-                        <FormControl
-                          type="text"
-                          name="dayName"
-                          onChange={(e) => handleDayInputChange(e, index)}
-                        />
-                      </FormGroup>
-                      <GooglePlaceAutocomplete
-                        controlId={`location-day-${index + 1}`}
-                        label={`Day ${index + 1} Location`}
-                        onLocationSelect={(location) => handleLocationSelect(location, index + 1)}
-                      />
-                      <FormGroup>
-                        <FormLabel>{`Day ${index + 1} Description`}</FormLabel>
-                        <FormControl
-                          as="textarea"
-                          name="desc"
-                          onChange={(e) => handleDayInputChange(e, index)}
-                        />
-                      </FormGroup>
-                      <FormGroup>
-                        <FormLabel>{`Day ${index + 1} Photo`}</FormLabel>
-                        <InputGroup>
-                          <InputGroup.Text><FontAwesomeIcon icon={faImages} /></InputGroup.Text>
-                          <FormControl
-                            type="file"
-                            name="dayPhoto"
-                            onChange={(e) => handleDayPhotoChange(e, index)}
-                          />
-                        </InputGroup>
-                      </FormGroup>
-                      <Button className="mb-3" variant="danger" type="button" onClick={removeDay}>
-                        <FontAwesomeIcon icon={faTrash} />Remove Day
+                      <Button
+                        variant="outline-secondary"
+                        onClick={(e) => {
+                          const input = e.target.previousElementSibling;
+                          addTag(input.value.trim());
+                          input.value = '';
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faPlus} /> Add Tag
                       </Button>
-                    </div>
-                  ))}
-                  <Button className="mb-3" variant="secondary" type="button" onClick={addDay}>
-                    <FontAwesomeIcon icon={faPlus} /> Add Day
-                  </Button>
+                    </InputGroup>
+                  </InputGroup>
+                  <div className="mt-2">
+                    {tags.map((tag) => (
+                      <span key={tag} className="badge badge-primary mr-2">
+                        {tag}{' '}
+                        <FontAwesomeIcon
+                          icon={faMinus}
+                          onClick={() => removeTag(tag)}
+                          style={{ cursor: 'pointer' }}
+                        />
+                      </span>
+                    ))}
+                  </div>
+                </FormGroup>
   
-                  <Button className="w-100" type="submit">Create Tour</Button>
-                </Form>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    );
-  };
+                {[...Array(dayCount)].map((_, index) => (
+                  <Day
+                    key={index}
+                    index={index}
+                    handleDayInputChange={handleDayInputChange}
+                    handleDayPhotoChange={handleDayPhotoChange}
+                    handleLocationSelect={handleLocationSelect}
+                    removeDay={removeDay}
+                  />
+                ))}
+                <Button className="mb-3" variant="secondary" type="button" onClick={addDay}>
+                  <FontAwesomeIcon icon={faPlus} /> Add Day
+                </Button>
   
-  export default CreateTour;
+                <Button className="w-100" type="submit">Create Tour</Button>
+              </Form>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
+  );
   
+};
+
+export default CreateTour;
+

@@ -9,22 +9,22 @@ import GooglePlaceAutocomplete from './GooglePlaceAutocomplete';
 import axios from 'axios';
 const photoURL = "../userPhoto/";
 const Profile = ({ user }) => {
-    
+
     const [activeSetting, setActiveSetting] = useState('publicView');
     const {
-      email = user ? user.email : '',
-      firstName = user ? user.firstName : '',
-      lastName = user ? user.lastName : '',
-      phoneNumber = user ? user.phoneNumber : '',
-      bio = user ? user.bio : '',
-      location = user ? user.location : '',
-      languages = user ? user.languages : [],
-      pastTourLocations = user ? user.pastTourLocations : [],
-      socialMediaLinks = user ? user.socialMediaLinks : [],
-      certifications =  user ? user.certifications  : [],
-      specialties = user ? user.specialties :[],
-      contactInfo = user ? user.contactInfo : [],
-      createdAt,
+        email = user ? user.email : '',
+        firstName = user ? user.firstName : '',
+        lastName = user ? user.lastName : '',
+        phoneNumber = user ? user.phoneNumber : '',
+        bio = user ? user.bio : '',
+        location = user ? user.location : '',
+        languages = user ? user.languages : [],
+
+        socialMediaLinks = user ? user.socialMediaLinks : [],
+        certifications = user ? user.certifications : [],
+        specialties = user ? user.specialties : [],
+        contactInfo = user ? user.contactInfo : [],
+        createdAt,
     } = user || {};
 
     const [newEmail, setNewEmail] = useState(email);
@@ -37,7 +37,7 @@ const Profile = ({ user }) => {
     const [newSocialMediaLinks, setNewSocialMediaLinks] = useState(socialMediaLinks);
     const [newCertifications, setNewCertifications] = useState(certifications);
     const [newSpecialties, setNewSpecialties] = useState(specialties);
-     const [userPhoto, setUserPhoto] = useState(user.photo ? user.photo : null);
+    const [userPhoto, setUserPhoto] = useState(user.photo ? user.photo : null);
     const [previewPhoto, setPreviewPhoto] = useState('https://via.placeholder.com/150');
     const handlePhotoChange = (e) => {
         const file = e.target.files[0];
@@ -68,7 +68,7 @@ const Profile = ({ user }) => {
             console.error('Error updating profile:', error);
         }
     }
-      
+
     const handleProfilePictureChange = (event) => {
         if (event.target.files && event.target.files[0]) {
             setProfilePicture(URL.createObjectURL(event.target.files[0]));
@@ -80,7 +80,7 @@ const Profile = ({ user }) => {
             { name: 'instagram', icon: faInstagram, link: user.socialMediaLinks?.instagram },
             { name: 'twitter', icon: faTwitter, link: user.socialMediaLinks?.twitter },
         ];
-    
+
         return socialMedia.map((media) => (
             media.link && (
                 <a href={media.link} target="_blank" rel="noopener noreferrer" className="mx-2">
@@ -91,25 +91,25 @@ const Profile = ({ user }) => {
     };
     const renderLocationField = () => {
         if (user.location) {
-          return (
-            <Form.Group controlId="location">
-              <Form.Label>Location</Form.Label>
-              <Form.Control type="text" defaultValue={user.location} readOnly />
-            </Form.Group>
-          );
+            return (
+                <Form.Group controlId="location">
+                    <Form.Label>Location</Form.Label>
+                    <Form.Control type="text" defaultValue={user.location} readOnly />
+                </Form.Group>
+            );
         } else {
-          return (
-            <Form.Group controlId="location">
-              <Form.Label>Location</Form.Label>
-              <GooglePlaceAutocomplete
-                onLocationSelect={(place) => handleLocationSelect(place)}
-                field={{ value: newLocation }}
-                className="form-control"
-              />
-            </Form.Group>
-          );
+            return (
+                <Form.Group controlId="location">
+                    <Form.Label>Location</Form.Label>
+                    <GooglePlaceAutocomplete
+                        onLocationSelect={(place) => handleLocationSelect(place)}
+                        field={{ value: newLocation }}
+                        className="form-control"
+                    />
+                </Form.Group>
+            );
         }
-      };
+    };
 
 
     const handleSelect = (eventKey) => {
@@ -151,19 +151,18 @@ const Profile = ({ user }) => {
             bio: newBio ? newBio : bio,
             location: newLocation ? newLocation : location,
             languages: newLanguages ? newLanguages : languages,
-            pastTourLocations: newPastTourLocations ? newPastTourLocations : pastTourLocations,
             socialMediaLinks: newSocialMediaLinks ? newSocialMediaLinks : socialMediaLinks,
             certifications: newCertifications ? newCertifications : certifications,
             specialties: newSpecialties ? newSpecialties : specialties,
             createdAt: createdAt,
-          };
-          console.log('updatedUser', updatedUser);
-            updateUserProfile(updatedUser);
-          };
-      
-        
-      
-      
+        };
+        console.log('updatedUser', updatedUser);
+        updateUserProfile(updatedUser);
+    };
+
+
+
+
 
     const renderSettingContent = () => {
         switch (activeSetting) {
@@ -172,26 +171,26 @@ const Profile = ({ user }) => {
                     <>
                         <Form onSubmit={handleSubmit}>
                             <div className='position-relative'>
-                                <img 
-                                src={`${previewPhoto}`}
-                                alt="User"
-                                 className="img-thumbnail rounded-circle"
-                                style={{ maxWidth: "150px", maxHeight: "150px", objectFit: "cover" }}
+                                <img
+                                    src={`${previewPhoto}`}
+                                    alt="User"
+                                    className="img-thumbnail rounded-circle"
+                                    style={{ maxWidth: "150px", maxHeight: "150px", objectFit: "cover" }}
                                 />
                                 <div className="position-absolute top-0 end-0">
-                                            <label htmlFor="user-photo-input" className="btn btn-secondary btn-sm">
-                                                Change Photo
-                                            </label>
-                                            <input
-                                                id="user-photo-input"
-                                                type="file"
-                                                className="d-none"
-                                                name="userPhoto"
-                                                onChange={handlePhotoChange}
-                                                accept="image/*"
-                                            />
-                                        </div>
-                                    </div>
+                                    <label htmlFor="user-photo-input" className="btn btn-secondary btn-sm">
+                                        Change Photo
+                                    </label>
+                                    <input
+                                        id="user-photo-input"
+                                        type="file"
+                                        className="d-none"
+                                        name="userPhoto"
+                                        onChange={handlePhotoChange}
+                                        accept="image/*"
+                                    />
+                                </div>
+                            </div>
                             <Form.Group className="mb-3" controlId="formBasicEmail">
                                 <Form.Label>
                                     Email address
@@ -214,7 +213,7 @@ const Profile = ({ user }) => {
                                 <FontAwesomeIcon
                                     icon={faPencilAlt}
                                     className="mx-2"
-                                   
+
                                 />
                             </Form.Label>
                             <Form.Group className="mb-3" controlId="formBasicName">
@@ -243,7 +242,7 @@ const Profile = ({ user }) => {
                                             <FontAwesomeIcon
                                                 icon={faPencilAlt}
                                                 className="mx-2"
-                                              
+
                                             />
                                         </Form.Label>
                                         <Col>
@@ -272,7 +271,7 @@ const Profile = ({ user }) => {
                                                         ? user.socialMediaLinks.facebook
                                                         : ''
                                                 }
-                                              onChange={(e) => setNewSocialMediaLinks({ ...newSocialMediaLinks, facebook: e.target.value })}
+                                                onChange={(e) => setNewSocialMediaLinks({ ...newSocialMediaLinks, facebook: e.target.value })}
                                             />
                                         </div>
                                         <div className="d-flex align-items-center">
@@ -320,7 +319,7 @@ const Profile = ({ user }) => {
                                                     <FontAwesomeIcon
                                                         icon={faPencilAlt}
                                                         className="mx-2"
-                                                        
+
                                                     />
                                                 </Form.Label>
                                                 <Form.Control
@@ -330,9 +329,9 @@ const Profile = ({ user }) => {
                                                 />
                                             </Form.Group>
 
-                                           
+
                                             {renderLocationField()}
-                                       
+
 
 
 
@@ -343,7 +342,7 @@ const Profile = ({ user }) => {
                                                     placeholder="Enter your languages"
                                                     defaultValue={user.languages}
                                                     onChange={(e) => setNewLanguages(e.target.value.split(', '))}
-                                                    
+
                                                 />
                                                 <Form.Text className="text-muted">
                                                     Separate multiple languages with commas (e.g. "English, Spanish, French")
@@ -364,8 +363,8 @@ const Profile = ({ user }) => {
                                                     Separate multiple certifications with commas (e.g. "First Aid, CPR, Wilderness Guide")
                                                 </Form.Text>
                                             </Form.Group>
-                                            <Form.Group  controlId="specialties">
-                                            <Form.Label>Specialties</Form.Label>
+                                            <Form.Group controlId="specialties">
+                                                <Form.Label>Specialties</Form.Label>
                                                 <Form.Control
                                                     type="text"
                                                     placeholder="Enter your Specialties"
@@ -378,7 +377,7 @@ const Profile = ({ user }) => {
                                                     Separate multiple Specialties with commas (e.g. "Ability to Listen , Attention to Details .. ")
                                                 </Form.Text>
                                             </Form.Group>
-                                     
+
                                         </>
                                     )}
                                 </div>
@@ -396,112 +395,112 @@ const Profile = ({ user }) => {
             case 'passwordSettings':
                 return (
                     <Form>
-                       <Form.Group controlId="Password" >
-                        <Form.Label>
-                        Current Password
-                        </Form.Label>
-                        <Form.Control type='password'></Form.Control>
-                       </Form.Group>
-                       <Form.Group controlId="Password1" >
-                        <Form.Label>
-                        Enter a new Password
-                        </Form.Label>
-                        <Form.Control type='password'></Form.Control>
-                       </Form.Group>
-                       <Form.Group controlId="Password2" >
-                        <Form.Label>
-                        Confriom Password
-                        </Form.Label>
-                        <Form.Control type='password'></Form.Control>
-                       </Form.Group>
-                       <Form.Group><Button type='sumbit' variant="primary"> Change Password</Button></Form.Group>
-                       
+                        <Form.Group controlId="Password" >
+                            <Form.Label>
+                                Current Password
+                            </Form.Label>
+                            <Form.Control type='password'></Form.Control>
+                        </Form.Group>
+                        <Form.Group controlId="Password1" >
+                            <Form.Label>
+                                Enter a new Password
+                            </Form.Label>
+                            <Form.Control type='password'></Form.Control>
+                        </Form.Group>
+                        <Form.Group controlId="Password2" >
+                            <Form.Label>
+                                Confriom Password
+                            </Form.Label>
+                            <Form.Control type='password'></Form.Control>
+                        </Form.Group>
+                        <Form.Group><Button type='sumbit' variant="primary"> Change Password</Button></Form.Group>
+
                     </Form>
                 );
-                case 'PaymentMethods':
-                    return(<Payment id={user._id}/>);
+            case 'PaymentMethods':
+                return (<Payment id={user._id} />);
             default:
                 return (
                     <Container fluid className="py-4">
-                    <Row>
-                        <Col md={4} className="d-flex flex-column align-items-center">
-                            <Image
-                                src={user.photo ? `${photoURL}${user.photo}` : 'https://via.placeholder.com/150'}
-                                roundedCircle
-                                width="200"
-                                height="200"
-                                onChange={handleProfilePictureChange}
-                            />
-                            <div className="mt-3">
-                                {renderSocialMediaIcons()}
-                            </div>
-                        </Col>
-                        <Col md={8}>
-                            <h3>
-                                {user.firstName} {user.lastName}
-                            </h3>
-                            {user.isAdmin || user.isOrganizer ? (
-                                <>
-                                    <Card className="mb-3">
-                                        <Card.Body>
-                                            <Card.Title>Bio</Card.Title>
-                                            <Card.Text>{user.bio}</Card.Text>
-                                        </Card.Body>
-                                    </Card>
-                                    {user.isOrganizer && (
-                                        <>
-                                            <Card className="mb-3">
-                                                <Card.Body>
-                                                    <Card.Title>Rating</Card.Title>
-                                                    <Card.Text>{renderStars(user.rating)}</Card.Text>
-                                                </Card.Body>
-                                            </Card>
-                                            <Card className="mb-3">
-                                                <Card.Body>
-                                                    <Card.Title>Location</Card.Title>
-                                                    <Card.Text>{user.location}</Card.Text>
-                                                </Card.Body>
-                                            </Card>
-                                            <Card className="mb-3">
-                                                <Card.Body>
-                                                    <Card.Title>Languages</Card.Title>
-                                                    <Card.Text>{user.languages.join(', ')}</Card.Text>
-                                                </Card.Body>
-                                            </Card>
-                                            <Card className="mb-3">
-                                                <Card.Body>
-                                                    <Card.Title>specialties</Card.Title>
-                                                    <Card.Text>{user.specialties.join(', ')}</Card.Text>
-                                                </Card.Body>
-                        
-                                            </Card>
-                                            <Card className='mb-3'>
-                                                <Card.Body>
-                                                    <Card.Title>certifications</Card.Title>
-                                                    <Card.Text>{user.certifications.join(', ')}</Card.Text>
-                                                </Card.Body>
-                                            </Card>
-                                            <Card className="mb-3">
-                                                <Card.Body>
-                                                    <Card.Title>contact</Card.Title>
-                                                    <Card.Text>{user.contactInfo ? user.contactInfo.contactEmail : ''}</Card.Text>
-                                                    <Card.Text>{user.contactInfo ? user.contactInfo.phone : ''}</Card.Text>
-                                                </Card.Body>
-                                            </Card>
-                                            <Card className="mb-3">
-                                                <Card.Body>
-                                                    <Card.Title>Tours Organized</Card.Title>
-                                                    <Card.Text>{user.toursOrganized}</Card.Text>
-                                                </Card.Body>
-                                            </Card>
-                                            {/* Add other cards for the remaining information */}
-                                        </>
-                                    )}
-                                </>
-                            ) : null}
-                        </Col>
-                    </Row>
-                </Container>
+                        <Row>
+                            <Col md={4} className="d-flex flex-column align-items-center">
+                                <Image
+                                    src={user.photo ? `${photoURL}${user.photo}` : 'https://via.placeholder.com/150'}
+                                    roundedCircle
+                                    width="200"
+                                    height="200"
+                                    onChange={handleProfilePictureChange}
+                                />
+                                <div className="mt-3">
+                                    {renderSocialMediaIcons()}
+                                </div>
+                            </Col>
+                            <Col md={8}>
+                                <h3>
+                                    {user.firstName} {user.lastName}
+                                </h3>
+                                {user.isAdmin || user.isOrganizer ? (
+                                    <>
+                                        <Card className="mb-3">
+                                            <Card.Body>
+                                                <Card.Title>Bio</Card.Title>
+                                                <Card.Text>{user.bio}</Card.Text>
+                                            </Card.Body>
+                                        </Card>
+                                        {user.isOrganizer && (
+                                            <>
+                                                <Card className="mb-3">
+                                                    <Card.Body>
+                                                        <Card.Title>Rating</Card.Title>
+                                                        <Card.Text>{renderStars(user.rating)}</Card.Text>
+                                                    </Card.Body>
+                                                </Card>
+                                                <Card className="mb-3">
+                                                    <Card.Body>
+                                                        <Card.Title>Location</Card.Title>
+                                                        <Card.Text>{user.location}</Card.Text>
+                                                    </Card.Body>
+                                                </Card>
+                                                <Card className="mb-3">
+                                                    <Card.Body>
+                                                        <Card.Title>Languages</Card.Title>
+                                                        <Card.Text>{user.languages.join(', ')}</Card.Text>
+                                                    </Card.Body>
+                                                </Card>
+                                                <Card className="mb-3">
+                                                    <Card.Body>
+                                                        <Card.Title>specialties</Card.Title>
+                                                        <Card.Text>{user.specialties.join(', ')}</Card.Text>
+                                                    </Card.Body>
+
+                                                </Card>
+                                                <Card className='mb-3'>
+                                                    <Card.Body>
+                                                        <Card.Title>certifications</Card.Title>
+                                                        <Card.Text>{user.certifications.join(', ')}</Card.Text>
+                                                    </Card.Body>
+                                                </Card>
+                                                <Card className="mb-3">
+                                                    <Card.Body>
+                                                        <Card.Title>contact</Card.Title>
+                                                        <Card.Text>{user.contactInfo ? user.contactInfo.contactEmail : ''}</Card.Text>
+                                                        <Card.Text>{user.contactInfo ? user.contactInfo.phone : ''}</Card.Text>
+                                                    </Card.Body>
+                                                </Card>
+                                                <Card className="mb-3">
+                                                    <Card.Body>
+                                                        <Card.Title>Tours Organized</Card.Title>
+                                                        <Card.Text>{user.toursOrganized}</Card.Text>
+                                                    </Card.Body>
+                                                </Card>
+                                                {/* Add other cards for the remaining information */}
+                                            </>
+                                        )}
+                                    </>
+                                ) : null}
+                            </Col>
+                        </Row>
+                    </Container>
                 );
         }
     };

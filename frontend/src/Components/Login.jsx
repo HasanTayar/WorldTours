@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/Login.css";
-
+import axios from 'axios';
 function Login({ setIsLoggedIn, setUser }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -15,63 +15,44 @@ function Login({ setIsLoggedIn, setUser }) {
     navigate('/register');
   }
 
+
+
   async function handleLogin(e, email, password) {
     e.preventDefault();
-    setError(""); 
-  
-    try {
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message);
-      } 
-      
-      const responseData = await response.json();
-      const { token } = responseData;
-localStorage.setItem('token', token);
-// Call getUserByToken to fetch user data
-const userResponse = await fetch('/api/getLoginInUser', {
-  method: 'GET',
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
-});
-if (!userResponse.ok) {
-  const errorData = await userResponse.json();
-  throw new Error(errorData.message);
-}
+    setError("");
 
-const userData = await userResponse.json();
-setUser(userData);
-setIsLoggedIn(true);
-console.table(responseData);
-navigate('/', { replace: true });
-} catch (error) {
-      setError(error.message);
+    try {
+      const response = await axios.post('/api/login', { email, password });
+
+      const { token } = response.data;
+      localStorage.setItem('token', token);
+
+      const userResponse = await axios.get('/api/getLoginInUser', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setUser(userResponse.data);
+      setIsLoggedIn(true);
+      console.table(response.data);
+      navigate('/', { replace: true });
+    } catch (error) {
+      setError(error.response?.data?.message || error.message);
     }
   }
-  
 
   async function handleEmailSubmit(e) {
     e.preventDefault();
-    setError(""); 
-  
+    setError("");
     try {
-      const response = await fetch(`/api/user/${email}`, {
-        method: 'GET',
+      const response = await axios.get(`/api/user/${email}`, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
-  
-      const data = await response.json();
-  
+
+      const data = response.data;
       if (data) {
         setLocalUser(data);
         setShowPasswordInput(true);
@@ -83,31 +64,21 @@ navigate('/', { replace: true });
       setError('An error occurred while fetching user data.');
     }
   }
-  
+
 
   const handleResetPassword = async () => {
-    setError(""); 
-    try {
-      const response = await fetch('/api/forgot-password', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-      console.table(response);
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message);
-      }
+    setError("");
 
-      const responseData = await response.json();
-      setError(responseData.message);
+    try {
+      const response = await axios.post('/api/forgot-password', { email });
+      console.table(response);
+      setError(response.data.message);
     } catch (error) {
       console.error("Error resetting password:", error);
       setError("An error occurred while resetting your password.");
     }
   };
+
 
   return (
     <div className="login-container">
@@ -127,7 +98,7 @@ navigate('/', { replace: true });
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
-                    setError(""); 
+                    setError("");
                   }}
                 />
               </div>
@@ -173,7 +144,7 @@ navigate('/', { replace: true });
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
-                    setError(""); 
+                    setError("");
                   }}
                 />
               </div>
@@ -184,22 +155,22 @@ navigate('/', { replace: true });
                 type="button"
                 className="btn btn-link"
                 onClick={handleResetPassword}
-                >
-                  Forgot password?
-                </button>
-              </form>
-            )}
-          </div>
-          <div className="login-image">
-            <img
-              src="https://source.unsplash.com/random/800x600?travel"
-              alt="Travel"
-            />
-          </div>
+              >
+                Forgot password?
+              </button>
+            </form>
+          )}
+        </div>
+        <div className="login-image">
+          <img
+            src="https://source.unsplash.com/random/800x600?travel"
+            alt="Travel"
+          />
         </div>
       </div>
-    );
-  }
-  
-  export default Login;
-  
+    </div>
+  );
+}
+
+export default Login;
+

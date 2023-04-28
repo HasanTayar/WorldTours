@@ -79,8 +79,8 @@ exports.verifyEmail = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    console.log("Email:",email);
+    const user = await User.findOne({ email: { $regex: new RegExp(`^${email}$`, 'i') } });
+    
     if (!user) {
       res.status(404).send({ message: 'User not found.' });
     } else {
@@ -200,22 +200,26 @@ exports.resetPassword = async (req, res) => {
 exports.getUserProfile = async (req, res) => {
   try {
     const userEmail = req.params.userEmail;
+    console.log('getUserProfile userEmail:', userEmail);
+
     if (!userEmail) {
       return res.status(401).send({ message: 'Unauthorized.' });
     }
 
-    const user = await User.findOne({ email: userEmail });
+    const user = await User.findOne({ email: { $regex: new RegExp(`^${userEmail}$`, 'i') } });
     if (!user) {
+      console.log('User not found');
       res.status(404).send({ message: 'User not found.' });
     } else {
+      console.log('User found:', user);
       res.status(200).send(user);
     }
- } catch (error) {
-    console.log("!user:", 3);
-    console.error('Error in resetPassword function:', error);
-    return res.status(500).send({ message: 'An error occurred while resetting your password. Please try again.', errorDetails: error.message });
+  } catch (error) {
+    console.error('Error in getUserProfile function:', error);
+    return res.status(500).send({ message: 'An error occurred while fetching user data. Please try again.', errorDetails: error.message });
   }
 };
+
 
 
 //to update user profile

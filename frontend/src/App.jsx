@@ -8,7 +8,7 @@ import Login from './Components/Login';
 import UpdateForgottenPassword from './Components/updateForgetsPassword';
 import Profile from './Components/Profile';
 import ProtectedRoute from './Components/ProtectedRoute';
-import CreateTourForm from './Components/CreateTour';
+import CreateTour from './Components/CreateTour';
 import ChatPage from './Components/ChatClient';
 import { LoadScript } from '@react-google-maps/api';
 import TourList from './Components/TourList';
@@ -16,7 +16,8 @@ import TourDetails from './Components/TourDetails';
 import OrganizerDetails from './Components/OrganizerDetails';
 import Order from './Components/Order.jsx';
 const token = localStorage.getItem('token');
-
+const googleMapsApiKey = 'AIzaSyDhDzbFCa7X0FwHS3aBCFGIpg1coS8UdjE';
+const libraries = ['places'];
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     const token = localStorage.getItem('token');
@@ -51,8 +52,7 @@ function App() {
         })
     }
   }, []);
-  const googleMapsApiKey = 'AIzaSyDhDzbFCa7X0FwHS3aBCFGIpg1coS8UdjE';
-  const libraries = ['places'];
+
   return (
     <LoadScript
     googleMapsApiKey={googleMapsApiKey}
@@ -71,7 +71,7 @@ function App() {
             <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />} />
             <Route path="/users/reset-passwtoursord/" element={<UpdateForgottenPassword />} />
             <Route path="/profile" element={<ProtectedRoute isLoggedIn={isLoggedIn} user={user}><Profile user={user} /></ProtectedRoute>} />
-            <Route path="/add-new-tours/" element={<CreateTourForm user={user} />}></Route>
+            <Route path="/add-new-tours/" element={<CreateTour user={user} />}></Route>
             <Route path="/chat/" element={<ChatPage currentUser={user}/>}></Route>
             <Route path="/tours/" element={<TourList/>}></Route>
             <Route path="/tour/:tourId" element={<TourDetails />} />

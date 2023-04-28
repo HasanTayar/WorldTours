@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import '../css/PaymentSettings.scss'
 import { Form } from 'react-bootstrap';
-const Payment = ({id}) => {
+const Payment = ({ id }) => {
   const [userId, setUserId] = useState(id);
   const [cardNumber, setCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
@@ -42,7 +42,7 @@ const Payment = ({id}) => {
           placeholder="User ID"
           value={userId}
           onChange={(e) => setUserId(e.target.value)}
-         hidden
+          hidden
         />
         <input
           type="text"
@@ -52,13 +52,13 @@ const Payment = ({id}) => {
           required
         />
         <Form.Group>
-        <input
-          type="month"
-          placeholder="Expiry month"
-          value={expiryDate}
-          onChange={(e) => setExpiryDate(e.target.value)}
-          required
-        />
+          <input
+            type="month"
+            placeholder="Expiry month"
+            value={expiryDate}
+            onChange={(e) => setExpiryDate(e.target.value)}
+            required
+          />
         </Form.Group>
         <input
           type="text"

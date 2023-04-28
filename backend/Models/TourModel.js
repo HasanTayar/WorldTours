@@ -18,6 +18,7 @@ const tourSchema = new mongoose.Schema({
       desc: String,
     },
   ],
+  tags:[String],
   locations: [
     {
       locationName: String,
