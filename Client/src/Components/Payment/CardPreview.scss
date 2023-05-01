@@ -1,0 +1,16 @@
+.card-preview {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+  
+    .card-number,
+    .expiry-date,
+    .cvv {
+      margin-bottom: 10px;
+    }
+  }
+  
