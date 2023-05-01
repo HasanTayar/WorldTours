@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 import 'react-datepicker/dist/react-datepicker.css';
-import '../css/DatePicker.scss';
+import './DatePicker.scss';
 
 const CustomDatePicker = ({ tourDays, onSelectDate }) => {
   const [startDate, setStartDate] = useState(null);

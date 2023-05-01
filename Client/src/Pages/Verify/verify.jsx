@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import qs from "qs";
 import Spinner from "react-bootstrap/esm/Spinner";
-import axios from "axios";
+import { verifyEmail } from "../../Services/userService.js";
 export default function Verify() {
   const { search } = useLocation();
   const { token } = qs.parse(search, { ignoreQueryPrefix: true });
@@ -12,25 +12,19 @@ export default function Verify() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const verifyEmail = async () => {
-      try {
-        const response = await axios.post("/api/verify-email", { token });
-        setLoading(false);
-        if (!response.ok) {
-          setError(response.data.message);
-          throw new Error(response.data.message);
-        }
-        setSuccess(response.data.message);
+    async function verify() {
+      const { success, message } = await verifyEmail(token);
+      setLoading(false);
+      if (!success) {
+        setError(message);
+      } else {
+        setSuccess(message);
         setTimeout(() => {
           navigate("/login");
         }, 3000);
-      } catch (error) {
-        setLoading(false);
-        setError("An error occurred while verifying your email");
       }
-    };
-  
-    verifyEmail();
+    }
+    verify();
   }, [token, navigate]);
 
   return (

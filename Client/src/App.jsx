@@ -1,21 +1,21 @@
 import  { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Navbar from './Components/Navbar';
-import Home from './Components/Home';
-import Verify from './Components/verify'
+import Navbar from './Pages/Navbar/Navbar';
+import Home from './Pages/Home/Home';
+import Verify from './Pages/Verify/verify'
 import RegisterForm from './Pages/signUp/SignupForm';
 import Login from './Pages/Login/Login';
-import UpdateForgottenPassword from './Components/updateForgetsPassword';
+import UpdateForgottenPassword from './Pages/ForgettenPasswords/updateForgetsPassword';
 import Profile from './Pages/Profile/Profile';
-import ProtectedRoute from './Components/ProtectedRoute';
-import CreateTour from './Components/CreateTour';
+import ProtectedRoute from './Components/Routers/ProtectedRoute';
+import CreateTour from './Pages/CreateTour/CreateTour';
 import ChatPage from './Components/ChatClient';
 import { LoadScript } from '@react-google-maps/api';
-import TourList from './Components/TourList';
-import TourDetails from './Components/TourDetails';
-import OrganizerDetails from './Components/OrganizerDetails';
-import Order from './Components/Order.jsx';
-import { logout } from './Services/User/auth';
+import TourList from './Pages/Tours/TourList';
+import TourDetails from './Pages/Tours/TourDetails';
+import OrganizerDetails from './Components/Tour/OrganizerDetails';
+import Order from './Pages/Order/Order.jsx';
+import { logout } from './Services/userService.js';
 import { getToken } from './Services/Tokens/token';
 const googleMapsApiKey = 'AIzaSyDhDzbFCa7X0FwHS3aBCFGIpg1coS8UdjE';
 const libraries = ['places'];

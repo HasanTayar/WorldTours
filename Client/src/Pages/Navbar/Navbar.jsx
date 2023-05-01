@@ -1,4 +1,4 @@
-import "../css/Navbar.css";
+import "./Navbar.css";
 import { Link, NavLink, useLocation } from "react-router-dom";
 const token = localStorage.getItem("token");
 export default function Navbar({ isLoggedIn, user, onLogout }) {

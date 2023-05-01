@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
 import PhotoUpload from "../../Components/SignUp/PhotoUpload";
 import PasswordStrength from "../../Components/SignUp/PasswordStrength";
-import { registerUser } from "../../Services/User/signup";
+import { registerUser } from "../../Services/userService.js";
 function getPasswordStrength(password) {
   let strength = 0;
   if (/[a-z]/.test(password)) strength += 1;

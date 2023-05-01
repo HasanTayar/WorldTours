@@ -6,6 +6,7 @@ import AccountSettings from "../../Components/Profile/AccountSettings";
 import PublicView from "../../Components/Profile/PublicView";
 import PasswordSettings from "../../Components/Profile/PasswordSettings";
 import SideBar from "../../Components/Profile/SideBar";
+import { updateUserProfile } from "../../Services/userService";
 const Profile = ({ user }) => {
   const [activeSetting, setActiveSetting] = useState("publicView");
   const {
@@ -46,25 +47,7 @@ const Profile = ({ user }) => {
       setPreviewPhoto(null);
     }
   };
-  async function updateUserProfile(updatedData) {
-    console.table(updatedData);
-    try {
-      const response = await axios.put("/api/update-profile", updatedData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
 
-      if (response.status === 200) {
-        console.log("Profile updated successfully");
-        // Update the UI or redirect the user as needed
-      } else {
-        console.log("Error updating profile");
-      }
-    } catch (error) {
-      console.error("Error updating profile:", error);
-    }
-  }
 
 const handleSelect = (eventKey) => {
     setActiveSetting(eventKey);

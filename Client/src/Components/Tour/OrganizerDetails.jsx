@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import '../css/OrganizerDetails.scss';
+import './OrganizerDetails.scss';
 const OrganizerDetails = ({ organizer, show, handleClose, handleCloseModal }) => {
   return (
     <div className="organizer-details">

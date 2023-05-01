@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import '../css/TourDetails.scss'
-import OrganizerDetails from './OrganizerDetails';
-import CustomDatePicker from "./DatePicker";
+import { fetchTourAndOrganizer } from "../../Services/tourService";
+import "./TourDetails.scss";
+import OrganizerDetails from "../../Components/Tour/OrganizerDetails";
+import CustomDatePicker from "../../Components/Tour/DatePicker";
 const TourDetails = () => {
   const { tourId } = useParams();
   const navigate = useNavigate();
@@ -13,20 +13,14 @@ const TourDetails = () => {
   const [showOrganizerPopup, setShowOrganizerPopup] = useState(false);
   const [activeDayIndex, setActiveDayIndex] = useState(0);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [price , setPrice] = useState(0);
   useEffect(() => {
-    const fetchTourAndOrganizer = async () => {
-      try {
-        const response = await axios.get(`/api/tour/${tourId}`);
-        setTour(response.data);
-        const organizerResponse = await axios.get(`/api/user/id/${response.data.organizerId}`);
-        setOrganizer(organizerResponse.data);
-      } catch (error) {
-        console.error("Error fetching tour and organizer details:", error);
-      }
-    };
+    async function fetchTourOrganizer() {
+      const { tour, organizer } = await fetchTourAndOrganizer(tourId);
+      setTour(tour);
+      setOrganizer(organizer);
+    }
 
-    fetchTourAndOrganizer();
+    fetchTourOrganizer();
   }, [tourId]);
 
   const handleOrganizerClick = () => {
@@ -38,19 +32,21 @@ const TourDetails = () => {
   };
 
   const handleBookNowClick = () => {
-    navigate(`/Booking/tour/${tourId}?/&tourId=${tourId}&selectedDate=${selectedDate}&price=${tour.price}&tourDays=${tour.days.length}`);
+    navigate(
+      `/Booking/tour/${tourId}?/&tourId=${tourId}&selectedDate=${selectedDate}&price=${tour.price}&tourDays=${tour.days.length}`
+    );
   };
-  
-  
-
-
 
   return (
     <div className="tour-details container">
       <div className="row">
         <div className="col-lg-8">
           <div className="tour-title">
-            <img src={tour.photoTimeline} className="img-fluid" alt="Tour Cover" />
+            <img
+              src={tour.photoTimeline}
+              className="img-fluid"
+              alt="Tour Cover"
+            />
             <h1>{tour.name}</h1>
           </div>
           <p>{tour.desc}</p>
@@ -61,7 +57,9 @@ const TourDetails = () => {
               tour.days.map((day, index) => (
                 <button
                   key={index}
-                  className={`btn btn-outline-secondary ${index === activeDayIndex ? "active" : ""}`}
+                  className={`btn btn-outline-secondary ${
+                    index === activeDayIndex ? "active" : ""
+                  }`}
                   onClick={() => setActiveDayIndex(index)}
                 >
                   Day {index + 1}
@@ -74,7 +72,12 @@ const TourDetails = () => {
               <h3>{tour.days[activeDayIndex].dayName}</h3>
               <p>{tour.days[activeDayIndex].desc}</p>
               {tour.days[activeDayIndex].photo.map((photo, i) => (
-                <img key={i} src={photo} alt={`Day ${activeDayIndex + 1} photo ${i}`} className="img-fluid mb-2" />
+                <img
+                  key={i}
+                  src={photo}
+                  alt={`Day ${activeDayIndex + 1} photo ${i}`}
+                  className="img-fluid mb-2"
+                />
               ))}
             </div>
           )}
@@ -96,7 +99,10 @@ const TourDetails = () => {
               }}
             />
           </div>
-          <button className="book-now btn btn-primary" onClick={handleBookNowClick}>
+          <button
+            className="book-now btn btn-primary"
+            onClick={handleBookNowClick}
+          >
             Book Now
           </button>
         </div>

@@ -2,7 +2,7 @@ import { useState, useEffect , useRef} from 'react';
 import { useLocation } from 'react-router-dom';
 import qs from 'qs';
 import axios from 'axios';
-import '../css/order.scss';
+import './order.scss';
 
 const Order = () => {
   const location = useLocation();
