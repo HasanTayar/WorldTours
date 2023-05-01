@@ -8,7 +8,7 @@ import { faComment } from "@fortawesome/free-solid-svg-icons";
 const chatbotPhotoUrl =
   "https://dcassetcdn.com/design_img/130158/46154/46154_1757480_130158_image.png";
 const token = localStorage.getItem("token");
-const photoUrl = "userPhoto";
+
 
 const ChatPage = () => {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -155,7 +155,7 @@ const ChatPage = () => {
                 onClick={() => handleSelectUser(admin.firstName)}
               >
                 <img
-                  src={`${photoUrl}/${admin.photo}`}
+                  src={`${admin.photo}`}
                   alt={`${admin.firstName} avatar`}
                   className="message-avatar"
                 />{" "}
@@ -208,7 +208,7 @@ const ChatPage = () => {
                     src={
                       msg.sender === "WorldTours"
                         ? chatbotPhotoUrl
-                        : `${photoUrl}/${msg.sender.photo}`
+                        : `/${msg.sender.photo}`
                     }
                     alt={`${msg.sender} avatar`}
                     className="message-avatar"
