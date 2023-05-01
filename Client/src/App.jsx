@@ -3,10 +3,10 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './Components/Navbar';
 import Home from './Components/Home';
 import Verify from './Components/verify'
-import RegisterForm from './Components/SignupForm';
+import RegisterForm from './Pages/signUp/SignupForm';
 import Login from './Pages/Login/Login';
 import UpdateForgottenPassword from './Components/updateForgetsPassword';
-import Profile from './Components/Profile';
+import Profile from './Pages/Profile/Profile';
 import ProtectedRoute from './Components/ProtectedRoute';
 import CreateTour from './Components/CreateTour';
 import ChatPage from './Components/ChatClient';
