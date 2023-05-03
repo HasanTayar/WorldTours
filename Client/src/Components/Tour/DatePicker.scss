@@ -1,0 +1,75 @@
+.custom-date-picker {
+  position: relative;
+  display: inline-block;
+  text-align: left;
+
+  .custom-calendar {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+
+    .react-datepicker__current-month {
+      font-weight: bold;
+    }
+
+    .react-datepicker__day-names {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+
+      .react-datepicker__day-name {
+        width: 14.285%;
+        text-align: center;
+      }
+    }
+
+    .react-datepicker__month {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      width: 100%;
+
+      .react-datepicker__week {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+      }
+    }
+  }
+
+  .custom-day {
+    width: 14.285%;
+    padding: 0.5rem 0;
+    text-align: center;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(0, 123, 255, 0.1);
+    }
+  }
+
+  .react-datepicker__day--selected {
+    background-color: orange !important;
+  }
+
+  .selectable-day {
+    background-color: #f2d8c2;
+  }
+
+  .custom-popper {
+    z-index: 999;
+  }
+  
+  // changes start here
+  .react-datepicker-wrapper {
+    display: inline-block;
+  }
+
+  .react-datepicker__input-container input {
+    background-color: #ff7700; // set your desired color here
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}

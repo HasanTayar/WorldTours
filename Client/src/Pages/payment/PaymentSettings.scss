@@ -1,0 +1,103 @@
+.add-payment-form {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+
+  button {
+    margin-top: 20px;
+    background-color: #28a745;
+    color: #fff;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #218838;
+    }
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+
+    input {
+      margin-bottom: 10px;
+      padding: 5px;
+      font-size: 16px;
+      border: 1px solid #ced4da;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: #fff;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+  }
+}
+
+.card-preview {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+
+  .card-number,
+  .expiry-date,
+  .cvv {
+    margin-bottom: 10px;
+  }
+}
+
+.saved-card {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+
+  i {
+    margin-right: 10px;
+  }
+
+  span {
+    margin-right: 20px;
+  }
+
+  button {
+    background-color: #dc3545;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #c82333;
+    }
+  }
+}
