@@ -14,7 +14,7 @@ const OrganizerDetails = ({ organizer, show, handleClose, handleCloseModal }) =>
         <Modal.Body>
           <div className="d-flex align-items-center mb-3">
             <img
-              src={`../userPhoto/${organizer.photo}`}
+              src={`${organizer.photo}`}
               alt={`${organizer.firstName} ${organizer.lastName}`}
               className="rounded-circle mr-3"
               style={{ width: '150px', height: '150px' }}

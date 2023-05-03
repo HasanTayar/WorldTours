@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import EmailForm from "../../Components/auth/EmailForm";
 import LoginForm from "../../Components/auth/LoginForm";
-
 import { checkUserDetails, getUserByEmail, getUserByToken } from "../../Services/userService";
 import Footer from "../../Components/auth/Footer";
 function Login({ setIsLoggedIn, setUser }) {
