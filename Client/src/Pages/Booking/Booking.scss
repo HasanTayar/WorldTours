@@ -1,0 +1,72 @@
+.order-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .tour-details {
+    list-style-type: none;
+    padding: 0;
+
+    li {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    img {
+      width: 100%;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+  }
+
+  .booking-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+
+    .payment-method-form {
+      flex: 1;
+      margin-right: 1rem;
+
+      .form-label {
+        font-weight: bold;
+      }
+    }
+
+    .tour-details-container {
+      flex: 1;
+      margin-left: 1rem;
+    }
+  }
+
+  .booking-form {
+    margin-top: 1rem;
+
+    .form-label {
+      font-weight: bold;
+    }
+
+    button[type="submit"] {
+      margin-top: 1rem;
+    }
+  }
+
+  button {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in;
+
+    &:hover {
+      background-color: #0056b3;
+    }
+  }
+}

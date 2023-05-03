@@ -1,74 +1,51 @@
-import  { useEffect, useState } from 'react';
-import axios from 'axios';
-import './PaymentSettings.scss';
-import { Form, Button } from 'react-bootstrap';
-import CardPreview from '../../Components/Payment/CardPreview';
-import SavedCards from '../../Components/Payment/SavedCards';
-
+import { useEffect, useState } from "react";
+import "./PaymentSettings.scss";
+import { Form, Button } from "react-bootstrap";
+import CardPreview from "../../Components/Payment/CardPreview";
+import SavedCards from "../../Components/Payment/SavedCards";
+import {
+  getPaymentMethods,
+  addPaymentMethod,
+  deletePaymentMethod,
+} from "../../Services/paymentService"; // Replace this with the actual file name
 
 const Payment = ({ id }) => {
-  const [userId, setUserId] = useState(id);
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiryDate, setExpiryDate] = useState('');
-  const [cvv, setCvv] = useState('');
+  const userId = id ;
+  const [cardNumber, setCardNumber] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
+  const [cvv, setCvv] = useState("");
   const [savedCards, setSavedCards] = useState([]);
   const [showForm, setShowForm] = useState(false);
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post('/api/addPaymentMethod', { userId, cardNumber, expiryDate, cvv });
-      if (response.status === 201) {
-        
-        setCardNumber('');
-        setExpiryDate('');
-        setCvv('');
-      }
-    } catch (error) {
-      console.error('Error adding payment method', error);
-    }
-  };
-  useEffect(() => {
-    const getCridets = async () => {
-      try {
-        const response = await axios.get(`/api/user/${id}/hasPaymentRef`);
-        if (response.status === 200) {
-          console.log("Fetched data:", response.data); // Debugging message
-          setSavedCards(response.data);
-        }
-      } catch (error) {
-        console.log("Error with fetching data:", error);
-      }
-    };
-    getCridets();
-  }, []);
-  
-  
-  
-  
-  const handleDeleteCard = async (cardId) => {
-    try {
-      const response = await axios.delete(`/api/delete/${cardId}`);
-      console.log(cardId);
-      if (response) {
-        setSavedCards(savedCards.filter((card) => card._id !== cardId));
-      }
-    } catch (error) {
-      console.error('Error deleting payment method', error);
-    }
+    await addPaymentMethod(userId, cardNumber, expiryDate, cvv);
+    setCardNumber("");
+    setExpiryDate("");
+    setCvv("");
   };
 
+  useEffect(() => {
+    getPaymentMethods(id, setSavedCards);
+  }, []);
+
+  const handleDeleteCard = async (cardId) => {
+    await deletePaymentMethod(cardId, setSavedCards);
+  };
 
   return (
     <div className="add-payment-form">
       <SavedCards savedCards={savedCards} handleDeleteCard={handleDeleteCard} />
       <Button variant="success" onClick={() => setShowForm(!showForm)}>
-        {showForm ? 'Hide form' : 'Add new card'}
+        {showForm ? "Hide form" : "Add new card"}
       </Button>
       {showForm && (
         <>
-          <CardPreview cardNumber={cardNumber} expiryDate={expiryDate} cvv={cvv} />
+          <CardPreview
+            cardNumber={cardNumber}
+            expiryDate={expiryDate}
+            cvv={cvv}
+          />
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="cardNumber">
               <Form.Label>Card Number</Form.Label>
@@ -107,8 +84,6 @@ const Payment = ({ id }) => {
       )}
     </div>
   );
-  
-  
 };
 
 export default Payment;

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { setToken, getToken, destroyToken } from "./Tokens/token";
+import { setToken, getToken, destroyToken } from "./token";
 // Validates user login and sets a token if successful
 export const checkUserDetails = async (email, password, setError) => {
   setError("");

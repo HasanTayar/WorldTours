@@ -5,7 +5,7 @@ import { fetchTourAndOrganizer } from "../../Services/tourService";
 import "./TourDetails.scss";
 import OrganizerDetails from "../../Components/Tour/OrganizerDetails";
 import CustomDatePicker from "../../Components/Tour/DatePicker";
-const TourDetails = () => {
+const TourDetails = ({isLoggedIn , user}) => {
   const { tourId } = useParams();
   const navigate = useNavigate();
   const [tour, setTour] = useState({});
@@ -33,7 +33,7 @@ const TourDetails = () => {
 
   const handleBookNowClick = () => {
     navigate(
-      `/Booking/tour/${tourId}?/&tourId=${tourId}&selectedDate=${selectedDate}&price=${tour.price}&tourDays=${tour.days.length}`
+      `/Booking/tour/${tourId}?/&tourId=${tourId}&selectedDate=${selectedDate}&price=${tour.price}&tourDays=${tour.days.length}&userId=${user._id}`
     );
   };
 
@@ -90,24 +90,29 @@ const TourDetails = () => {
             show={showOrganizerPopup}
             handleCloseModal={closeOrganizerPopup}
           />
-          <div className="date-picker">
-            <CustomDatePicker
-              tourDays={tour.days ? tour.days.length : 0}
-              onSelectDate={(date) => {
-                setSelectedDate(date);
-                console.log(date);
-              }}
-            />
+          {isLoggedIn && (
+            <>
+              <div className="date-picker">
+                <CustomDatePicker
+                  tourDays={tour.days ? tour.days.length : 0}
+                  onSelectDate={(date) => {
+                    setSelectedDate(date);
+                    console.log(date);
+                  }}
+                />
+              </div>
+              <button
+                className="book-now btn btn-primary"
+                onClick={handleBookNowClick}
+              >
+                Book Now
+              </button>
+            </>
+          )}
           </div>
-          <button
-            className="book-now btn btn-primary"
-            onClick={handleBookNowClick}
-          >
-            Book Now
-          </button>
-        </div>
+          </div>
       </div>
-    </div>
+          
   );
 };
 

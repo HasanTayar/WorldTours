@@ -9,12 +9,14 @@ import CreateTour from "../../Pages/CreateTour/CreateTour";
 import ChatPage from "../../Components/ChatClient";
 import TourList from "../../Pages/Tours/TourList";
 import TourDetails from "../../Pages/Tours/TourDetails";
-import Order from "../../Pages/Order/Order.jsx";
+import Booking from "../../Pages/Booking/Booking";
 import OrganizerDetails from "../Tour/OrganizerDetails";
-
-const AppRoutes = ({ isLoggedIn, user , setUser , setIsLoggedIn}) => {
+import NotFound from "../../Pages/NotFound/NotFound";
+import OrderHistory from "../../Pages/orderHistory/OrderHistory";
+const AppRoutes = ({ isLoggedIn, user, setUser, setIsLoggedIn }) => {
   return (
     <Routes>
+      <Route path="*" element={<NotFound />} />
       <Route path="/" element={<Home />} />
       <Route path="/register" element={<RegisterForm />} />
       <Route path="/users/verify/" element={<Verify />} />
@@ -27,8 +29,8 @@ const AppRoutes = ({ isLoggedIn, user , setUser , setIsLoggedIn}) => {
         path="/users/reset-password/"
         element={<UpdateForgottenPassword />}
       />
-      <Route path="/tours/" element={<TourList />} />
-      <Route path="/tour/:tourId" element={<TourDetails />} />
+      <Route path="/tours/" element={<TourList user={user} />} />
+      <Route path="/tour/:tourId" element={<TourDetails isLoggedIn={isLoggedIn}  user={user}/>} />
       <Route path="/tour/:tourId" element={<OrganizerDetails />} />
       <Route
         path="/profile"
@@ -54,9 +56,14 @@ const AppRoutes = ({ isLoggedIn, user , setUser , setIsLoggedIn}) => {
       />
       <Route
         path="/Booking/tour/:tourId"
-        element={isLoggedIn ? <Order /> : <Navigate to="/login" />}
+        element={isLoggedIn ? <Booking /> : <Navigate to="/login" />}
+      />
+       <Route
+        path="/Orders"
+        element={isLoggedIn ? <OrderHistory user={user} /> : <Navigate to="/login" />}
       />
     </Routes>
+    
   );
 };
 

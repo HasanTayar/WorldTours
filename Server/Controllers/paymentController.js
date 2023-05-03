@@ -29,6 +29,7 @@ exports.addPaymentMethod = async (req, res) => {
       .status(201)
       .json({ message: "Payment method added successfully", paymentMethod });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Error adding payment method", error });
   }
 };

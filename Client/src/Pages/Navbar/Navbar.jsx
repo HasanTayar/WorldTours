@@ -69,9 +69,15 @@ export default function Navbar({ isLoggedIn, user, onLogout }) {
                     <Link className="dropdown-item" to="/profile">
                       Profile
                     </Link>
-                    {user.isOrganizer && ( <Link className="dropdown-item" to="/add-new-tours/">
+                    <Link className="dropdown-item" to="/Orders">
+                      Orders
+                    </Link>
+                    {user.isOrganizer && (
+                       <Link className="dropdown-item" to="/add-new-tours/">
                         Add Tour
-                      </Link>)}
+                      </Link>
+                      
+                      )}
                      
                     
                     <div className="dropdown-divider"></div>

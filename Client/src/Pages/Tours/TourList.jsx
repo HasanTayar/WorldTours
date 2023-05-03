@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFlag, faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
 import { fetchAllTours } from "../../Services/tourService";
-const TourList = () => {
+const TourList = ({user}) => {
   const [tours, setTours] = useState([]);
-
+  const userId= user._id;
   useEffect(() => {
     async function fetchTours() {
       const fetchedTours = await fetchAllTours();
@@ -18,10 +18,8 @@ const TourList = () => {
   const navigate = useNavigate();
 
   const handleTourClick = (tourId) => {
-    navigate(`/tour/${tourId}`);
+    navigate(`/tour/${tourId}?/&userId=${userId}`);
   };
-
-  console.table(tours);
   return (
     <Container>
       <Row>

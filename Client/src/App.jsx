@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import Navbar from "./Pages/Navbar/Navbar";
 import { LoadScript } from "@react-google-maps/api";
 import { logout } from "./Services/userService.js";
-import { getToken } from "./Services/Tokens/token";
+import { getToken } from "./Services/token";
 import AppRoutes from "./Components/Routers/AppRoutes";
 const googleMapsApiKey = "AIzaSyDhDzbFCa7X0FwHS3aBCFGIpg1coS8UdjE";
 const libraries = ["places"];

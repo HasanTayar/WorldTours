@@ -39,3 +39,12 @@ export const fetchTourAndOrganizer = async (tourId) => {
     return { tour: null, organizer: null };
   }
 };
+export const getTourById = async (id)=>{
+  try{
+    const response = await axios.get(`/api/tour/${id}`);
+    return response.data; 
+  }catch(e){
+    console.log("error while getting tour ",e);
+    return(null);
+  }
+}
