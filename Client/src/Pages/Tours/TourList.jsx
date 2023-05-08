@@ -6,7 +6,8 @@ import { faFlag, faMoneyBill1Wave } from "@fortawesome/free-solid-svg-icons";
 import { fetchAllTours } from "../../Services/tourService";
 const TourList = ({user}) => {
   const [tours, setTours] = useState([]);
-  const userId= user._id;
+  const userId = user ? user._id : '';
+
   useEffect(() => {
     async function fetchTours() {
       const fetchedTours = await fetchAllTours();

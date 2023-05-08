@@ -6,7 +6,7 @@ import Login from "../../Pages/Login/Login";
 import UpdateForgottenPassword from "../../Pages/ForgettenPasswords/updateForgetsPassword";
 import Profile from "../../Pages/Profile/Profile";
 import CreateTour from "../../Pages/CreateTour/CreateTour";
-import ChatPage from "../../Components/ChatClient";
+import ChatPage from "../../Pages/Chat/chat";
 import TourList from "../../Pages/Tours/TourList";
 import TourDetails from "../../Pages/Tours/TourDetails";
 import Booking from "../../Pages/Booking/Booking";
@@ -45,14 +45,8 @@ const AppRoutes = ({ isLoggedIn, user, setUser, setIsLoggedIn }) => {
         }
       />
       <Route
-        path="/chat/"
-        element={
-          isLoggedIn ? (
-            <ChatPage currentUser={user} />
-          ) : (
-            <Navigate to="/login" />
-          )
-        }
+        path="/chat"
+        element={isLoggedIn ? <ChatPage /> : <Navigate to="/login" />}
       />
       <Route
         path="/Booking/tour/:tourId"

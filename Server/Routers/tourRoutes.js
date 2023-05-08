@@ -21,12 +21,12 @@ const upload = multer({ storage: storage });
 router.post('/create-tour', upload.any(), TourController.createTour);
 
 router.get('/tours', TourController.getAllTours);
-router.get('/tour/:tourId', TourController.getTourById);
-router.put('/tour/:tourId', passport.authenticate('jwt', { session: false }), TourController.updateTourById);
-router.delete('/tour/:tourId', passport.authenticate('jwt', { session: false }), TourController.deleteTourById);
-router.get('/tours/nearby', TourController.getToursByLocation);
-router.get('/tours/search', TourController.searchTours);
+router.get('/:tourId', TourController.getTourById);
+router.put('/:tourId', passport.authenticate('jwt', { session: false }), TourController.updateTourById);
+router.delete('/:tourId', passport.authenticate('jwt', { session: false }), TourController.deleteTourById);
+router.get('/nearby', TourController.getToursByLocation);
+router.get('/search', TourController.searchTours);
 
-router.post('/tour/:tourId/photos', passport.authenticate('jwt', { session: false }), upload.array('photos', 10), TourController.uploadTourPhotos);
+router.post('/:tourId/photos', passport.authenticate('jwt', { session: false }), upload.array('photos', 10), TourController.uploadTourPhotos);
 
 module.exports = router;

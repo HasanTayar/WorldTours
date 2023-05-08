@@ -1,0 +1,223 @@
+// Define variables for colors and spacing
+$primary-color: #007bff;
+$light-gray: #f0f0f0;
+$dark-gray: #ccc;
+$border-radius: 20px;
+$padding-small: 5px 10px;
+$padding-medium: 10px;
+$margin-bottom: 10px;
+$icon-size: 24px;
+$message-input-height: 60px;
+// Define styles for the chatbot container
+.chatbot-container {
+  max-width: 320px;
+  height: 60vh; // change to 100vh to fill the viewport
+  position: fixed;
+  right: 20px;
+  bottom: 70px;
+  border: 1px solid $dark-gray;
+  border-radius: $border-radius;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  box-sizing: border-box;
+
+  // Define styles for the message list
+  .message-list {
+    height: calc(50vh - #{$message-input-height} - 40px);  // adjust the height based on the height of the input field and other elements
+    overflow-y: auto;
+    overflow: auto;
+    padding: $padding-medium;
+    margin-bottom: $margin-bottom;
+    -webkit-overflow-scrolling: touch; // For smooth scrolling on mobile devices
+    box-sizing: border-box;
+    // Add scrollbar styles
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 2px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  }
+    // Define styles for each message item
+    .message-item {
+      display: flex;
+      margin-bottom: $margin-bottom;
+  
+      // Define styles for the message content
+      p {
+        margin: 0;
+        padding: $padding-medium;
+        border-radius: $border-radius;
+        max-width: 75%;
+        line-height: 1.4;
+      }
+    }
+      .message-logo {
+        width: 40px; // Set the desired width for the logo
+        height: 40px; // Set the desired height for the logo
+        margin-right: 5px; // Add some margin to separate the logo from the text
+      }
+      .message-user-icon {
+        width: 40px;
+        height: 40px;
+        margin-right: 5px; // Add some margin to separate the icon from the text
+        border-radius: $border-radius;
+      }
+      
+      // Define styles for the message content
+      p {
+        margin: 0;
+        padding: $padding-medium;
+        border-radius: $border-radius;
+        max-width: 75%;
+        line-height: 1.4;
+      }
+
+      // Define styles for the message icon
+      .icon {
+        width: $icon-size;
+        height: $icon-size;
+        margin-right: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    // Define styles for bot messages
+    .bot-message {
+      text-align: left;
+  
+      .message-logo {
+        width: 40px;
+        height: 40px;
+        margin-right: 5px;
+      }
+  
+      p {
+        background-color: $light-gray;
+      }
+    }
+    // Define styles for user messages
+    .user-message {
+      text-align: right;
+      flex-direction: row-reverse;
+  
+      .message-user-icon {
+        width: 40px;
+        height: 40px;
+        margin-left: 5px; // Add some margin to separate the icon from the text
+        border-radius: $border-radius;
+      }
+  
+      p {
+        background-color: $primary-color;
+        color: #fff;
+      }
+    }
+  
+
+  // Define styles for the message input
+  .message-input {
+    height: $message-input-height;
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+
+    input {
+      flex-grow: 1;
+      border: 1px solid $dark-gray;
+      // border-radius: $border-radius;
+      padding: $padding-small;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+      }
+    }
+
+    button {
+      background-color: $primary-color;
+      color: #fff;
+      border: none;
+      // border-radius: 50%;
+      padding: $padding-small;
+      // margin-left: 5px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: darken($primary-color, 10%);
+      }
+
+      &:focus {
+        outline: none;
+      }
+
+      .send-icon {
+        vertical-align: middle;
+      }
+    }
+  }
+// Define styles for the typing indicator
+// Define styles for the typing indicator
+.message.bot-message.typing-indicator {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: left;
+  // Add any additional styling for the typing indicator here
+}
+
+.message.bot-message.typing-indicator .message-logo {
+  width: 40px;
+  height: 40px;
+  margin-right: 5px;
+}
+
+.message.bot-message.typing-indicator .typing-dots {
+  background-color: $light-gray;
+  border-radius: $border-radius;
+  padding: $padding-medium;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.message.bot-message.typing-indicator span {
+  animation: typingDots 1s steps(5, end) infinite;
+}
+
+@keyframes typingDots {
+  0%, 20% {
+    visibility: hidden;
+  }
+  50% {
+    visibility: visible;
+  }
+  100% {
+    visibility: hidden;
+  }
+}
+
+// Define styles for the chatbot toggle button
+.chatbot-toggle {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  cursor: pointer;
+  z-index: 1000;
+}

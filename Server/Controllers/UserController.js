@@ -364,11 +364,13 @@ exports.setAdmin = async (req, res) => {
 };
 
 exports.getUserByToken = async (req, res) => {
+  console.log(req);
   try {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decodedToken.userId;
     const user = await User.findById(userId);
+    console.log(user);
     if (!user) {
       res.status(404).send({ message: "User not found." });
     } else {

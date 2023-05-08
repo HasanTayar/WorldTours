@@ -1,8 +1,9 @@
 import axios from "axios";
+const API = "http://localhost:5000/payments"
 
 export const getPaymentMethods = async (userId, setSavedCards) => {
   try {
-    const response = await axios.get(`/api/${userId}/hasPaymentRef`);
+    const response = await axios.get(`${API}/${userId}/hasPaymentRef`);
     if(response.status === 200){
       setSavedCards(response.data);
     }
@@ -13,7 +14,7 @@ export const getPaymentMethods = async (userId, setSavedCards) => {
 
 export const addPaymentMethod = async (userId, cardNumber, expiryDate, cvv) => {
   try {
-    const response = await axios.post(`/api/addPaymentMethod`, {
+    const response = await axios.post(`${API}/addPaymentMethod`, {
       userId,
       cardNumber,
       expiryDate,
@@ -29,7 +30,7 @@ export const addPaymentMethod = async (userId, cardNumber, expiryDate, cvv) => {
 
 export const deletePaymentMethod = async (cardId, setSavedCards) => {
   try {
-    const response = await axios.delete(`/api/delete/${cardId}`);
+    const response = await axios.delete(`${API}/delete/${cardId}`);
     console.log(cardId);
     if (response) {
       setSavedCards(savedCards.filter((card) => card._id !== cardId));

@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const addOrder = async (data) => {
   try {
-    const response = await axios.post("/api/new-order", data);
+    const response = await axios.post("/api/order/new-order", data);
     if (response.status === 201) {
       return true;
     }
@@ -14,7 +14,7 @@ export const addOrder = async (data) => {
 
 export const fetchAllOrders = async () => {
   try {
-    const response = await axios.get("/api/orders"); 
+    const response = await axios.get("/api/order/orders"); 
     return response.data;
   } catch (error) {
     console.error("Error fetching orders:", error);
@@ -23,7 +23,7 @@ export const fetchAllOrders = async () => {
 };
 export const approveOrder = async (orderId) => {
   try {
-    const response = await axios.patch(`/api/orders/${orderId}/approve`, {});
+    const response = await axios.patch(`/api/order/${orderId}/approve`, {});
 
     if (response.status === 200) {
       console.log(response.data);
@@ -38,7 +38,7 @@ export const approveOrder = async (orderId) => {
 
 export const cancelOrder = async (orderId) => {
   try {
-    const response = await axios.patch(`/api/orders/${orderId}/cancel-organizer`, {});
+    const response = await axios.patch(`/api/order/${orderId}/cancel-organizer`, {});
 
     if (response.status === 200) {
       return response.data.order;

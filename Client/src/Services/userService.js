@@ -1,10 +1,11 @@
 import axios from "axios";
 import { setToken, getToken, destroyToken } from "./token";
+const API = "http://localhost:5000/users";
 // Validates user login and sets a token if successful
 export const checkUserDetails = async (email, password, setError) => {
   setError("");
   try {
-    const response = await axios.post("/api/login", { email, password });
+    const response = await axios.post(`${API}/login`, { email, password });
     setToken(response.data);
     return response.data; // Return the token on success
   } catch (error) {
@@ -18,7 +19,7 @@ export const checkUserDetails = async (email, password, setError) => {
 export const getUserByToken = async (setUser, setIsLoggedIn, setError) => {
   const token = getToken();
   try {
-    const response = await axios.get("/api/getUser", {
+    const response = await axios.get(`${API}/userByToken`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -41,7 +42,7 @@ export const getUserByEmail = async (
 ) => {
   setError("");
   try {
-    const response = await axios.get(`/api/user/${email}`, {
+    const response = await axios.get(`${API}/${email}`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -61,7 +62,7 @@ export const getUserByEmail = async (
 // Handles password reset request and sets an error message
 export const forgotPassword = async (email, setError) => {
   try {
-    const response = await axios.post("/api/forget-password", { email });
+    const response = await axios.post(`${API}/forget-password`, { email });
     setError(response.data.message);
   } catch (error) {
     console.error("Error resetting password :", error);
@@ -78,7 +79,7 @@ export const logout = (setIsLoggedIn, setUser) => {
 // Handles new user insert
 export const registerUser = async (formData) => {
   try {
-    const response = await axios.post("/api/signup", formData, {
+    const response = await axios.post(`${API}/signup`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -92,7 +93,7 @@ export const registerUser = async (formData) => {
 export async function updateUserProfile(updatedData) {
   console.table(updatedData);
   try {
-    const response = await axios.put("/api/update-profile", updatedData, {
+    const response = await axios.put(`${API}/update-profile"`, updatedData, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -111,7 +112,7 @@ export async function updateUserProfile(updatedData) {
 //Handle Verifing Email for The User
 export const verifyEmail = async (token) => {
     try {
-      const response = await axios.post("/api/verify-email", { token });
+      const response = await axios.post(`${API}/verify-email`, { token });
       if (!response.ok) {
         throw new Error(response.data.message);
       }
@@ -123,7 +124,7 @@ export const verifyEmail = async (token) => {
   // Handles Upadting Forgeten Password
   export const updatePassword = async (token, newPassword) => {
     try {
-      const response = await axios.post('/api/reset-password', {
+      const response = await axios.post(`${API}/reset-password`, {
         token,
         newPassword,
       });

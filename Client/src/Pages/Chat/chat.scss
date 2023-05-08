@@ -1,0 +1,33 @@
+.chat-room {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #f8f9fa;
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  }
+  
+  .chat-list {
+    max-height: 400px;
+    margin-bottom: 1rem;
+    overflow-y: auto;
+  
+    .list-group-item {
+      word-wrap: break-word;
+    }
+  }
+  
+  .send-message-form {
+    display: flex;
+  
+    .form-group {
+      flex-grow: 1;
+      margin-bottom: 0;
+      margin-right: 1rem;
+    }
+  
+    .btn {
+      flex-shrink: 0;
+    }
+  }
+  

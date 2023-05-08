@@ -24,6 +24,7 @@ function Login({ setIsLoggedIn, setUser }) {
   const checkInputs = async (e, email, password) => {
     e.preventDefault();
     const success = await checkUserDetails(email, password, setError);
+    alert('Success:', success);
     if (success) {
       await getUserByToken(setUser, setIsLoggedIn, setError);
       navigate("/");

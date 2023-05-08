@@ -5,6 +5,11 @@ import { LoadScript } from "@react-google-maps/api";
 import { logout } from "./Services/userService.js";
 import { getToken } from "./Services/token";
 import AppRoutes from "./Components/Routers/AppRoutes";
+import ChatBot from "./Pages/ChatBot/ChatBot";
+import ChatBotLogo from "./assets/ChatBotLogo.png";
+
+import "./App.css";
+// import { deleteAllChatBotMessages } from "./Services/ChatService";
 const googleMapsApiKey = "AIzaSyDhDzbFCa7X0FwHS3aBCFGIpg1coS8UdjE";
 const libraries = ["places"];
 
@@ -13,13 +18,29 @@ function App() {
     const token = getToken();
     return token !== null;
   });
+  const handleChatBotToggle = () => {
+    setShowChatBot(!showChatBot);
+  };
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("user")) || {}
   );
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(user));
   }, [user]);
+  const [showChatBot, setShowChatBot] = useState(false);
 
+  // useEffect(() => {
+  //   if (!isLoggedIn) {
+  //     clearChatBotHistory();
+  //   }
+  // }, [isLoggedIn]);
+  // const clearChatBotHistory = async () => {
+  //   try {
+  //     await deleteAllChatBotMessages(user._id);
+  //   } catch (error) {
+  //     console.error("Error while deleting chatbot messages:", error);
+  //   }
+  // };
   return (
     <LoadScript
       googleMapsApiKey={googleMapsApiKey}
@@ -38,9 +59,22 @@ function App() {
           />
 
           <div className="container mt-4">
-            <AppRoutes isLoggedIn={isLoggedIn} user={user}  setUser={setUser} setIsLoggedIn={setIsLoggedIn}/>
+            <AppRoutes
+              isLoggedIn={isLoggedIn}
+              user={user}
+              setUser={setUser}
+              setIsLoggedIn={setIsLoggedIn}
+            />
           </div>
         </div>
+        <img
+          src={ChatBotLogo}
+          onClick={handleChatBotToggle}
+          className="chatbot-toggle"
+          alt="Chatbot"
+        />
+
+        {showChatBot && <ChatBot />}
       </Router>
     </LoadScript>
   );

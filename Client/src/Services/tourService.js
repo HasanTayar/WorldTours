@@ -1,9 +1,11 @@
 
 import axios from "axios";
+const API = "http://localhost:5000/tours";
+const USER_API = "http://localhost:5000/users";
 //Handles Creating New Tour
 export const createTour = async (data) => {
   try {
-    const response = await axios.post("/api/create-tour", data, {
+    const response = await axios.post(`${API}/create-tour`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -18,7 +20,7 @@ export const createTour = async (data) => {
 //To Get ALl The Tours From The Database
 export const fetchAllTours = async () => {
   try {
-    const response = await axios.get('/api/tours');
+    const response = await axios.get(`${API}/tours`);
     return response.data;
   } catch (error) {
     console.error("Error fetching tours:", error);
@@ -28,9 +30,9 @@ export const fetchAllTours = async () => {
 //Getting Orgainzer And Tour Detials At Same Time
 export const fetchTourAndOrganizer = async (tourId) => {
   try {
-    const response = await axios.get(`/api/tour/${tourId}`);
+    const response = await axios.get(`${API}/${tourId}`);
     const tour = response.data;
-    const organizerResponse = await axios.get(`/api/user/id/${tour.organizerId}`);
+    const organizerResponse = await axios.get(`${USER_API}/id/${tour.organizerId}`);
     const organizer = organizerResponse.data;
     
     return { tour, organizer };
@@ -41,7 +43,7 @@ export const fetchTourAndOrganizer = async (tourId) => {
 };
 export const getTourById = async (id)=>{
   try{
-    const response = await axios.get(`/api/tour/${id}`);
+    const response = await axios.get(`${API}/${id}`);
     return response.data; 
   }catch(e){
     console.log("error while getting tour ",e);
