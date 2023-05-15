@@ -1,52 +1,51 @@
 const Chat = require('../Models/ChatModel');
+const Message = require('../Models/Message');
 
-exports.createMessage = async (req, res) => {
-  try {
-    const { sender, receiver, content } = req.body;
-    const newMessage = new Chat({ sender, receiver, content });
-    const savedMessage = await newMessage.save();
-    res.status(201).json(savedMessage);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-    console.log(error);
-  }
+exports.createNewChat = async (req, res) => {
+    const participants = req.body.participants;
+
+    try {
+        const chat = new Chat({ participants });
+        await chat.save();
+
+        res.status(201).json(chat);
+    } catch (error) {
+        res.status(500).json({ error: 'Error creating chat: ' + error.message });
+    }
+};
+
+exports.sendMessage = async (req, res) => {
+    const { chatId, senderId, content } = req.body;
+
+    try {
+        const chat = await Chat.findById(chatId);
+        if (!chat) {
+            return res.status(404).json({ error: 'Chat not found' });
+        }
+
+        const message = new Message({ content, sender: senderId });
+        await message.save();
+
+        chat.messages.push(message);
+        await chat.save();
+
+        res.status(201).json(message);
+    } catch (error) {
+        res.status(500).json({ error: 'Error sending message: ' + error.message });
+    }
 };
 
 exports.getChatHistory = async (req, res) => {
-  try {
-    const { sender, receiver } = req.query;
-    const chatHistory = await Chat.find({
-      $or: [
-        { sender, receiver },
-        { sender: receiver, receiver: sender },
-      ],
-    }).sort('timestamp');
-    res.status(200).json(chatHistory);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+    const { chatId } = req.params;
 
-exports.markAsRead = async (req, res) => {
-  try {
-    const { messageId } = req.params;
-    const updatedMessage = await Chat.findByIdAndUpdate(
-      messageId,
-      { read: true },
-      { new: true }
-    );
-    res.status(200).json(updatedMessage);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+    try {
+        const chat = await Chat.findById(chatId).populate('messages');
+        if (!chat) {
+            return res.status(404).json({ error: 'Chat not found' });
+        }
 
-exports.deleteMessage = async (req, res) => {
-  try {
-    const { messageId } = req.params;
-    await Chat.findByIdAndDelete(messageId);
-    res.status(200).json({ message: 'Message deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+        res.status(200).json(chat.messages);
+    } catch (error) {
+        res.status(500).json({ error: 'Error getting chat history: ' + error.message });
+    }
 };

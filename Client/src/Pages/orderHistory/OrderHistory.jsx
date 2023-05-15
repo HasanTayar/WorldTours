@@ -12,7 +12,7 @@ const OrderHistory = ({ user }) => {
       setOrders(fetchedOrders);
     };
     fetchOrders();
-  }, []);
+  }, [orders]);
 
   const handleApprove = async (orderId) => {
     const approvedOrder = await approveOrder(orderId);
@@ -55,6 +55,7 @@ if (canceledOrder) {
                 {user.isOrganizer && <th>End Date</th>}
                 <th>Status</th>
                 {user.isOrganizer && <th>Actions</th>}
+                {!user.isOrganizer && <th>Cancel Order</th>}
               </tr>
             </thead>
             <tbody>

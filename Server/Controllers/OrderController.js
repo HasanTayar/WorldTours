@@ -150,3 +150,38 @@ exports.cancelOrderOrganizer = async (req, res) => {
     });
   }
 };
+
+exports.deleteOrder = async (req, res) => {
+  try {
+    const orderId = req.params.orderId;
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+      res.status(404).json({
+        status: 'fail',
+        message: 'Order not found',
+      });
+      return;
+    }
+
+    // Update the order count for the tour
+    const tour = await Tour.findById(order.tourId);
+    if (tour) {
+      tour.orderCount -= 1;
+      await tour.save();
+    }
+
+    // Delete the order
+    await Order.findByIdAndDelete(orderId);
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Order deleted successfully',
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: 'fail',
+      message: error.message,
+    });
+  }
+};

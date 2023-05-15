@@ -133,3 +133,18 @@ export const verifyEmail = async (token) => {
       return { success: false, message: error.response.data.message || 'An error occurred while updating your password. Please try again.' };
     }
   };
+  export const fetchUserByToken = async () => {
+    const token = getToken();
+    try {
+      const response = await axios.get(`${API}/userByToken`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data; // Return the user data
+    } catch (error) {
+      console.error('Error fetching user by token:', error);
+      throw error; // Re-throw the error to be caught in the calling function
+    }
+  };
+  

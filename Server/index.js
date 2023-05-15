@@ -22,8 +22,9 @@ const OrderRoutes = require('./Routers/OrderRoutes');
 const PaymentRoutes = require('./Routers/paymentRouter');
 const passport = require('passport');
 const passportConfig = require('./passport');
-const socketEvents = require('./socketEvents');
 
+const chatSocket = require('./Routers/chatSocket')
+const BotRoutes = require('./Routers/chatBotRoutes');
 passportConfig(passport);
 app.use(passport.initialize());
 
@@ -35,7 +36,9 @@ app.use('/tours',TourRoutes);
 app.use('/chat', ChatRoutes)
 app.use('/order',OrderRoutes);
 app.use('/payment',PaymentRoutes);
-socketEvents(io);
+app.use('/chatBot' , BotRoutes);
+app.use('/chat' , ChatRoutes);
+chatSocket(io);
 
 http.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

@@ -1,25 +1,33 @@
 import React, { useState } from 'react';
-import ChatRoom from '../../Components/Chat/ChatRoom';
-import UsersList from '../../Components/Chat/UsersList';
 import { Container, Row, Col } from 'react-bootstrap';
-
+import ChatList from '../../Components/Chat/ChatList';
+import ChatBox from '../../Components/Chat/ChatBox';
+import MessageForm from '../../Components/Chat/MessageForm';
 
 const ChatPage = () => {
-  const [sender] = useState('YourUsername');
-  const [receiver, setReceiver] = useState(null);
+  const [selectedChatId, setSelectedChatId] = useState(null);
+  const [messages, setMessages] = useState([]);
 
-  const handleUserSelect = (selectedUser) => {
-    setReceiver(selectedUser);
+  const handleChatSelect = (chatId) => {
+    setSelectedChatId(chatId);
+    setMessages([]);
   };
 
   return (
-    <Container className="chat-page">
+    <Container fluid>
       <Row>
         <Col md={4}>
-          <UsersList onUserSelect={handleUserSelect} />
+          <h2>Chats</h2>
+          <ChatList onChatSelect={handleChatSelect} />
         </Col>
         <Col md={8}>
-          {receiver && <ChatRoom sender={sender} receiver={receiver} />}
+          {selectedChatId && (
+            <>
+              <h2>Chat</h2>
+              <ChatBox chatId={selectedChatId} messages={messages} setMessages={setMessages} />
+              <MessageForm chatId={selectedChatId} />
+            </>
+          )}
         </Col>
       </Row>
     </Container>

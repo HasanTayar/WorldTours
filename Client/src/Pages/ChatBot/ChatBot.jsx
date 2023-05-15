@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import MessageList from '../../Components/ChatBot/MessageList';
 import MessageInput from '../../Components/ChatBot/MessageInput';
 import './ChatBot.scss';
-import { handleUserMessage } from '../../Services/chatBotSercive';
+import { chatWithBot } from '../../Services/chatBotSercive';
 
 const ChatBot = () => {
   const [messages, setMessages] = useState([]);
@@ -17,7 +17,7 @@ const ChatBot = () => {
     setIsTyping(true);
 
     try {
-      const botResponse =  handleUserMessage(message);
+      const botResponse = await chatWithBot(message);
       setTimeout(() => {
         setIsTyping(false);
         setMessages((prevMessages) => [...prevMessages, { sender: 'bot', content: botResponse.message }]);

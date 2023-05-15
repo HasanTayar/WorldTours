@@ -2,27 +2,31 @@ import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
-
-import OrganizerDetails from "../Tour/OrganizerDetails";
+import { cancelOrder, deleteOrder } from "../../Services/orderService";
 import "./OrderRow.scss";
 
 const OrderRow = ({ order, user, handleApprove, handleCancel }) => {
-  const [showOrganizerDetails, setShowOrganizerDetails] = useState(false);
 
-  const handleShowOrganizerDetails = () => {
-    setShowOrganizerDetails(true);
+
+ 
+  const handleCancelOrder = async () => {
+    try {
+      const response = await deleteOrder(order._id);
+      if (response) {
+        console.log('Order cancelled successfully');
+      } else {
+        console.log('Failed to cancel order');
+      }
+    } catch (error) {
+      console.error('Error cancelling order:', error);
+    }
   };
-
-  const handleCloseOrganizerDetails = () => {
-    setShowOrganizerDetails(false);
-  };
-
+  
   const calculateEndDate = (startDate, duration) => {
     const endDate = new Date(startDate);
     endDate.setDate(endDate.getDate() + duration);
     return endDate.toLocaleDateString();
   };
-  console.log(order.tourId.organizerId)
   return (
     <tr className="order-row">
       <td>{order.tourId.name}</td>
@@ -68,16 +72,12 @@ const OrderRow = ({ order, user, handleApprove, handleCancel }) => {
       {!user.isOrganizer && (
         <td>
           <Button
-            className="contact-organizer-btn"
-            onClick={handleShowOrganizerDetails}
+           variant="danger"
+            onClick={handleCancelOrder}
           >
-            Contact Organizer
+            Cancel
           </Button>
-          <OrganizerDetails
-            organizer={order.tourId.organizerId}
-            show={showOrganizerDetails}
-            handleClose={handleCloseOrganizerDetails}
-          />
+          
         </td>
       )}
     </tr>

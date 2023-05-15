@@ -1,5 +1,5 @@
 import axios from "axios";
-const API = "http://localhost:5000/payments"
+const API = "http://localhost:5000/payment"
 
 export const getPaymentMethods = async (userId, setSavedCards) => {
   try {
