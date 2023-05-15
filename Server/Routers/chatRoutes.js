@@ -11,4 +11,6 @@ router.post('/chats/:chatId/messages', chatController.sendMessage);
 // Route to get chat history
 router.get('/chats/:chatId/messages', chatController.getChatHistory);
 
+//Route to get all the chat
+router.get('/chats' , chatController.getAllChats);
 module.exports = router;

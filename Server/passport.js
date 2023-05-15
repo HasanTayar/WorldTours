@@ -11,12 +11,11 @@ const opts = {
 module.exports = (passport) => {
   passport.use(
     new JwtStrategy(opts, async (jwt_payload, done) => {
-      console.log('JWT payload:', jwt_payload);
+   
 
       try {
         const user = await User.findById(jwt_payload.userId); // Change jwt_payload.id to jwt_payload.userId
-        console.log('User:', user);
-
+       
         if (user) {
           return done(null, user);
         } else {

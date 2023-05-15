@@ -1,27 +1,38 @@
-const chatController = require('../Controllers/chatController');
+// chatSocket.js
+const Chat = require('../Models/ChatModel');
+const Message = require('../Models/Message');
 
 module.exports = (io) => {
   io.on('connection', (socket) => {
-    console.log('User connected.');
+    console.log('A user connected');
 
-    socket.on('join', async ({ room }) => {
-      socket.join(room);
-      const messages = await chatController.getMessages(room);
-      socket.emit('load messages', messages);
+    socket.on('chatMessage', async ({ chatId, message, senderId, receiverId }) => {
+      try {
+        let chat = await Chat.findById(chatId);
+        if (!chat) {
+          console.log(`Chat ${chatId} not found. Creating a new chat.`);
+          chat = new Chat({ _id: chatId, participants: [senderId, receiverId] });
+          await chat.save();
+        }
+    
+        const newMessage = new Message({ content: message, sender: senderId, receiver: receiverId });
+        await newMessage.save();
+    
+        chat.messages.push(newMessage);
+        await chat.save();
+    
+        // Emit a new 'chatMessage' event to all clients in the same chat
+        io.to(receiverId).emit('chatMessage', newMessage);  // send message to specific receiver
+      } catch (error) {
+        console.error('Error handling chatMessage event:', error);
+      }
     });
-
-    socket.on('send message', async (messageData) => {
-      await chatController.saveMessage(messageData);
-      io.to(messageData.room).emit('new message', messageData);
-    });
-
-    socket.on('delete message', async (id) => {
-      await chatController.deleteMessage(id);
-      io.emit('message deleted', id);
-    });
+    
+    
+    
 
     socket.on('disconnect', () => {
-      console.log('User disconnected.');
+      console.log('A user disconnected');
     });
   });
 };

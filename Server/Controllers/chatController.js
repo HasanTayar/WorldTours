@@ -49,3 +49,29 @@ exports.getChatHistory = async (req, res) => {
         res.status(500).json({ error: 'Error getting chat history: ' + error.message });
     }
 };
+exports.getAllChats = async (req, res) => {
+    try {
+        const chats = await Chat.find({}).populate('participants').populate('messages');
+        res.status(200).json(chats);
+    } catch (error) {
+        res.status(500).json({ error: 'Error getting all chats: ' + error.message });
+    }
+};
+exports.markMessageAsRead = async (req, res) => {
+    const { messageId } = req.params;
+
+    try {
+        const message = await Message.findById(messageId);
+        if (!message) {
+            return res.status(404).json({ error: 'Message not found' });
+        }
+
+        message.read = true;
+        await message.save();
+
+        res.status(200).json(message);
+    } catch (error) {
+        res.status(500).json({ error: 'Error marking message as read: ' + error.message });
+    }
+};
+

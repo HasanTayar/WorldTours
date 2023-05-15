@@ -17,12 +17,13 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 const router = express.Router();
+
 router.get('/userByToken', UserController.getUserByToken);
 router.post('/signup', upload.single('photo'), UserController.signup);
 router.post('/verify-email', UserController.verifyEmail);
 router.post('/login', UserController.login);
 router.put('/update-profile', passport.authenticate('jwt', { session: false }), UserController.updateUserProfile);
-router.get('/:userEmail', UserController.getUserProfile);
+
 router.post('/set-admin', passport.authenticate('jwt', { session: false }), isAdmin, UserController.setAdmin);
 router.post('/forgot-password', UserController.forgotPassword);
 router.post('/reset-password', UserController.resetPassword);
@@ -32,4 +33,5 @@ router.get('/admins', UserController.getAdmins);
 router.get('/users', passport.authenticate('jwt', { session: false }), UserController.getAllUsers);
 router.get('/id/:userId', UserController.getUserById);
 
+router.get('/:userEmail', UserController.getUserProfile);
 module.exports = router;

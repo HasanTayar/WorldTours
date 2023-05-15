@@ -148,3 +148,17 @@ export const verifyEmail = async (token) => {
     }
   };
   
+  export const fetchAllUsers = async () => {
+    try{
+      const response = await axios.get(`${API}/users`,{
+        headers:{
+          Authorization:`Bearer ${getToken()}`
+        }
+      });
+      return response.data;
+    }catch(error){
+      console.error(error);
+      throw error;
+    }
+  }
+  

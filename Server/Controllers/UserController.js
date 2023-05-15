@@ -440,6 +440,7 @@ exports.getAllUsers = async (req, res) => {
       });
   }
 };
+
 exports.getUserById = async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -462,3 +463,4 @@ exports.getUserById = async (req, res) => {
       });
   }
 };
+
