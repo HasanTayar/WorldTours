@@ -29,18 +29,6 @@ function App() {
   }, [user]);
   const [showChatBot, setShowChatBot] = useState(false);
 
-  // useEffect(() => {
-  //   if (!isLoggedIn) {
-  //     clearChatBotHistory();
-  //   }
-  // }, [isLoggedIn]);
-  // const clearChatBotHistory = async () => {
-  //   try {
-  //     await deleteAllChatBotMessages(user._id);
-  //   } catch (error) {
-  //     console.error("Error while deleting chatbot messages:", error);
-  //   }
-  // };
   return (
     <LoadScript
       googleMapsApiKey={googleMapsApiKey}

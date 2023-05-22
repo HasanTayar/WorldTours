@@ -1,0 +1,19 @@
+.user-item {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s; // Added transition for smoother color change
+
+  &.active {
+    background-color: #e0e0e0;
+  }
+
+  img {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+}

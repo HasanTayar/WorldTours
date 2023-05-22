@@ -1,0 +1,18 @@
+.message-input {
+  display: flex;
+  align-items: center;
+  padding: 10px 0; // Added padding for a better layout
+  
+  input {
+    flex: 1;
+    margin-right: 10px;
+  }
+
+  button {
+    transition: background-color 0.2s; // Added transition for smoother color change
+
+    &:hover {
+      background-color: darken(#007bff, 10%); // Darkens the button color when hovered over
+    }
+  }
+}

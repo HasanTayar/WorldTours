@@ -1,0 +1,29 @@
+.user {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s; // Added transition for smoother color change
+
+  h2 {
+    margin-right: 10px;
+    font-size: small;
+  }
+
+  .fas {
+    color: #25d366;
+  }
+
+  &:hover {
+    background-color: #ebebeb;
+  }
+
+  .user-photo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+  }
+}

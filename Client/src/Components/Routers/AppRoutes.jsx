@@ -45,7 +45,7 @@ const AppRoutes = ({ isLoggedIn, user, setUser, setIsLoggedIn }) => {
         }
       />
       <Route
-        path="/chat"
+        path="/chat/:userId"
         element={isLoggedIn ? <ChatPage user={user} /> : <Navigate to="/login" />}
       />
       <Route

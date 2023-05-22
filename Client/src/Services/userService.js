@@ -161,4 +161,12 @@ export const verifyEmail = async (token) => {
       throw error;
     }
   }
-  
+  export const fetchUserById = async (userId) => {
+    try {
+      const response = await axios.get(`${API}/id/${userId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      throw error;
+    }
+  };

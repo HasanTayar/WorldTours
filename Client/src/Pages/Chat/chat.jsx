@@ -1,85 +1,103 @@
-import React, { useState, useEffect } from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import ChatList from "../../Components/Chat/ChatList";
-import ChatBox from "../../Components/Chat/ChatBox";
-import MessageForm from "../../Components/Chat/MessageForm";
-import { fetchAllUsers } from "../../Services/userService";
-import { connectSocket, disconnectSocket, fetchChat } from "../../Services/chatService";
-
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import useChat from '../../Services/ChatService';
+import UserList from '../../Components/Chat/UserList' 
+import ChatArea from '../../Components/Chat/ChatArea';
+import SearchBar from '../../Components/Chat/SearchBar';
+import { fetchAllUsers } from '../../Services/userService'; 
+import './chat.scss';
+import axios from 'axios';
 const ChatPage = ({ user }) => {
-  const [selectedChatId, setSelectedChatId] = useState(null);
-  const [messages, setMessages] = useState([]);
-  const [receiverId, setReceiverId] = useState(null);
+  const { userId : receiverId} = useParams();
+  const navigate = useNavigate();
+  const senderId = user._id;
+  const roomId = useRef();
 
-  const handleChatSelect = (chatId, receiverId) => {
-    setSelectedChatId(chatId);
-    setReceiverId(receiverId);
-  };
-
-  useEffect(() => {
-    const fetchChatHistory = async () => {
-      if (selectedChatId && receiverId) {
-        try {
-          const chatHistory = await fetchChat(selectedChatId);
-          setMessages(prevMessages => [...prevMessages, ...chatHistory]);
-        } catch (error) {
-          console.error(`Error fetching chat ${selectedChatId}:`, error);
-        }
-      }
-    }
-
-    fetchChatHistory();
-  }, [selectedChatId, receiverId]);
+  const { messages, sendMessage, deleteMessage, markAsRead, getMessages  } = useChat(senderId , roomId.current);
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
-    connectSocket();
-
-    return () => {
-      disconnectSocket();
-    }
-  }, []);
-
-  useEffect(() => {
-    const getUsers = async () => {
-      if (user.isAdmin) {
-        try {
-          const users = await fetchAllUsers();
-          console.log(users);
-        } catch (error) {
-          console.error("Error fetching users:", error);
-        }
-      }
+    const fetchUsers = async () => {
+      const fetchedUsers = await fetchAllUsers();
+      setUsers(fetchedUsers);
+      
     };
+    fetchUsers();
+  }, [receiverId]);
 
-    getUsers();
-  }, [user]);
+  useEffect(() => {
+    // Initiate the chat room automatically when entering the chat page
+
+    if (selectedUser) {
+
+      initiateChatRoom(senderId , receiverId);
+    }
+  }, [senderId, receiverId, selectedUser]);
+
+  const initiateChatRoom = useCallback(
+    async (senderId, receiverId) => {
+      try {
+        const response = await axios.post(`http://localhost:5000/chatRoom/initiate`, {
+          senderId,
+          receiverId,
+        });
+        console.log(response.data);
+        roomId.current = response.data.roomId;
+        getMessages(roomId.current);
+
+      } catch (error) {
+        console.error('Error initiating chat room:', error);
+      }
+    },
+    [roomId]
+  );
+  
+  
+
+  const handleUserClick = (
+    (user) => {
+      setSelectedUser(user);
+      navigate(`/chat/${user._id}`);
+    }
+   
+  );
+
+  const handleSearch = ((e) => {
+    setSearch(e.target.value);
+  });
+
+  const filteredUsers = 
+   
+      users.filter(
+
+        (user) => 
+        `${user.firstName} ${user.lastName}`.toLowerCase().includes(search.toLowerCase())
+      
+  );
+
+  
 
   return (
-    <Container fluid>
-      <Row>
-        <Col md={4}>
-          <h2>Chats</h2>
-          <ChatList onChatSelect={handleChatSelect} user={user} />
-        </Col>
-        <Col md={8}>
-          {selectedChatId ? (
-            <>
-              <h2>Chat</h2>
-              <ChatBox
-                chatId={selectedChatId}
-                messages={messages}
-                setMessages={setMessages}
-              />
-              <MessageForm chatId={selectedChatId} user={user} receiverId={receiverId} />
-            </>
-          ) : (
-            <div style={{ border: "1px solid black", padding: "20px" }}>
-              Please select a chat to start conversation
-            </div>
-          )}
-        </Col>
-      </Row>
-    </Container>
+    <div className="chat-page">
+      <div className="sidebar">
+        <SearchBar search={search} handleSearch={handleSearch} />
+        <UserList users={filteredUsers} handleUserClick={handleUserClick} selectedUser={selectedUser} />
+      </div>
+      <div className="chat-content">
+        {selectedUser && (
+          <ChatArea
+            messages={messages}
+            sendMessage={sendMessage}
+            deleteMessage={deleteMessage}
+            markAsRead={markAsRead}
+            getMessages={getMessages}
+            senderId={senderId}
+          />
+        )}
+      </div>
+    </div>
   );
 };
 

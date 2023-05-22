@@ -1,0 +1,69 @@
+.message-block {
+  margin-bottom: 16px;
+}
+
+.own-message-block {
+  text-align: right;
+}
+
+.message-content {
+  background-color: #f2f2f2;
+  padding: 8px;
+  border-radius: 8px;
+  display: inline-block;
+  max-width: 75%;
+}
+
+.own-message .message-content {
+  background-color: #dcf8c6;
+}
+
+.message-time {
+  font-size: 12px;
+  color: #888;
+  margin-top: 4px;
+}
+
+.unread-indicator {
+  font-size: 12px;
+  color: #888;
+  margin-top: 4px;
+}
+
+.message-actions {
+  margin-top: 8px;
+}
+
+.message-actions button {
+  background-color: transparent;
+  border: none;
+  color: #888;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.message-actions button:hover {
+  text-decoration: underline;
+}
+.message-sender {
+  display: flex;
+  align-items: center;
+}
+
+.sender-photo {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.sender-name {
+  font-weight: bold;
+}
+
+.message-text {
+  margin-top: 8px;
+}
+
+
+

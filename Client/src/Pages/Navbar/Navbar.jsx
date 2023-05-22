@@ -2,7 +2,6 @@ import "./Navbar.css";
 import { Link, NavLink, useLocation } from "react-router-dom";
 const token = localStorage.getItem("token");
 export default function Navbar({ isLoggedIn, user, onLogout }) {
-
   const location = useLocation();
 
   const isActive = (path) => {
@@ -40,11 +39,16 @@ export default function Navbar({ isLoggedIn, user, onLogout }) {
             </li>
 
             {isLoggedIn && user ? (
-              <><li className="nav-item">
-                <NavLink className={`nav-link ${isActive("/chat")}`} to="/chat">
-                  Chat
-                </NavLink>
-              </li><li className="nav-item dropdown">
+              <>
+                <li className="nav-item">
+                  <NavLink
+                    className={`nav-link ${isActive(`/chat/${user._id}`)}`}
+                    to={`/chat/${user._id}`}
+                  >
+                    Chat
+                  </NavLink>
+                </li>
+                <li className="nav-item dropdown">
                   <a
                     className="nav-link dropdown-toggle"
                     href="#"
@@ -58,7 +62,8 @@ export default function Navbar({ isLoggedIn, user, onLogout }) {
                         src={`${user.photo}`}
                         alt="User"
                         className="rounded-circle"
-                        style={{ width: "30px", height: "30px" }} />
+                        style={{ width: "30px", height: "30px" }}
+                      />
                     )}
                     {user.firstName} {user.lastName}
                   </a>
@@ -73,19 +78,18 @@ export default function Navbar({ isLoggedIn, user, onLogout }) {
                       Orders
                     </Link>
                     {user.isOrganizer && (
-                       <Link className="dropdown-item" to="/add-new-tours/">
+                      <Link className="dropdown-item" to="/add-new-tours/">
                         Add Tour
                       </Link>
-                      
-                      )}
-                     
-                    
+                    )}
+
                     <div className="dropdown-divider"></div>
                     <button className="dropdown-item" onClick={onLogout}>
                       Logout
                     </button>
                   </div>
-                </li></>
+                </li>
+              </>
             ) : (
               <li className="nav-item">
                 <NavLink
