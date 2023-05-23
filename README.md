@@ -17,7 +17,7 @@ The backend has been enhanced with new controllers to support the above features
 ### Controllers
 
 - `searchController.js`: Handles the search functionality in the application.
-- `ToursController.js`: Fetches tours that are close to the user's current location.
+
 
 
 ### Models
