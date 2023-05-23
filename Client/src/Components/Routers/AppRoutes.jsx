@@ -15,6 +15,7 @@ import NotFound from "../../Pages/NotFound/NotFound";
 import OrderHistory from "../../Pages/orderHistory/OrderHistory";
 import EditTour from "../../Pages/EditTour/EditTour";
 import About from "../../Pages/About/About";
+import PaymentSuccess from "../../Pages/PaymentSuccess/PaymentSuccess";
 const AppRoutes = ({ isLoggedIn, user, setUser, setIsLoggedIn }) => {
   return (
     <Routes>
@@ -23,6 +24,7 @@ const AppRoutes = ({ isLoggedIn, user, setUser, setIsLoggedIn }) => {
       <Route path="/register" element={<RegisterForm />} />
       <Route path="/users/verify/" element={<Verify />} />
       <Route path="/about" element={<About/>} />
+      <Route path="/Payment-Success" element={<PaymentSuccess/>} />
       <Route
         path="/login"
         element={<Login setIsLoggedIn={setIsLoggedIn} setUser={setUser} />}

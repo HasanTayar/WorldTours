@@ -1,20 +1,16 @@
 import React, { useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import "./BookingForm.scss";
-import PaymentMethodForm from "./PaymentMethodForm";
+
 const BookingForm = ({
   onSubmit,
-  hasPaymentMethod,
-  redirectToProfile,
-  savedCards,
+  setName,
+  setEmail,
+  setPhone
 }) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-
-  const handleSubmit = (e, selectedCard) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ name, email, phone, paymentMethod: selectedCard });
+    onSubmit();
   };
 
   return (
@@ -27,7 +23,6 @@ const BookingForm = ({
               <Form.Control
                 type="text"
                 placeholder="Enter your name"
-                value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
               />
@@ -41,7 +36,6 @@ const BookingForm = ({
               <Form.Control
                 type="email"
                 placeholder="Enter your email"
-                value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
@@ -55,24 +49,14 @@ const BookingForm = ({
               <Form.Control
                 type="tel"
                 placeholder="Enter your phone number"
-                value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 required
               />
             </Form.Group>
           </Col>
         </Row>
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
+        <Button variant="primary" type="submit">Submit</Button>
       </Form>
-
-      <PaymentMethodForm
-        onSubmit={handleSubmit}
-        hasPaymentMethod={hasPaymentMethod}
-        redirectToProfile={redirectToProfile}
-        savedCards={savedCards}
-      />
     </Container>
   );
 };

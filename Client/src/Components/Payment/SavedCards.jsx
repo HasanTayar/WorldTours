@@ -10,9 +10,9 @@ const SavedCards = ({ savedCards, handleDeleteCard }) => {
     if (/^4[0-9]{12}(?:[0-9]{3})?$/.test(cardNumber)) {
       return <FontAwesomeIcon icon={faCcVisa} style={{color: "#005eff" , width:"50px" , height:"50px"}} /> 
     } else if (/^5[1-5][0-9]{14}$/.test(cardNumber)) {
-      return <FontAwesomeIcon icon={faCcMastercard} style={{color: "#ff8800"}} />; 
+      return <FontAwesomeIcon icon={faCcMastercard} style={{color: "#ff8800" , width:"50px" , height:"50px"}} />; 
     } else if (/^3[47][0-9]{13}$/.test(cardNumber)) {
-      return <FontAwesomeIcon icon={faCcAmex} style={{color: "#12520a"}} />; 
+      return <FontAwesomeIcon icon={faCcAmex} style={{color: "#12520a" , width:"50px" , height:"50px"}} />; 
     } else if (/^3(?:0[0-5]|[68][0-9])[0-9]{11}$/.test(cardNumber)) {
       return <FontAwesomeIcon icon={faCcDinersClub} />; 
     } else if (/^6(?:011|5[0-9]{2})[0-9]{12}$/.test(cardNumber)) {

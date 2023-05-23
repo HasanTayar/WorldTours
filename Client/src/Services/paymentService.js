@@ -1,16 +1,18 @@
 import axios from "axios";
 const API = "http://localhost:5000/payment"
 
-export const getPaymentMethods = async (userId, setSavedCards) => {
+export const getPaymentMethods = async (userId) => {
   try {
     const response = await axios.get(`${API}/${userId}/hasPaymentRef`);
-    if(response.status === 200){
-      setSavedCards(response.data);
+    if (response.status === 200){
+      return response.data;
     }
   } catch (e) {
     console.error("Error While fetching Payment Methods:", e);
   }
+  return {};  
 };
+
 
 export const addPaymentMethod = async (userId, cardNumber, expiryDate, cvv) => {
   try {

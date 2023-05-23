@@ -1,26 +1,62 @@
 # WorldTours (v4)
 
 This project is a work-in-progress application called WorldTours (v4). It is built using a `React` frontend, an `Express(Node.js)` backend, and `MongoDB` as the database. This version focuses on the Chat system frontend and backend.
-
 ## Backend
 
 The backend is built with Express and MongoDB. It includes the following files and directories:
 
+### Controllers
 - `ChatsController.js`: Contains the logic for handling chat data and database CRUD operations.
-- `ChatsModel.js`: Defines the chat schema for MongoDB.
 
-- `UserController.js`: Contains the logic for user authentication, email verification, and profile updates.
-- `UserModel.js`: Defines the User schema for MongoDB.
-- `userRoutes.js`:Defines the API routes for users data and handles HTTP requests and responses.
+### Models
+- `ChatRoom.js`: Defines the chat room schema for MongoDB.
+- `ChatMessage.js`: Defines the message schema for MongoDB.
 
-- `db.js`: Configures the connection to the MongoDB database.
+### Routes
+- `ChatRoomRoutes`: Handles chat room-related operations.
+
+  - `POST /initiate`: Initializes a chat room between two users. It expects the `senderId` and `receiverId` in the request body. If the chat room already exists, it returns the existing room ID. Otherwise, it creates a new chat room and returns the new room ID.
+
+### Services
+- `Socket`: Handles real-time communication using Socket.IO. It provides the following functionality:
+
+  - `initialize(httpServer)`: Initializes the Socket.IO server and sets up event listeners for various socket events.
+
+  - `getIO()`: Returns the Socket.IO instance.
+
+The services are responsible for managing real-time messaging and interaction between clients.
+
 
 ## Frontend
 
-The frontend is built with React and includes the following components:
+The frontend is built with React and includes the following components for real-time chat:
 
-- `ChatBox`
-- `ChatList`
+### Real-Time Chat Components
+- `ChatArea`
+- `Message`
+- `MessageInput`
+- `SearchBar`
+- `User`
+- `UserList`
+
+Additionally, there are components specifically designed for the chat bot:
+
+### Chat Bot Components
+- `MessageInput`
+- `MessageItem`
+- `MessageList`
+
+The project also consists of the following pages:
+
+### Pages
+- `Chat`: Provides the user interface for real-time chat functionality.
+- `ChatBot`: Displays the chat bot interface.
+
+The frontend relies on the following services:
+
+### Services
+- `ChatBotService`: Manages chat bot functionality.
+- `ChatService`: Empowered by Socket.IO, it handles real-time communication.
 
 The project uses Vite for development and is configured with the following settings:
 

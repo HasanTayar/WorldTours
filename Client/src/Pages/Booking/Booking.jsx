@@ -1,51 +1,31 @@
 import { useState, useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import qs from "qs";
-import "./Booking.scss";
+import { useNavigate, useLocation } from "react-router-dom";
+import TourHeader from "../../Components/Booking/TourHeader";
 import TourDetails from "../../Components/Booking/TourDetails";
 import BookingForm from "../../Components/Booking/BookingForm";
-import { Container, Form, Row, Col } from "react-bootstrap";
+import TourLocations from "../../Components/Booking/TourLocations";
+import PaymentMethodForm from "../../Components/Booking/PaymentMethodForm";
 import { getTourById } from "../../Services/tourService";
 import { getPaymentMethods } from "../../Services/paymentService";
 import { addOrder } from "../../Services/orderService";
-
+import qs from "qs";
+import "./Booking.scss";
 const Booking = () => {
-  const location = useLocation();
   const navigate = useNavigate();
+  const location = useLocation();
   const tourId = useRef("");
   const selectedDate = useRef("");
   const price = useRef("");
   const tourDays = useRef("");
   const userId = useRef("");
   const [tour, setTour] = useState({});
-  const [savedCards, setSavedCards] = useState({});
+  const [savedCards, setSavedCards] = useState([]);
   const [hasPaymentMethod, setHasPaymentMethod] = useState(false);
-  
-  const handleSubmit = async (bookingData) => {
-    try {
-      const orderData = {
-        userId: userId.current,
-        tourId: tourId.current,
-        selectedDate: selectedDate.current,
-        price: price.current,
-        tourDays: tourDays.current,
-        ...bookingData
-      };
-      const success = await addOrder(orderData);
-      if (success) {
-        console.log("Payment processed and order saved successfully");
-        navigate("/success-order");
-      } else {
-        console.log("Error saving the order");
-      }
-    } catch (error) {
-      console.log("Error processing payment and saving the order:", error);
-    }
-  };
-  
+  const [selectedCard, setSelectedCard] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
 
-  // To get the parm from the url
   useEffect(() => {
     const query = qs.parse(location.search, { ignoreQueryPrefix: true });
 
@@ -60,60 +40,83 @@ const Booking = () => {
       console.error("Invalid date format.");
       return;
     }
-    console.log(query);
+
     tourId.current = query.tourId;
     selectedDate.current = date;
     price.current = query.price;
     tourDays.current = query.tourDays;
     userId.current = query.userId;
-    console.log(query.userId);
+
     // Fetch tour details
     getTourById(tourId.current).then((fetchedTour) => {
-      setTour(fetchedTour);
+      if (fetchedTour) {
+        setTour(fetchedTour);
+      }
+    });
+
+    // Fetch payment methods
+    getPaymentMethods(userId.current).then((fetchedCards) => {
+      if (fetchedCards && fetchedCards.length > 0) {
+        setSavedCards(fetchedCards);
+        setHasPaymentMethod(true);
+      }
     });
   }, [location]);
 
-  useEffect(() => {
-    const hasPaymentMethod = async () => {
-      if (userId.current) {
-        await getPaymentMethods(userId.current, setSavedCards);
-        const hasPayment = savedCards && Object.keys(savedCards).length > 0;
-        setHasPaymentMethod(hasPayment);
-      }
+  const handlePaymentSubmit = async () => {
+    // Prepare the order data
+    const orderData = {
+      tourId: tourId.current,
+      userId: userId.current,
+      selectedDate: selectedDate.current,
+      price: price.current,
+      tourDays: tourDays.current,
+      paymentMethod: selectedCard,
+      phone,
+      email,
+      name,
     };
-  
-    hasPaymentMethod();
-  }, [userId.current]);
-  
+
+    // Call addOrder function
+    const isOrderAdded = await addOrder(orderData);
+    if (isOrderAdded) {
+      console.log("Order has been successfully added.");
+      navigate('/Payment-Success');
+    } else {
+      console.log("Error adding order.");
+    }
+  };
+
+  const handleFormSubmit = () => {
+      handlePaymentSubmit();
+  };
+
   const redirectToProfile = () => {
     navigate("/profile");
   };
 
   return (
-    <Container className="order-page">
-      <Row>
-        <Col>
-          <h2>{tour.name}</h2>
-          <TourDetails
-            tour={tour}
-            selectedDate={selectedDate.current}
-            tourDays={tourDays.current}
-            userId={userId}
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <BookingForm
-            onSubmit={handleSubmit}
-            hasPaymentMethod={hasPaymentMethod}
-            redirectToProfile={redirectToProfile}
-            savedCards={savedCards}
-          />
-        </Col>
-      </Row>
-    </Container>
+    <div className="Booking">
+      <TourHeader tour={tour} />
+      <TourDetails tour={tour} />
+      <h2 style={{ alignItems: "left" }}>Cities:</h2>
+      <TourLocations tour={tour} />
+      <PaymentMethodForm
+        savedCards={savedCards}
+        hasPaymentMethod={hasPaymentMethod}
+        redirectToProfile={redirectToProfile}
+        handlePaymentSubmit={handlePaymentSubmit}
+        setSelectedCard={setSelectedCard}
+      />
+      <BookingForm
+        onSubmit={handleFormSubmit}
+        setName={setName}
+        setEmail={setEmail}
+        setPhone={setPhone}
+      />
+    </div>
   );
 };
 
 export default Booking;
+

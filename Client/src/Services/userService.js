@@ -1,6 +1,7 @@
 import axios from "axios";
 import { setToken, getToken, destroyToken } from "./token";
 import { getUserLocation } from "./Google/locationService";
+import { Navigate } from "react-router-dom";
 const API = "http://localhost:5000/users";
 // Validates user login and sets a token if successful
 export const checkUserDetails = async (email, password, setError) => {
@@ -82,6 +83,7 @@ export const logout = (setIsLoggedIn, setUser) => {
   setUser(null);
   destroyToken();
   localStorage.removeItem("user");
+  Navigate("/");
 };
 
 // Handles new user insert

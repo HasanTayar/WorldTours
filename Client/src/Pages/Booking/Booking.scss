@@ -1,72 +1,109 @@
-.order-page {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem;
+//Booking.scss
 
-  h2 {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
+.Booking {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tour-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  padding: 20px;
+  border-bottom: 1px solid gray;
+
+  img {
+    width: 50%;
+    object-fit: cover;
   }
 
-  .tour-details {
-    list-style-type: none;
-    padding: 0;
+  h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
 
-    li {
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
+  p {
+    font-size: 18px;
+  }
+}
+
+.tour-details {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  padding: 20px;
+  border-bottom: 1px solid gray;
+  
+  p {
+    font-size: 18px;
+  }
+}
+
+.booking-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid gray;
+
+  input, button {
+    margin: 10px 0;
+  }
+  
+  button {
+    padding: 10px 20px;
+    background-color: blue;
+    color: white;
+    cursor: pointer;
+  }
+}
+
+.tour-timeline {
+  width: 100%;
+  padding: 20px;
+  border-bottom: 1px solid gray;
+
+  .day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
     }
 
     img {
       width: 100%;
       object-fit: cover;
-      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 16px;
     }
   }
+}
 
-  .booking-container {
+.tour-locations {
+  width: 100%;
+  padding: 20px;
+  
+  .location {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 2rem;
-
-    .payment-method-form {
-      flex: 1;
-      margin-right: 1rem;
-
-      .form-label {
-        font-weight: bold;
-      }
+    flex-direction: column;
+    align-items: left;
+    
+    h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
     }
-
-    .tour-details-container {
-      flex: 1;
-      margin-left: 1rem;
-    }
-  }
-
-  .booking-form {
-    margin-top: 1rem;
-
-    .form-label {
-      font-weight: bold;
-    }
-
-    button[type="submit"] {
-      margin-top: 1rem;
-    }
-  }
-
-  button {
-    background-color: #007bff;
-    border: none;
-    color: white;
-    padding: 0.5rem 1rem;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in;
-
-    &:hover {
-      background-color: #0056b3;
+    
+    p {
+      font-size: 16px;
     }
   }
 }

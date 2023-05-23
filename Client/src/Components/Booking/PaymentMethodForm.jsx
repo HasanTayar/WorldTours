@@ -1,18 +1,19 @@
 import { useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, Row, Card } from "react-bootstrap";
 import "./PaymentMethodForm.scss";
 
 const PaymentMethodForm = ({
-  onSubmit,
   hasPaymentMethod,
   redirectToProfile,
   savedCards,
+  handlePaymentSubmit,
+  setSelectedCard
 }) => {
-  const [selectedCard, setSelectedCard] = useState(null);
+  const [selectedCard, setCard] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(e, selectedCard); // Pass the event object here
+    handlePaymentSubmit(selectedCard);
   };
 
   const handleCardSelect = (cardId) => {
@@ -20,29 +21,31 @@ const PaymentMethodForm = ({
   };
 
   return (
-    <Container>
-      <h3>Payment Method</h3>
+    <Container className="payment-method-form">
+      <br/>
       {hasPaymentMethod ? (
         <Form onSubmit={handleSubmit}>
-          {savedCards.map((card) => (
-            <Row key={card._id}>
+          {savedCards && savedCards.map((card) => (
+            <Row key={card._id} className="mb-3">
               <Col>
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value={card._id}
-                  onChange={() => handleCardSelect(card._id)}
-                  required
-                />
-                <label htmlFor={card._id}>
-                  Card ending in {card.cardNumber.slice(-4)}
-                </label>
+                <Card>
+                  <Card.Body>
+                    <Form.Check 
+                      type="radio"
+                      id={`card-${card._id}`}
+                      name="paymentMethod"
+                      value={card._id}
+                      onChange={() => handleCardSelect(card._id)}
+                      required
+                      label={`Card ending in ${card.cardNumber.slice(-4)}`}
+                      className="ml-2"
+                    />
+                  </Card.Body>
+                </Card>
               </Col>
             </Row>
           ))}
-          <Button variant="primary" type="submit">
-            Pay
-          </Button>
+          <Button variant="primary" type="submit">Proceed</Button>
         </Form>
       ) : (
         <>

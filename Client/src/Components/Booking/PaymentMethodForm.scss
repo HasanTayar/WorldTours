@@ -1,8 +1,29 @@
 .payment-method-form {
-    margin-top: 1rem;
+  margin-top: 1rem;
   
-    .form-label {
-      font-weight: bold;
-    }
+  .form-label {
+    font-weight: bold;
   }
-  
+
+  h3 {
+    text-align: center;
+    color: #333;
+    font-weight: bold;
+  }
+
+  .card {
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+
+  button[type="submit"] {
+    margin-top: 1rem;
+    width: 100%;
+  }
+
+  button[variant="warning"] {
+    margin-top: 1rem;
+    width: 100%;
+  }
+}
