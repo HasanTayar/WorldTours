@@ -35,6 +35,12 @@ const ChatPage = ({ user }) => {
       initiateChatRoom(senderId , receiverId);
     }
   }, [senderId, receiverId, selectedUser]);
+  useEffect(() => {
+    // Refetch the messages after a message has been marked as read
+    if (roomId.current) {
+      getMessages(roomId.current);
+    }
+  }, [markAsRead, getMessages]);
 
   const initiateChatRoom = useCallback(
     async (senderId, receiverId) => {
@@ -45,14 +51,15 @@ const ChatPage = ({ user }) => {
         });
         console.log(response.data);
         roomId.current = response.data.roomId;
-        getMessages(roomId.current);
-
+         getMessages(roomId.current); 
+  
       } catch (error) {
         console.error('Error initiating chat room:', error);
       }
     },
     [roomId]
   );
+  
   
   
 
@@ -68,14 +75,11 @@ const ChatPage = ({ user }) => {
     setSearch(e.target.value);
   });
 
-  const filteredUsers = 
-   
-      users.filter(
+  const currentUserID =user._id;  // replace with your actual current user ID
 
-        (user) => 
-        `${user.firstName} ${user.lastName}`.toLowerCase().includes(search.toLowerCase())
-      
-  );
+const filteredUsers = users.filter((user) => 
+  user._id !== currentUserID && `${user.firstName} ${user.lastName}`.toLowerCase().includes(search.toLowerCase())
+);
 
   
 

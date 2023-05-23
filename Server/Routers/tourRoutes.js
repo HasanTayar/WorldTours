@@ -16,17 +16,24 @@ const storage = multer.diskStorage({
     cb(null, fileName);
   }
 });
+
 const upload = multer({ storage: storage });
 
+// Create Tour
 router.post('/create-tour', upload.any(), TourController.createTour);
-
+// Get all Tours
 router.get('/tours', TourController.getAllTours);
+// Get Tour by ID
 router.get('/:tourId', TourController.getTourById);
-router.put('/:tourId', passport.authenticate('jwt', { session: false }), TourController.updateTourById);
-router.delete('/:tourId', passport.authenticate('jwt', { session: false }), TourController.deleteTourById);
+// Update Tour by ID
+router.put('/update/:tourId', passport.authenticate('jwt', { session: false }), TourController.updateTourById);
+// Delete Tour by ID
+router.delete('/delete/:tourId', passport.authenticate('jwt', { session: false }), TourController.deleteTourById);
+// Get Tour by Location
 router.get('/nearby', TourController.getToursByLocation);
+// Search Tours
 router.get('/search', TourController.searchTours);
-
+// Upload Tour Photos
 router.post('/:tourId/photos', passport.authenticate('jwt', { session: false }), upload.array('photos', 10), TourController.uploadTourPhotos);
 
 module.exports = router;

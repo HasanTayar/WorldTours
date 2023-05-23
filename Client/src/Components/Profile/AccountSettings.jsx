@@ -13,7 +13,6 @@ const AccountSettings = ({
   previewPhoto,
   setNewEmail,
   setNewBio,
-  setNewSocialMediaLinks,
   setNewPhoneNumber,
   setNewCertifications,
   setNewLanguages,
@@ -37,10 +36,6 @@ const AccountSettings = ({
       {user.isAdmin || user.isOrganizer ? (
         <div>
           <Bio user={user} setNewBio={setNewBio} />
-          <SocialMedia
-            user={user}
-            setNewSocialMediaLinks={setNewSocialMediaLinks}
-          />
           {user.isOrganizer && (
             <OrganizerSettings
               user={user}

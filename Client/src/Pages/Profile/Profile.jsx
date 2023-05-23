@@ -62,12 +62,8 @@ const handleSelect = (eventKey) => {
       bio: newBio ? newBio : bio,
       location: newLocation ? newLocation : location,
       languages: newLanguages ? newLanguages : languages,
-      socialMediaLinks: newSocialMediaLinks
-        ? newSocialMediaLinks
-        : socialMediaLinks,
       certifications: newCertifications ? newCertifications : certifications,
       specialties: newSpecialties ? newSpecialties : specialties,
-      createdAt: createdAt,
     };
     updateUserProfile(updatedUser);
   };

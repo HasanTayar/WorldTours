@@ -1,5 +1,6 @@
 import axios from "axios";
 import { setToken, getToken, destroyToken } from "./token";
+import { getUserLocation } from "./Google/locationService";
 const API = "http://localhost:5000/users";
 // Validates user login and sets a token if successful
 export const checkUserDetails = async (email, password, setError) => {
@@ -7,6 +8,13 @@ export const checkUserDetails = async (email, password, setError) => {
   try {
     const response = await axios.post(`${API}/login`, { email, password });
     setToken(response.data);
+
+    // Get user location
+    const userLocation = await getUserLocation();
+    
+    // Store the user's location in local storage
+    localStorage.setItem("userLocation", JSON.stringify(userLocation));
+    
     return response.data; // Return the token on success
   } catch (error) {
     console.error("error", error);
@@ -93,7 +101,7 @@ export const registerUser = async (formData) => {
 export async function updateUserProfile(updatedData) {
   console.table(updatedData);
   try {
-    const response = await axios.put(`${API}/update-profile"`, updatedData, {
+    const response = await axios.put(`${API}/updateprofile`, updatedData, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },

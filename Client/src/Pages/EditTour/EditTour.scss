@@ -1,0 +1,47 @@
+.edit-tour {
+  margin: 2em auto;
+  max-width: 600px;
+
+  > *:not(:last-child) {
+    margin-bottom: 2em;
+  }
+
+  h2 {
+    margin-bottom: 1em;
+    color: #007BFF;
+  }
+
+  form {
+    margin-bottom: 2em;
+
+    h3 {
+      margin-top: 1em;
+      margin-bottom: 0.5em;
+      color: #6C757D;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea {
+      width: 100%;
+      padding: 0.5em;
+      margin-bottom: 1em;
+      border: 1px solid #CED4DA;
+      border-radius: 0.25em;
+    }
+
+    button[type="submit"] {
+      display: block;
+      padding: 0.5em 1em;
+      color: white;
+      background-color: #007BFF;
+      border: none;
+      border-radius: 0.25em;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+  }
+}

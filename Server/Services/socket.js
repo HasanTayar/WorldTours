@@ -17,10 +17,11 @@ module.exports = {
     io.on('connection', (socket) => {
       console.log("A user connected!");
 
-      socket.on('join room', async (roomId) => {
+      socket.on('join room', async (roomId, callback) => {
         try {
           socket.join(roomId);
-          console.log("jooined rooom");
+          console.log("joined room");
+          callback();  // Acknowledge the event
 
           const oldMessages = await ChatMessage.find({ room: roomId })
             .populate('sender')
@@ -60,12 +61,13 @@ module.exports = {
           console.error('Error deleting message:', error);
         }
       });
+
       socket.on('get messages', async ({ roomId }) => {
         try {
           if (!mongoose.Types.ObjectId.isValid(roomId)) {
             return;
           }
-      
+
           const messages = await ChatMessage.find({
             room: roomId,
             deleted: false,
@@ -78,8 +80,7 @@ module.exports = {
           console.error('Error retrieving messages:', error);
         }
       });
-      
-      
+
       socket.on('mark as read', async ({ messageId }) => {
         try {
           const updatedMessage = await ChatMessage.findByIdAndUpdate(

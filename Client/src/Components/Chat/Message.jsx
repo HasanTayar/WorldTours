@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './SCSS/message.scss';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faCheckDouble } from '@fortawesome/free-solid-svg-icons';
 const Message = ({ message, deleteMessage, markAsRead, senderId }) => {
   const { sender, content, timestamp, read } = message;
   console.log(message);
@@ -37,8 +38,8 @@ const Message = ({ message, deleteMessage, markAsRead, senderId }) => {
       <div className={`message-content ${isOwnMessage ? 'own-message' : ''}`}>
         {renderMessageContent()}
         <div className="message-time">{new Date(timestamp).toLocaleString()}</div>
+        <FontAwesomeIcon icon={read ? faCheckDouble : faCheck} className={`read-indicator ${read ? 'double-check' : ''}`} />
       </div>
-  
       {!read && <span className="unread-indicator">Unread</span>}
       {isOwnMessage && (
         <div className="message-actions">

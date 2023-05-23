@@ -33,6 +33,12 @@
 .message-actions {
   margin-top: 8px;
 }
+.read-indicator {
+  float: right;
+  &.double-check {
+    color: #007bff;
+  }
+}
 
 .message-actions button {
   background-color: transparent;

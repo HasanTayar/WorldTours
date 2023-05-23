@@ -5,6 +5,7 @@ import { fetchTourAndOrganizer } from "../../Services/tourService";
 import "./TourDetails.scss";
 import OrganizerDetails from "../../Components/Tour/OrganizerDetails";
 import CustomDatePicker from "../../Components/Tour/DatePicker";
+import { Link } from "react-router-dom";
 const TourDetails = ({isLoggedIn , user}) => {
   const { tourId } = useParams();
   const navigate = useNavigate();
@@ -38,9 +39,14 @@ const TourDetails = ({isLoggedIn , user}) => {
   };
 
   return (
+    <>  {user._id === tour.organizerId && (
+      <Link to={`/edit-tour/${tourId}`} className="btn btn-secondary mt-2" >Edit Tour</Link>
+    )}
     <div className="tour-details container">
       <div className="row">
+      
         <div className="col-lg-8">
+      
           <div className="tour-title">
             <img
               src={tour.photoTimeline}
@@ -77,6 +83,7 @@ const TourDetails = ({isLoggedIn , user}) => {
                   src={photo}
                   alt={`Day ${activeDayIndex + 1} photo ${i}`}
                   className="img-fluid mb-2"
+                  style={{width:"300px" , height:"200px" , padding:"10px"}}
                 />
               ))}
             </div>
@@ -112,7 +119,7 @@ const TourDetails = ({isLoggedIn , user}) => {
           </div>
           </div>
       </div>
-          
+      </>
   );
 };
 

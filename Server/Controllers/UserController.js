@@ -292,6 +292,7 @@ exports.getUserProfile = async (req, res) => {
 
 //to update user profile
 exports.updateUserProfile = async (req, res) => {
+  console.log(req.body);
   try {
     const user = await User.findById(req.user.id);
     if (!user) {
