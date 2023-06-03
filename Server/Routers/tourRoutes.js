@@ -31,8 +31,7 @@ router.put('/update/:tourId', passport.authenticate('jwt', { session: false }), 
 router.delete('/delete/:tourId', passport.authenticate('jwt', { session: false }), TourController.deleteTourById);
 // Get Tour by Location
 router.get('/nearby', TourController.getToursByLocation);
-// Search Tours
-router.get('/search', TourController.searchTours);
+
 // Upload Tour Photos
 router.post('/:tourId/photos', passport.authenticate('jwt', { session: false }), upload.array('photos', 10), TourController.uploadTourPhotos);
 

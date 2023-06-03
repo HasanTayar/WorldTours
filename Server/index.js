@@ -15,7 +15,7 @@ const BotRoutes = require("./Routers/chatBotRoutes");
 const passport = require("passport");
 const ChatRoomRoutes = require("./Routers/ChatRoomRoutes");
 const passportConfig = require("./Services/passport");
-
+const SearchRoutes = require('./Routers/searchRoutes');
 passportConfig(passport);
 app.use(passport.initialize());
 
@@ -28,7 +28,7 @@ app.use("/order", OrderRoutes);
 app.use("/payment", PaymentRoutes);
 app.use("/chatBot", BotRoutes);
 app.use("/chatRoom" , ChatRoomRoutes);
-
+app.use("/search" , SearchRoutes);
 socketService.initialize(http);  // initialize socket service
 
 http.listen(PORT, () => {

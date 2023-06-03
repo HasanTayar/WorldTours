@@ -23,21 +23,21 @@ exports.createTour = async (req, res) => {
     console.log(req.body);
     const { organizerId, name, desc, days, locations, tags, price } = req.body;
 
-    const parsedOrganizerId = JSON.parse(organizerId);
+    const parsedOrganizerId = organizerId;
     const tour = new Tour({
       organizerId: parsedOrganizerId,
       name,
       desc,
       photoTimeline: "",
       price,
-      days: days
+      days: days && days !== "" 
         ? JSON.parse(days).map((day) => ({
             ...day,
-            photo: day.photo ? JSON.parse(day.photo) : [],
+            photo: day.photo ? day.photo : [],
           }))
         : [],
-      locations: locations ? JSON.parse(locations) : null,
-      tags:tags,
+      locations: locations && locations !== "" ? JSON.parse(locations) : null,
+      tags: tags,
     });
 
     if (req.files && req.files.length > 0) {
@@ -80,6 +80,7 @@ exports.createTour = async (req, res) => {
   }
 };
 
+
 // Get all tours
 exports.getAllTours = async (req, res) => {
   try {
@@ -92,37 +93,8 @@ exports.getAllTours = async (req, res) => {
     });
   }
 };
-exports.searchTours = async (req, res) => {
-  try {
-    const { price, rating, location } = req.query;
 
-    let query = {};
 
-    if (price) {
-      query.price = price;
-    }
-    if (rating) {
-      query.rating = rating;
-    }
-    if (location) {
-      query.locations = { $elemMatch: { locationName: location } };
-    }
-
-    const tours = await Tour.find(query);
-
-    res.status(200).json({
-      status: "success",
-      data: {
-        tours,
-      },
-    });
-  } catch (error) {
-    res.status(404).json({
-      status: "fail",
-      message: error,
-    });
-  }
-};
 
 // Get a specific tour by ID
 exports.getTourById = async (req, res) => {

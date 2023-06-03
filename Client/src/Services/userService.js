@@ -1,8 +1,9 @@
 import axios from "axios";
 import { setToken, getToken, destroyToken } from "./token";
 import { getUserLocation } from "./Google/locationService";
-import { Navigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 const API = "http://localhost:5000/users";
+
 // Validates user login and sets a token if successful
 export const checkUserDetails = async (email, password, setError) => {
   setError("");
@@ -78,13 +79,16 @@ export const forgotPassword = async (email, setError) => {
     setError("An error occurred while resetting your password.");
   }
 };
-export const logout = (setIsLoggedIn, setUser) => {
+export const logout = (setIsLoggedIn, setUser, navigate) => {
   setIsLoggedIn(false);
   setUser(null);
   destroyToken();
   localStorage.removeItem("user");
-  Navigate("/");
+  if (navigate) {
+    navigate("/");
+  }
 };
+
 
 // Handles new user insert
 export const registerUser = async (formData) => {

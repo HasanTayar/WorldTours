@@ -1,6 +1,11 @@
 import { FormGroup, FormControl, FormLabel } from "react-bootstrap";
 
-const TourForm = ({ formData, handleInputChange }) => {
+const TourForm = ({ formData, handleInputChange, setTimelinePhoto }) => {
+  const handlePhotoChange = (event) => {
+    const file = event.target.files[0];
+    setTimelinePhoto(file);
+  };
+
   return (
     <>
       <FormGroup>
@@ -36,7 +41,7 @@ const TourForm = ({ formData, handleInputChange }) => {
           type="file"
           id="timelinePhoto"
           name="timelinePhoto"
-          onChange={(e) => setTimelinePhoto(e.target.files[0])}
+          onChange={handlePhotoChange}
         />
       </FormGroup>
     </>

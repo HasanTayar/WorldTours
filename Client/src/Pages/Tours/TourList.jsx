@@ -3,27 +3,39 @@ import { Card, Container, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faStar ,
+  faTags,
   faMoneyBill1Wave,
   faLocation,
-
   faCity,
 } from "@fortawesome/free-solid-svg-icons";
 import { fetchAllTours } from "../../Services/tourService";
-
+import Search from "../../Components/Tour/Search";
+import './TourList.css';
 const TourList = ({ user }) => {
+
   const [tours, setTours] = useState([]);
   const userId = user ? user._id : "";
   const userLocation = JSON.parse(localStorage.getItem("userLocation"));
   useEffect(() => {
     async function fetchTours() {
       const fetchedTours = await fetchAllTours();
-      setTours(fetchedTours);
+      console.log(fetchedTours); 
+      setTours(fetchedTours);  
     }
+    
 
     fetchTours();
   }, []);
   const navigate = useNavigate();
-
+  const handleSearch = (searchResults) => {
+    console.log(searchResults.tours);
+    if (searchResults.tours && searchResults.tours.length > 0) {
+      
+      setTours(searchResults.tours);
+    }
+  };
+  
   const handleTourClick = (tourId) => {
     navigate(`/tour/${tourId}?/&userId=${userId}`);
   };
@@ -70,6 +82,7 @@ const TourList = ({ user }) => {
 
   return (
     <Container>
+      <Search onSearch={handleSearch} tours={tours} />
       <Row>
         {tours.map((tour) => (
           <Col
@@ -80,30 +93,37 @@ const TourList = ({ user }) => {
             className="d-flex align-items-stretch"
             onClick={() => handleTourClick(tour._id)}
           >
-            <Card className="mb-4 h-100">
-              <Card.Img variant="top" src={tour.photoTimeline} />
-              <Card.Body className="d-flex flex-column">
-                <Card.Title>{tour.name}</Card.Title>
-                <Card.Text>
-                  <FontAwesomeIcon icon={faCity} /> &nbsp; Country:
-                  <b> {tour.locations[0].locationName}</b>
-                </Card.Text>
-                <Card.Text>
-                  <FontAwesomeIcon icon={faMoneyBill1Wave} /> &nbsp; Price:
-                  <b> {tour.price} $</b>
-                </Card.Text>
-                <Card.Text className="mt-auto">
-                  <FontAwesomeIcon icon={faLocation} />
-                  &nbsp; Distance:
-                  <b> {calculateDistance(userLocation, tour.locations[0])}Km</b>
-                </Card.Text>
-              </Card.Body>
-            </Card>
+            <div className="border p-3 mb-3 h-100 tour-div" style={{ width: "300px", height: "300px" }}>
+              <img src={tour.photoTimeline} alt={tour.name} className="img-fluid mb-2 tour-img"/>
+              <h5>{tour.name}</h5>
+              <p>
+                <FontAwesomeIcon icon={faCity} /> &nbsp; Country:
+                <b> {tour.locations[0].locationName}</b>
+              </p>
+              <p>
+                <FontAwesomeIcon icon={faMoneyBill1Wave} /> &nbsp; Price:
+                <b> {tour.price} $</b>
+              </p>
+              <p>
+                <FontAwesomeIcon icon={faStar} /> &nbsp; Rating:
+                <b> {tour.rating}</b>
+              </p>
+              <p>
+                <FontAwesomeIcon icon={faTags} /> &nbsp; Tags:
+                <b> {tour.tags.join(', ')}</b>
+              </p>
+              <p className="mt-auto">
+                <FontAwesomeIcon icon={faLocation} />
+                &nbsp; Distance:
+                <b> {calculateDistance(userLocation, tour.locations[0])}Km</b>
+              </p>
+            </div>
           </Col>
         ))}
       </Row>
     </Container>
   );
+  
 };
 
 export default TourList;

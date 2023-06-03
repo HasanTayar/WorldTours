@@ -2,12 +2,11 @@ import React from 'react';
 import User from './User';
 import './SCSS/userList.scss';
 
-export default function UserList({ users, handleUserClick }) {
-
+export default function UserList({ users, handleUserClick, unreadCount }) {
   return (
-    <div >
+    <div>
       {users.map((user) => (
-        <User key={user._id} user={user} handleUserClick={handleUserClick} /> 
+        <User key={user._id} user={user} handleUserClick={handleUserClick} unreadCount={unreadCount} /> 
       ))}
     </div>
   );

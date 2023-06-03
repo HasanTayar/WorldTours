@@ -88,11 +88,18 @@ module.exports = {
             { read: true },
             { new: true }
           );
-          io.to(updatedMessage.room).emit('message updated', updatedMessage); // Emit to the room
+    
+          // Ensure that the message is saved correctly
+          if (updatedMessage) {
+            io.to(updatedMessage.room).emit('message updated', updatedMessage); // Emit to the room
+          } else {
+            console.error('Failed to mark message as read:', messageId);
+          }
         } catch (error) {
           console.error('Error marking message as read:', error);
         }
       });
+    
     });
   },
 

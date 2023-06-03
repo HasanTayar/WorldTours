@@ -1,15 +1,6 @@
 import { useState } from "react";
-
 import GooglePlaceAutocomplete from "../../Services/Google/GooglePlaceAutocomplete";
-import {
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  Card,
-  Alert,
-} from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Card, Alert } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Days from "../../Components/Tour/Days";
@@ -27,14 +18,16 @@ const CreateTour = ({ user }) => {
     days: [],
     locations: [],
     tags: [],
+    photoTimeline: null, // Added photoTimeline field
   });
-  console.log(user._id);
+
   const [tags, setTags] = useState([]);
   const [dayCount, setDayCount] = useState(1);
   const [timelinePhoto, setTimelinePhoto] = useState(null);
   const [dayPhotos, setDayPhotos] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
@@ -53,6 +46,7 @@ const CreateTour = ({ user }) => {
     updatedDayPhotos[index] = file;
     setDayPhotos(updatedDayPhotos);
   };
+
   const handleLocationSelect = (location, index) => {
     const { name } = location;
     const { lat, lng } = location.geometry.location;
@@ -72,7 +66,11 @@ const CreateTour = ({ user }) => {
           data.append("tags[]", tag);
         });
       } else {
-        data.append(key, JSON.stringify(formData[key]));
+        if (key === "days" || key === "locations") {
+          data.append(key, JSON.stringify(formData[key]));
+        } else {
+          data.append(key, formData[key]);
+        }
       }
     }
     data.append("timelinePhoto", timelinePhoto);
@@ -93,9 +91,11 @@ const CreateTour = ({ user }) => {
   const addDay = () => {
     setDayCount(dayCount + 1);
   };
+
   const removeDay = () => {
     setDayCount(dayCount - 1);
   };
+
   return (
     <Container>
       <Row className="justify-content-center">
@@ -111,6 +111,7 @@ const CreateTour = ({ user }) => {
                 <TourForm
                   formData={formData}
                   handleInputChange={handleInputChange}
+                  setTimelinePhoto={setTimelinePhoto}
                 />
                 <GooglePlaceAutocomplete
                   controlId="location"

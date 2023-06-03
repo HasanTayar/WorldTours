@@ -1,0 +1,17 @@
+.tour-div {
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+  
+  .tour-div:hover {
+    transform: scale(1.05);
+  }
+  
+  .tour-img {
+    transition: transform 0.3s;
+  }
+  
+  .tour-div:hover .tour-img {
+    transform: scale(1.1);
+  }
+  
