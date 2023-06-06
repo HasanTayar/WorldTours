@@ -8,7 +8,7 @@ const tourSchema = new mongoose.Schema({
   desc: { type: String, required: true },
   photoTimeline: { type: String, required: true },
   isPopular: { type: Boolean, default: false },
-  price:{type: String , required : true },
+  price:{type: Number , required : true },
   rating: { type: mongoose.Schema.Types.Decimal128, min: 0, max: 5 },
   orderCount: { type: Number, default: 0 },
   days: [

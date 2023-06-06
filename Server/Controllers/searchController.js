@@ -5,36 +5,23 @@ const Search = require("../Models/search");
 exports.createSearch = async (req, res) => {
   console.log(req.body);
   if (!req.body) {
-    res 
+    res
       .status(400)
       .json({ success: false, message: "Missing search criteria" });
     return;
   }
 
   try {
-    // Fetch the latest search made by the user
-    let latestSearch = await Search.findOne({ userId: req.user._id });
-
     // Create a filter object based on the search criteria
     const filter = {};
 
-    // Use new search criteria if provided, else use the old one
-    let tags =
-      req.body.tags || (latestSearch ? latestSearch.searchCriteria.tags : null);
-    let organizerId =
-      req.body.organizerId ||
-      (latestSearch ? latestSearch.searchCriteria.organizerId : null);
-    let name =
-      req.body.name || (latestSearch ? latestSearch.searchCriteria.name : null);
-    let language =
-      req.body.language ||
-      (latestSearch ? latestSearch.searchCriteria.language : null);
-    let places =
-      req.body.places ||
-      (latestSearch ? latestSearch.searchCriteria.places : null);
-    let priceRange =
-      req.body.priceRange ||
-      (latestSearch ? latestSearch.searchCriteria.priceRange : null);
+    // Only use new search criteria
+    let tags = req.body.tags;
+    let organizerId = req.body.organizerId;
+    let name = req.body.name;
+    let language = req.body.language;
+    let places = req.body.places;
+    let priceRange = req.body.priceRange;
 
     if (tags && tags.length > 0) {
       filter.tags = { $in: tags };
@@ -53,17 +40,17 @@ exports.createSearch = async (req, res) => {
       console.log("language pass");
     }
     if (places && places.length > 0) {
-      filter["locations.locationName"] = { $in: places };
+      filter["locations.locationName"] = { $in: locations };
       console.log("places pass");
     }
     if (priceRange) {
       filter.price = {};
       console.log("price pass", priceRange);
       if (priceRange.lowPrice) {
-        filter.price.$gte = priceRange.lowPrice;
+        filter.price.$gte = Number(priceRange.lowPrice);
       }
       if (priceRange.highPrice) {
-        filter.price.$lte = priceRange.highPrice;
+        filter.price.$lte = Number(priceRange.highPrice);
       }
     }
 
@@ -116,15 +103,13 @@ exports.createSearch = async (req, res) => {
   }
 };
 
+
 exports.getUserSearches = async (req, res) => {
   try {
     const searches = await Search.find({ userId: req.user._id });
-    const user = await User.findById(req.user._id).populate("topPicks"); // populate the topPicks field
+    const user = await User.findById(req.user._id).populate("topPicks");
 
-    // Send both the searches and the top picks in the response
-    res
-      .status(200)
-      .json({ success: true, data: { searches, topPicks: user.topPicks } });
+    res.status(200).json({ success: true, data: { searches, topPicks: user.topPicks } });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
