@@ -1,52 +1,53 @@
-# WorldTours (v5)
+# WorldTours (v6)
 
-Welcome to WorldTours v5. In this version, we are introducing several new features and enhancements that improve user engagement. Our main updates include:
+Welcome to WorldTours v6. This version is focused on improving the admin dashboard and providing advanced features for managing the website and user data. The key updates include:
 
-1. Search functionality
-2. Top picks for tours
-3. Nearby tours
-4. Popular tours
-5. A completely redesigned home page
+1. Enhanced Admin Dashboard: The admin dashboard has been completely redesigned with a user-friendly interface to manage website details, user tours, orders, requests, chat rooms, and more.
 
-These features are built using a React frontend, an Express (Node.js) backend, and MongoDB as the database.
+2. Advanced Data Visualization: The admin dashboard now includes powerful data visualization tools to analyze website performance, user engagement, and booking trends.
+
+3. Improved User Management: The admin can easily manage user accounts, permissions, and access levels within the system.
+
+4. Chat History Management: The admin can view and manage the chat history between users and customer support.
+
+5. Comprehensive Reporting: Generate detailed reports on tours, bookings, revenue, and other key metrics to gain insights into the business performance.
 
 ## Backend
 
-The backend has been enhanced with new controllers to support the above features:
+The backend has been updated with new controllers, models, and routes to support the admin functionality:
 
 ### Controllers
 
-- `searchController.js`: Handles the search functionality in the application.
+- `adminController.js`: Handles admin-related operations such as user management, data visualization, and reporting.
 
 
+### Routes
 
-### Models
-
-- `search.js`: Defines the serach schema for MongoDB, now updated to accommodate the new features.
-
+- `adminRoutes.js`: Contains the API routes for admin-related operations.
 
 ## Frontend
 
-The frontend has been revamped with new components and pages to support our new features:
+The frontend has been expanded to include new components and pages for the admin dashboard:
 
 ### Components
 
-- `Search.js`: Handles user searches.
-- `TopPicks.js`: Displays the user's top 5 picks on the home page after signing in.
-- `NearbyTours.js`: Shows tours that are close to the user's current location.
-- `PopularTours.js`: Lists the most popular tours based on booking frequency.
+- `AdminSidebar.js`: Displays the sidebar navigation for the admin dashboard.
+- `DashboardOverview.js`: Provides an overview of website performance and key metrics.
+- `UserManagement.js`: Allows the admin to manage user accounts and permissions.
+- `DataVisualization.js`: Renders interactive charts and graphs for data analysis.
+- `ChatHistory.js`: Shows the chat history between users and customer support.
+- `Reports.js`: Generates comprehensive reports based on different criteria.
 
 ### Pages
 
-- `Home.js`: The home page has been completely redesigned and now includes the new components like `TopPicks`, `NearbyTours`, and `PopularTours`.
-### Services
-- `SearchService` : That handle http request for the server side
+- `AdminDashboard.js`: The main page for the admin dashboard, integrating all the components mentioned above.
+
 ## Installation
 
 1. Clone the repository.
 2. Install dependencies for both frontend and backend using `npm install`.
 3. Start the backend server using `node index.js` or `npm start` (make sure MongoDB is running).
-4. Start the frontend development server using `npm run dev` or `vite`.
+4. Start the frontend development server using `npm run dev` or any appropriate command for the build system used.
 
 ## License
 
@@ -54,4 +55,4 @@ This project is licensed under the MIT License. For more information, please see
 
 ## Notice
 
-This project is still under development. More features and improvements are planned for the upcoming versions. As it is a work in progress, some features may not work as expected and the code might change significantly before the final release.
+This project is still under development. Additional features and improvements are planned for future versions. As it is a work in progress, some functionality may not be fully implemented, and the code may undergo further changes before the final release.
