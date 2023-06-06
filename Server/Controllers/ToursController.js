@@ -177,13 +177,14 @@ const haversineDistance = (lat1, lon1, lat2, lon2) => {
 // Get tours by user location
 exports.getToursByLocation = async (req, res) => {
   const { userLat, userLong } = req.query;
+  console.log(req.query);
 
   try {
     const tours = await Tour.find();
 
     const sortedTours = tours
       .map((tour) => {
-        const nearestLocation = tour.location.reduce(
+        const nearestLocation = tour.locations.reduce(
           (min, loc) => {
             const distance = haversineDistance(
               userLat,
@@ -207,6 +208,7 @@ exports.getToursByLocation = async (req, res) => {
     res.status(500).send({ message: "Error fetching tours by user location" });
   }
 };
+
 // Upload photos for a tour
 exports.uploadTourPhotos = async (req, res) => {
   try {

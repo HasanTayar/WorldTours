@@ -20,7 +20,7 @@ const AppRoutes = ({ isLoggedIn, user, setUser, setIsLoggedIn }) => {
   return (
     <Routes>
       <Route path="*" element={<NotFound />} />
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<Home isLoggedIn={isLoggedIn} user={user} />} />
       <Route path="/register" element={<RegisterForm />} />
       <Route path="/users/verify/" element={<Verify />} />
       <Route path="/about" element={<About/>} />

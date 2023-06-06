@@ -21,7 +21,7 @@ export const createSearch = async (searchData) => {
 
 export const getUserSearches = async () => {
   try {
-    const response = await axios.get(`${API_URL}/serach`, {
+    const response = await axios.get(`${API_URL}/getSearch`, {
       headers: {
         'Authorization': `Bearer ${getToken()}`,
       }

@@ -1,37 +1,33 @@
-import { useState, useEffect } from "react";
-import { Form, Dropdown } from "react-bootstrap";
+import React from "react";
+import Select from "react-select";
 
-const TagSearch = ({ onChange, tags }) => {
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [allTags, setAllTags] = useState([]);
+const TagSearch = ({ tags, onChange }) => {
+  // convert tags to format compatible with react-select
+  const options = tags.map((tag) => ({ value: tag, label: tag }));
 
-  useEffect(() => {
-    setAllTags(tags);
-  }, [tags]);
-
-  const handleSelectTag = (tag) => {
-    if (!selectedTags.includes(tag)) {
-      setSelectedTags([...selectedTags, tag]);
-      onChange({ tags: [...selectedTags, tag] });
-    }
-  };
-
-  return (
-    <Form.Group controlId="tourTags">
-      <Form.Label>Tour Tags</Form.Label>
-      <Dropdown onSelect={handleSelectTag}>
-        <Dropdown.Toggle variant="success" id="dropdown-basic">
-          Select Tags
-        </Dropdown.Toggle>
-
-        <Dropdown.Menu>
-          {allTags.map(tag => 
-            <Dropdown.Item eventKey={tag} key={tag}>{tag}</Dropdown.Item>
-          )}
-        </Dropdown.Menu>
-      </Dropdown>
-    </Form.Group>
-  );
-};
-
-export default TagSearch;
+  const handleChange = (selected) => {
+    const selectedTags = selected.map((item) => item.value);
+    onChange({ tags: selectedTags });
+  }
+    const TagSearch = ({ tags, onChange }) => {
+      const handleChange = (selected) => {
+        const selectedTags = selected.map((item) => item.value);
+        onChange({ tags: selectedTags });
+      };
+    
+      return (
+        <Form.Group controlId="tourTags">
+          <Form.Label>Tour Tags</Form.Label>
+          <Select
+            isMulti
+            name="tags"
+            options={tags.map((tag) => ({ value: tag, label: tag }))}
+            onChange={handleChange}
+          />
+        </Form.Group>
+      );
+    };
+  }
+    
+    export default TagSearch;
+    

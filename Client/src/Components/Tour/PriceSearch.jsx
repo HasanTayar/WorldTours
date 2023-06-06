@@ -1,16 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Form } from "react-bootstrap";
 
 const PriceSearch = ({ onChange }) => {
   const [lowPrice, setLowPrice] = useState("");
   const [highPrice, setHighPrice] = useState("");
 
-  useEffect(() => {
-    onChange({ priceRange: { lowPrice, highPrice } });
-  }, [lowPrice, highPrice, onChange]);
+  const handlePriceChange = () => {
+    const priceRange = {};
+    if (lowPrice) {
+      priceRange.lowPrice = parseInt(lowPrice);
+    }
+    if (highPrice) {
+      priceRange.highPrice = parseInt(highPrice);
+    }
+    onChange({ priceRange });
+  };
 
-  console.log("highprice = ", highPrice , "lowprice = " , lowPrice);
-  
   return (
     <>
       <Form.Group controlId="lowPrice">
@@ -19,7 +24,8 @@ const PriceSearch = ({ onChange }) => {
           type="number"
           name="lowPrice"
           value={lowPrice}
-          onChange={(e)=>{setLowPrice(e.target.value)}}
+          onChange={(e) => setLowPrice(e.target.value)}
+          onBlur={handlePriceChange}
         />
       </Form.Group>
 
@@ -29,7 +35,8 @@ const PriceSearch = ({ onChange }) => {
           type="number"
           name="highPrice"
           value={highPrice}
-          onChange={(e)=>{setHighPrice(e.target.value)}}
+          onChange={(e) => setHighPrice(e.target.value)}
+          onBlur={handlePriceChange}
         />
       </Form.Group>
     </>
@@ -37,4 +44,3 @@ const PriceSearch = ({ onChange }) => {
 };
 
 export default PriceSearch;
-  

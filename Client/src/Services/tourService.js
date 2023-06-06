@@ -88,3 +88,12 @@ export const deleteTour = async (tourId) => {
     };
   }
 };
+export const getNearbyTours = async (lat, long) => {
+  try {
+    const response = await axios.get(`${API}/nearby?userLat=${lat}&userLong=${long}`);
+    return response.data.tours;
+  } catch (error) {
+    console.error("Error fetching nearby tours:", error);
+    throw error;
+  }
+};

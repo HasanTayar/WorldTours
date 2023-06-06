@@ -1,0 +1,6 @@
+.tour-card {
+    max-width: 500px; /* you can set the maximum width you want here */
+    min-height: 300px; /* you can set the minimum height you want here */
+    margin: 0 auto;
+  }
+  
