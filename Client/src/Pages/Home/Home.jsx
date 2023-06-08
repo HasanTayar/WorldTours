@@ -8,15 +8,19 @@ import { getUserLocation } from "../../Services/Google/locationService";
 import { Container } from "react-bootstrap";
 import Header from "../../Components/Home/Headr";
 import "./Home.css"; 
+import { useNavigate } from "react-router-dom";
 //:: TODO: Fix the issue with showing the nearby tours if not found
 
 
-const Home = ({ isLoggedIn }) => {
+const Home = ({ isLoggedIn  , user}) => {
   const [location, setLocation] = useState(null);
   const [topPicks, setTopPicks] = useState([]);
   const [popularTours, setPopularTours] = useState([]);
   const [nearbyTours, setNearbyTours] = useState([]);
-
+  const navigate = useNavigate();
+  if(user && user.isAdmin){
+    navigate('/admin');
+  }
   useEffect(() => {
     fetchAllTours().then((tours) => {
       setPopularTours(tours);

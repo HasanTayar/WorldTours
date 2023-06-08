@@ -1,0 +1,37 @@
+.dashboard {
+  padding: 20px;
+}
+
+.dashboard h2 {
+  margin-bottom: 20px;
+}
+
+.dashboard-overview {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 20px;
+}
+
+.overview-card {
+  border: none;
+  background-color: #fff;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.overview-icon {
+  font-size: 2rem;
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.overview-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.overview-count {
+  font-size: 1.5rem;
+  color: #007bff;
+  margin-top: 10px;
+}

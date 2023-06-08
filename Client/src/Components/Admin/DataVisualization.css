@@ -1,0 +1,25 @@
+.data-visualization {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.data-visualization .icon {
+  margin-right: 10px;
+}
+
+.data-visualization .chart-container {
+  flex: 1;
+  min-width: 300px;
+  max-width: 600px;
+  height: 400px;
+  margin: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  .data-visualization .chart-container {
+    height: 300px;
+  }
+}

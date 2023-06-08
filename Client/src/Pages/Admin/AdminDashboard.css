@@ -1,0 +1,15 @@
+.admin-dashboard {
+  display: flex;
+}
+
+.main-content {
+  width: 100%;
+  padding-left: 260px; /* This value is for larger screens */
+}
+
+/* This media query targets screens with a maximum width of 768px */
+@media screen and (max-width: 768px) {
+  .main-content {
+    padding-left: 100px; /* This value is for smaller screens */
+  }
+}

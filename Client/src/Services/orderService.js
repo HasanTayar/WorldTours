@@ -15,7 +15,9 @@ export const addOrder = async (data) => {
 export const fetchAllOrders = async () => {
   try {
     const response = await axios.get(`${API}/orders`); 
-    return response.data;
+   
+    return response.data.orders;
+    
   } catch (error) {
     console.error("Error fetching orders:", error);
     return [];

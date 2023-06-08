@@ -1,0 +1,35 @@
+.chat-history {
+    margin-top: 20px;
+  }
+  
+  .chat-history .icon {
+    margin-right: 10px;
+  }
+  
+  .chat-history .message-container {
+    height: 300px; /* Adjust the height as needed */
+    overflow-y: auto;
+  }
+  
+  .chat-history .message {
+    margin-bottom: 10px;
+  }
+  
+  .chat-history .message-info {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+  }
+  
+  .chat-history .user {
+    margin-right: 10px;
+  }
+  
+  .chat-history .time {
+    color: gray;
+  }
+  
+  .chat-history .message-content {
+    margin-top: 5px;
+  }
+      

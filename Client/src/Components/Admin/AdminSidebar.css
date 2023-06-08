@@ -1,0 +1,69 @@
+.admin-sidebar {
+  background-color: #353535;  
+  color: #ffffff;
+  padding: 30px;  
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0;
+  overflow-x: hidden;
+  transition: 0.5s;
+  visibility: hidden;  /* new */
+  opacity: 0; /* new */
+}
+
+.admin-sidebar.open {
+  width: 250px;
+  visibility: visible; /* new */
+  opacity: 1; /* new */
+}
+
+.admin-sidebar .admin-profile {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.admin-sidebar .admin-profile .admin-photo {
+  border-radius: 50%; 
+  margin-right: 10px;
+  width: auto;
+  height: 200px;
+}
+
+.admin-sidebar .nav-link {
+  color: #ffffff;
+  font-size: 18px;
+  padding: 15px 30px; 
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.admin-sidebar .nav-link:hover {
+  background-color: #636363; 
+  color: #f9f9f9;
+}
+
+.admin-sidebar .nav-link.active {
+  background-color: #ff6347; 
+  color: #ffffff;
+}
+
+.admin-sidebar .icon {
+  margin-right: 15px;  
+}
+
+.sidebar-toggle {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  background-color: #353535;
+  border: none;
+  color: #ffffff;
+  padding: 10px;
+  cursor: pointer;
+}

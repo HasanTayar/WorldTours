@@ -8,6 +8,7 @@ import AppRoutes from "./Components/Routers/AppRoutes";
 import ChatBot from "./Pages/ChatBot/ChatBot";
 import ChatBotLogo from "./assets/ChatBotLogo.png";
 import "./App.css";
+import AdminSidebar from "./Components/Admin/AdminSidebar";
 
 // import { deleteAllChatBotMessages } from "./Services/ChatService";
 const googleMapsApiKey = "AIzaSyDhDzbFCa7X0FwHS3aBCFGIpg1coS8UdjE";
@@ -24,8 +25,9 @@ function App() {
   };
 
   const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("user")) || {}
+    localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {}
   );
+  
 
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(user));
@@ -68,13 +70,19 @@ function AppContent({ user, setUser, isLoggedIn, setIsLoggedIn, handleChatBotTog
     navigate("/");
   };
 
+  const isAdmin = user && user.isAdmin;
+
   return (
     <>
-      <Navbar
-        isLoggedIn={isLoggedIn}
-        user={user}
-        onLogout={handleLogout}
-      />
+      {isAdmin ? (
+        <AdminSidebar user={user} onLogout={handleLogout}/>
+      ) : (
+        <Navbar
+          isLoggedIn={isLoggedIn}
+          user={user}
+          onLogout={handleLogout}
+        />
+      )}
       <div className="container mt-4">
         <AppRoutes
           isLoggedIn={isLoggedIn}

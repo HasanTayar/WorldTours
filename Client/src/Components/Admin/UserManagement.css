@@ -1,0 +1,29 @@
+.user-management {
+  margin-top: 20px;
+}
+
+.user-management h2 {
+  margin-bottom: 20px;
+}
+
+.user-management table {
+  width: 100%;
+}
+
+.user-management th,
+.user-management td {
+  padding: 10px;
+}
+
+.user-management th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.user-management .action-button {
+  margin-right: 5px;
+}
+
+.user-management .icon {
+  margin-right: 5px;
+}

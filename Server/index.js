@@ -5,7 +5,7 @@ const db = require("./Services/db");
 const app = express();
 const http = require("http").createServer(app);
 const socketService = require("./Services/socket");  // import socket service
-
+const { scheduleReviewEmails } = require('./Controllers/Review');
 const PORT = process.env.PORT || 5000;
 const UserRoutes = require("./Routers/userRoutes");
 const TourRoutes = require("./Routers/tourRoutes");
@@ -16,6 +16,8 @@ const passport = require("passport");
 const ChatRoomRoutes = require("./Routers/ChatRoomRoutes");
 const passportConfig = require("./Services/passport");
 const SearchRoutes = require('./Routers/searchRoutes');
+const adminRoutes = require('./Routers/adminRoutes');
+const reviewRoutes = require('./Routers/Review');
 passportConfig(passport);
 app.use(passport.initialize());
 
@@ -29,10 +31,13 @@ app.use("/payment", PaymentRoutes);
 app.use("/chatBot", BotRoutes);
 app.use("/chatRoom" , ChatRoomRoutes);
 app.use("/search" , SearchRoutes);
+app.use('/admin', adminRoutes);
+app.use('/reviews' , reviewRoutes);
 socketService.initialize(http);  // initialize socket service
 
 http.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    scheduleReviewEmails();
 }).on("error", (err) => {
     console.error(`Error starting server: ${err}`);
 });

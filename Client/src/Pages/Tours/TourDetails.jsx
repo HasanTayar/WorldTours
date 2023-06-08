@@ -39,7 +39,7 @@ const TourDetails = ({isLoggedIn , user}) => {
   };
 
   return (
-    <>  {user._id === tour.organizerId && (
+    <>  {user && user._id === tour.organizerId && (
       <Link to={`/edit-tour/${tourId}`} className="btn btn-secondary mt-2" >Edit Tour</Link>
     )}
     <div className="tour-details container">

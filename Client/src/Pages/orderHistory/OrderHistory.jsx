@@ -17,7 +17,7 @@ const OrderHistory = ({ user }) => {
   const handleApprove = async (orderId) => {
     const approvedOrder = await approveOrder(orderId);
     if (approvedOrder) {
-      setOrders(orders.orders.map((order) => (order._id === orderId ? approvedOrder : order)));
+      setOrders(orders.map((order) => (order._id === orderId ? approvedOrder : order)));
     }
     
   };
@@ -25,7 +25,7 @@ const OrderHistory = ({ user }) => {
   const handleCancel = async (orderId) => {
     const canceledOrder = await cancelOrder(orderId);
 if (canceledOrder) {
-  setOrders(orders.orders.map((order) => (order._id === orderId ? canceledOrder : order)));
+  setOrders(orders.map((order) => (order._id === orderId ? canceledOrder : order)));
 }
 
     

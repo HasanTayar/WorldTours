@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { InputGroup, Input, InputGroupAddon, Button } from 'reactstrap';
+import { InputGroup, Input, Button } from 'reactstrap';
 import './SCSS/messageInput.scss';
 
 const MessageInput = ({ sendMessage }) => {

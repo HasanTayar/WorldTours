@@ -16,6 +16,10 @@ import OrderHistory from "../../Pages/orderHistory/OrderHistory";
 import EditTour from "../../Pages/EditTour/EditTour";
 import About from "../../Pages/About/About";
 import PaymentSuccess from "../../Pages/PaymentSuccess/PaymentSuccess";
+import AdminDashboard from "../../Pages/Admin/AdminDashboard";
+import UserManagement from "../Admin/UserManagement";
+import AdminTours from "../Admin/AdminTours";
+import ReviewPage from "../../Pages/Review/ReviewPage";
 const AppRoutes = ({ isLoggedIn, user, setUser, setIsLoggedIn }) => {
   return (
     <Routes>
@@ -65,6 +69,23 @@ const AppRoutes = ({ isLoggedIn, user, setUser, setIsLoggedIn }) => {
         path="/edit-tour/:tourId"
         element={isLoggedIn ? <EditTour/> : <Navigate to="/login"/>}
       />
+       <Route
+        path="/admin"
+        element={isLoggedIn && user && user.isAdmin ? <AdminDashboard user={user}/> : <Navigate to="/login" />}
+      />
+       <Route
+        path="/admin/users"
+        element={isLoggedIn && user &&  user.isAdmin ? <UserManagement user={user}/> : <Navigate to="/login" />}
+      />
+       <Route
+        path="/admin/tours"
+        element={isLoggedIn && user &&  user.isAdmin ? <AdminTours /> : <Navigate to="/login" />}
+      />
+       <Route
+        path="/reviews"
+        element={isLoggedIn ? <ReviewPage /> : <Navigate to="/login" />}
+      />
+        
     </Routes>
     
   );

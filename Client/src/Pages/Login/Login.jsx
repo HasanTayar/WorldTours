@@ -24,14 +24,17 @@ function Login({ setIsLoggedIn, setUser }) {
   const checkInputs = async (e, email, password) => {
     e.preventDefault();
     const success = await checkUserDetails(email, password, setError);
+
     if (success) {
       await getUserByToken(setUser, setIsLoggedIn, setError);
-      navigate("/");
+      // Check if the user is an admin
+      if (localUser.isAdmin) {
+        navigate("/admin"); // Redirect to the admin dashboard
+      } else {
+        navigate("/"); // Redirect to the regular user dashboard
+      }
     }
   };
-
-  
-  
 
   return (
     <div className="login-container">
@@ -58,17 +61,13 @@ function Login({ setIsLoggedIn, setUser }) {
               onSubmit={checkInputs}
             />
           )}
-          <Footer handleSignupClick={()=>handleSignupClick()} />
+          <Footer handleSignupClick={() => handleSignupClick()} />
         </div>
-    
+
         <div className="login-image">
-          <img
-            src="https://source.unsplash.com/random/800x600?travel"
-            alt="Travel"
-          />
+          <img src="https://source.unsplash.com/random/800x600?travel" alt="Travel" />
         </div>
       </div>
-      
     </div>
   );
 }
