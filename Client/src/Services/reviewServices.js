@@ -10,6 +10,14 @@ export const sendReviewEmail = async (orderId) => {
     throw error.response.data;
   }
 }
+export const getAllReviews = async ()=>{
+  try {
+    const response = await axios.post(`${API}`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+}
 
 export const submitReview = async (hashedToken, text, rating) => {
   try {

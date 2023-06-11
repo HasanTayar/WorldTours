@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-
 import {Typography , Box} from '@mui/material';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faChartPie, faChartLine } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faChartPie } from '@fortawesome/free-solid-svg-icons';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-  PieChart, Pie, Cell, RadialBarChart, RadialBar
+  PieChart, Pie, Cell
 } from 'recharts';
 import { fetchAllUsers } from '../../Services/userService';
 import { fetchAllOrders } from '../../Services/orderService';
@@ -36,7 +34,6 @@ const DataVisualization = () => {
 
   const totalApprovedPrice = approvedOrders.reduce((total, order) => total + order.price, 0);
   const totalUnapprovedPrice = unapprovedOrders.reduce((total, order) => total + order.price, 0);
-  const totalIncome = totalApprovedPrice - totalUnapprovedPrice;
 
   const approvedOrdersCount = approvedOrders.length;
   const unapprovedOrdersCount = unapprovedOrders.length;
@@ -50,12 +47,8 @@ const DataVisualization = () => {
   ];
 
   const dataPie = [
-    { name: 'Approved Orders', value: totalApprovedPrice },
-    { name: 'Unapproved Orders', value: totalUnapprovedPrice },
-  ];
-
-  const dataRadial = [
-    { name: 'Income', value: totalIncome },
+    { name: 'Approved Orders', value: (totalApprovedPrice/(totalApprovedPrice + totalUnapprovedPrice)) * 100  },
+    { name: 'Unapproved Orders', value: (totalUnapprovedPrice/(totalApprovedPrice + totalUnapprovedPrice)) * 100 },
   ];
 
   const COLORS = ['#8884d8', '#ff4d4f'];
@@ -64,11 +57,11 @@ const DataVisualization = () => {
     <div className="data-visualization">
       <Typography variant="h4" gutterBottom>Data Visualization</Typography>
       
-      <Box style={{ margin: '1rem 0', padding: '1rem', backgroundColor: '#ffffff', borderRadius: '0.5rem' }}>
+      <Box className="chart-container">
         <Typography variant="h6" gutterBottom>
           <FontAwesomeIcon icon={faChartBar} className="icon" /> Data
         </Typography>
-        <BarChart width={800} height={300} data={dataBar}>
+        <BarChart className="chart" width={800} height={300} data={dataBar}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
           <YAxis />
@@ -78,11 +71,13 @@ const DataVisualization = () => {
         </BarChart>
       </Box>
       
-      <Box style={{ margin: '1rem 0', padding: '1rem', backgroundColor: '#ffffff', borderRadius: '0.5rem' }}>
+      <Box className="chart-container">
         <Typography variant="h6" gutterBottom>
-          <FontAwesomeIcon icon={faChartPie} className="icon" /> Incomes
+          <FontAwesomeIcon icon={faChartPie} className="icon" /> Incomes (Percentage)
+          <br></br>
+          Future Total Incomes: {totalApprovedPrice + totalUnapprovedPrice}$
         </Typography>
-        <PieChart width={500} height={300}>
+        <PieChart className="chart" width={500} height={300}>
           <Pie data={dataPie} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
             {dataPie.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -91,18 +86,6 @@ const DataVisualization = () => {
           <Tooltip />
           <Legend />
         </PieChart>
-      </Box>
-
-      <Box style={{ margin: '1rem 0', padding: '1rem', backgroundColor: '#ffffff', borderRadius: '0.5rem' }}>
-        <Typography variant="h6" gutterBottom>
-          <FontAwesomeIcon icon={faChartLine} className="icon" /> Profits
-        </Typography>
-        <Typography variant="subtitle1" gutterBottom>Total Price: ${totalIncome}</Typography>
-        <RadialBarChart width={500} height={300} innerRadius="10%" outerRadius="80%" data={dataRadial} barSize={10}>
-          <RadialBar minAngle={15} label={{ position: 'insideStart', fill: '#fff' }} background dataKey="value" />
-          <Legend iconSize={10} width={120} height={140} layout='vertical' verticalAlign='middle' wrapperStyle={{ lineHeight: '24px' }} />
-          <Tooltip />
-        </RadialBarChart>
       </Box>
     </div>
   );

@@ -1,8 +1,9 @@
 .data-visualization {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+  justify-items: center;
   margin-top: 20px;
 }
 
@@ -11,14 +12,19 @@
 }
 
 .data-visualization .chart-container {
-  flex: 1;
-  min-width: 300px;
-  max-width: 600px;
-  height: 400px;
-  margin: 10px;
+  width: 100%;
+  height: 100%;
+}
+
+.chart-container .chart {
+  width: 100%!important;
+  height: auto!important;
 }
 
 @media screen and (max-width: 768px) {
+  .data-visualization {
+    grid-template-columns: 1fr;
+  }
   .data-visualization .chart-container {
     height: 300px;
   }

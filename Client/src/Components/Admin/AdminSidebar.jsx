@@ -36,7 +36,7 @@ const AdminSidebar = ({ user , onLogout}) => {
             </Link>
           </NavItem>
           <NavItem>
-            <Link to="/admin/chatrooms" className="nav-link">
+            <Link to="/admin/chats" className="nav-link">
               <FontAwesomeIcon icon={faComments} className="icon" />
               Chat Rooms
             </Link>

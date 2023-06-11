@@ -1,0 +1,54 @@
+
+
+.tour-card, .review-card {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .tour-card h2, .review-card h2 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #333;
+  }
+  
+  .tour-card p, .review-card p {
+    font-size: 16px;
+    color: #666;
+  }
+  
+  .review-card .rating {
+    display: flex;
+    align-items: center;
+  }
+  
+  .NavItem {
+    cursor: pointer;
+    padding: 10px;
+    margin-right: 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .NavItem:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .NavLink {
+    color: black;
+    text-decoration: none;
+  }
+  
+  .NavLink.active {
+    font-weight: bold;
+    color: blue;
+  }
+  .img-fit {
+    width: 200px;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+  
+  

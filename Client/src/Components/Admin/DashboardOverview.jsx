@@ -1,25 +1,27 @@
 import { Card, CardContent, Typography } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUsers, faUserShield, faUserTie, faPlane } from '@fortawesome/free-solid-svg-icons';
+import { faUsers, faUserShield, faCartShopping, faPlane } from '@fortawesome/free-solid-svg-icons';
 import { useState , useEffect} from 'react';
 import { fetchAllUsers } from '../../Services/userService';
 import { fetchAllOrders } from '../../Services/orderService';
 import { fetchAllTours } from '../../Services/tourService';
 import './Dashboard.css';
 
+function Dashboard() {
+  const [userCount, setUserCount] = useState(0);
+  const [tourCount, setTourCount] = useState(0);
+  const [orderCount, setOrderCount] = useState(0);
+  const [adminCount , setAdminCount] = useState(0);
 
-function Dashboard()
- {
-const [userCount, setUserCount] = useState(0);
-const [tourCount, setTourCount] = useState(0);
-const [orderCount, setOrderCount] = useState(0);
-const [adminCount , setAdminCount] = useState(0);
-const [organizerCount ,setOrganizerCount] = useState(0)
   useEffect(() => {
-    fetchAllUsers().then(users => setUserCount(users.length));
+    fetchAllUsers().then(users => {
+      setUserCount(users.length);
+      setAdminCount(users.filter(user => user.isAdmin).length);
+    });
     fetchAllTours().then(tours => setTourCount(tours.length));
     fetchAllOrders().then(orders => setOrderCount(orders.length));
   }, []);
+
   return (
     <div className="dashboard">
       <h2>Dashboard</h2>
@@ -40,9 +42,9 @@ const [organizerCount ,setOrganizerCount] = useState(0)
         </Card>
         <Card className="overview-card">
           <CardContent>
-            <FontAwesomeIcon icon={faUserTie} className="overview-icon" />
-            <Typography className="overview-title">Organizers</Typography>
-            <Typography className="overview-count">{organizerCount}</Typography>
+            <FontAwesomeIcon icon={faCartShopping} className="overview-icon" />
+            <Typography className="overview-title">Orders</Typography>
+            <Typography className="overview-count">{orderCount}</Typography>
           </CardContent>
         </Card>
         <Card className="overview-card">
@@ -52,7 +54,6 @@ const [organizerCount ,setOrganizerCount] = useState(0)
             <Typography className="overview-count">{tourCount}</Typography>
           </CardContent>
         </Card>
-      
       </div>
     </div>
   );

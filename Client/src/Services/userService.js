@@ -10,12 +10,6 @@ export const checkUserDetails = async (email, password, setError) => {
   try {
     const response = await axios.post(`${API}/login`, { email, password });
     setToken(response.data);
-
-    // Get user location
-    const userLocation = await getUserLocation();
-    
-    // Store the user's location in local storage
-    localStorage.setItem("userLocation", JSON.stringify(userLocation));
     
     return response.data; // Return the token on success
   } catch (error) {

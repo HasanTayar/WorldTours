@@ -33,4 +33,15 @@ router.post('/initiate', async (req, res) => {
   }
 });
 
+router.get('/chatrooms', async (req, res) => {
+  try {
+    const chatRooms = await ChatRoom.find();
+    res.json(chatRooms);
+  } catch (error) {
+    console.error('Error fetching chat rooms:', error);
+    res.status(500).json({ error: 'Failed to fetch chat rooms' });
+  }
+});
+
+
 module.exports = router;

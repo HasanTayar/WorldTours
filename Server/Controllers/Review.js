@@ -17,6 +17,19 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS,
   },
 });
+exports.getAllReviews = async(req , res) =>{
+  try {
+    const reviews = await Review.find();
+    res.status(200).send(reviews);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .send({
+        message: "An error occurred while fetching users. Please try again.",
+      });
+  }
+}
 
 const createReviewToken = async (userId, orderId) => {
   const token = jwt.sign({ userId, orderId }, process.env.JWT_SECRET, {

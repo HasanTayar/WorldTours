@@ -20,6 +20,8 @@ import AdminDashboard from "../../Pages/Admin/AdminDashboard";
 import UserManagement from "../Admin/UserManagement";
 import AdminTours from "../Admin/AdminTours";
 import ReviewPage from "../../Pages/Review/ReviewPage";
+import AdminOrder from "../Admin/AdminOrder";
+import AdminChat from "../Admin/AdminChat";
 const AppRoutes = ({ isLoggedIn, user, setUser, setIsLoggedIn }) => {
   return (
     <Routes>
@@ -80,6 +82,14 @@ const AppRoutes = ({ isLoggedIn, user, setUser, setIsLoggedIn }) => {
        <Route
         path="/admin/tours"
         element={isLoggedIn && user &&  user.isAdmin ? <AdminTours /> : <Navigate to="/login" />}
+      />
+      <Route
+        path="/admin/orders"
+        element={isLoggedIn && user &&  user.isAdmin ? <AdminOrder admin={user} /> : <Navigate to="/login" />}
+      />
+        <Route
+        path="/admin/chats"
+        element={isLoggedIn && user &&  user.isAdmin ? <AdminChat adminId={user._id}/> : <Navigate to="/login" />}
       />
        <Route
         path="/reviews"
