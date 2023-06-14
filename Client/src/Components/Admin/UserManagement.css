@@ -27,3 +27,24 @@
 .user-management .icon {
   margin-right: 5px;
 }
+.user-management {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-management h2 {
+  margin-bottom: 20px;
+}
+
+.user-management .input-search {
+  width: 100%;
+  max-width: 600px;
+}
+
+.user-management nav, 
+.user-management .tab-content {
+  width: 100%;
+  max-width: 1000px;
+}

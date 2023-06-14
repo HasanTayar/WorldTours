@@ -13,12 +13,16 @@ const OrganizerRequest = ({ user }) => {
       setLoading(true);
       setErrorMessage(null);
       setSuccessMessage(null);
-
+  
       const formData = new FormData();
       formData.append("cv", cv);
-
+      
+      for (var pair of formData.entries()) {
+        console.log(pair[0] + ', ' + pair[1]); // debug line to print form data entries
+      }
+      
       await uploadCV(user._id, formData);
-
+  
       // CV uploaded successfully
       setSuccessMessage("CV uploaded successfully for organizer request");
     } catch (error) {
@@ -28,7 +32,10 @@ const OrganizerRequest = ({ user }) => {
       setLoading(false);
     }
   };
+  
+  
 
+  console.log(cv);
   const handleCVChange = (event) => {
     setCV(event.target.files[0]);
   };
@@ -36,7 +43,7 @@ const OrganizerRequest = ({ user }) => {
   return (
     <div className="organizer-request">
       <h1>Organizer Request</h1>
-      <Form>
+      <Form encType="multipart/form-data">
         <FormGroup>
           <Label for="cv">Upload CV</Label>
           <Input type="file" name="cv" id="cv" onChange={handleCVChange} />

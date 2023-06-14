@@ -33,8 +33,13 @@ app.use("/chatRoom" , ChatRoomRoutes);
 app.use("/search" , SearchRoutes);
 app.use('/admin', adminRoutes);
 app.use('/reviews' , reviewRoutes);
-socketService.initialize(http);  // initialize socket service
-
+socketService.initialize(http); 
+//For Hosting on Futere
+// app.use((req,res,next)=>{
+//     res.header("Access-Control-Allow-Origin" ,"URL" );
+//     res.header("Access-Control-Allow-Headers","Origin , X-Requested-With , Content-Type , Accept");
+//     next();
+// })
 http.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
     scheduleReviewEmails();

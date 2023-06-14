@@ -3,7 +3,7 @@ import { TabContent, TabPane, Nav, NavItem, NavLink, Row, Col, Table, Button } f
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsers, faUserShield } from '@fortawesome/free-solid-svg-icons';
 import classnames from 'classnames';
-import { fetchAllOrders, cancelOrder as apiCancelOrder } from '../../Services/orderService';
+import { fetchAllOrders, cancelOrderTours as apiCancelOrder } from '../../Services/orderService';
 import './AdminOrder.css';
 
 const AdminOrder = ({ admin }) => {
@@ -19,11 +19,11 @@ const AdminOrder = ({ admin }) => {
   }, []);
 
   const adminOrders = Array.isArray(orders)
-    ? orders.filter((order) => order.userId._id === admin._id)
+    ? orders.filter((order) => order.userId._id === admin._id && !order.isCanceld)
     : [];
 
   const userOrders = Array.isArray(orders)
-    ? orders.filter((order) => order.userId._id !== admin._id)
+    ? orders.filter((order) => order.userId._id )
     : [];
 
   const toggle = tab => {
@@ -69,7 +69,6 @@ const AdminOrder = ({ admin }) => {
                     <th>Phone</th>
                     <th>Price</th>
                     <th>Selected Date</th>
-                    <th>Payment Method</th>
                     <th>Cancel</th>
                   </tr>
                 </thead>
@@ -82,7 +81,6 @@ const AdminOrder = ({ admin }) => {
                       <td>{order.phone}</td>
                       <td>{order.price}</td>
                       <td>{new Date(order.selectedDate).toLocaleDateString()}</td>
-                      <td>{order.paymentMethod}</td>
                       <td><Button color="danger" onClick={() => handleCancel(order._id)}>Cancel</Button></td>
                     </tr>
                   ))}
@@ -104,7 +102,7 @@ const AdminOrder = ({ admin }) => {
                     <th>Phone</th>
                     <th>Price</th>
                     <th>Selected Date</th>
-                    <th>Payment Method</th>
+                    <th>Canceld</th>
                     <th>Approved</th>
                     <th>Done</th>
                   </tr>
@@ -113,15 +111,16 @@ const AdminOrder = ({ admin }) => {
                   {userOrders.map(order => (
                     <tr key={order._id}>
                       <td>{order.tourId.name}</td>
-                      <td>{order.tourId.organizerId}</td>
+                      <td>{order.tourId.organizerId && order.tourId.organizerId.firstName + " " + order.tourId.organizerId.lastName}</td>
                       <td>{order.name}</td>
                       <td>{order.email}</td>
                       <td>{order.phone}</td>
                       <td>{order.price}</td>
                       <td>{new Date(order.selectedDate).toLocaleDateString()}</td>
-                      <td>{order.paymentMethod}</td>
+                      <td>{order.isCanceld ? 'Yes' : 'No'}</td>
                       <td>{order.approved ? 'Yes' : 'No'}</td>
                       <td>{order.isDone ? 'Yes' : 'No'}</td>
+                     
                     </tr>
                   ))}
                 </tbody>

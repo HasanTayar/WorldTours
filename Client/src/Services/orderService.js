@@ -51,6 +51,19 @@ export const cancelOrder = async (orderId) => {
     return false;
   }
 };
+export const cancelOrderTours = async (orderId) => {
+  try {
+    const response = await axios.post(`${API}/cancel/${orderId}`, {});
+
+    if (response.status === 200) {
+      return response.data.order;
+    }
+    
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
 
 export const deleteOrder = async (orderId) => {
   try {

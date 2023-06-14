@@ -89,7 +89,7 @@ const AppRoutes = ({ isLoggedIn, user, setUser, setIsLoggedIn }) => {
       />
         <Route
         path="/admin/chats"
-        element={isLoggedIn && user &&  user.isAdmin ? <AdminChat adminId={user._id}/> : <Navigate to="/login" />}
+        element={isLoggedIn && user &&  user.isAdmin ? <AdminChat user={user}/> : <Navigate to="/login" />}
       />
        <Route
         path="/reviews"

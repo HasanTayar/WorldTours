@@ -11,7 +11,7 @@ import "./App.css";
 import AdminSidebar from "./Components/Admin/AdminSidebar";
 
 // import { deleteAllChatBotMessages } from "./Services/ChatService";
-const googleMapsApiKey = "AIzaSyDhDzbFCa7X0FwHS3aBCFGIpg1coS8UdjE";
+const googleMapsApiKey = "AIzaSyDOw0sqxhr6SW0JIteC82q1HN2q3GY9aqo";
 const libraries = ["places"];
 
 function App() {

@@ -19,7 +19,7 @@ function UserManagement({user}) {
   useEffect(() => {
     fetchAllUsers().then(users => setUsers(users));
   }, []);
-
+  console.table(users);
   return (
     <div className="user-management">
       <h2>User Management</h2>
@@ -101,12 +101,12 @@ function UserManagement({user}) {
               </tr>
             </thead>
             <tbody>
-              {users && users.filter(user => user._id !== currentUserID && user.isRequest).filter(user => user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) || user.lastName.toLowerCase().includes(searchTerm.toLowerCase())).map((user, index) => (
+              {users && users.filter(user => user._id !== currentUserID && user.organizerRequest).filter(user => user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) || user.lastName.toLowerCase().includes(searchTerm.toLowerCase())).map((user, index) => (
                 <tr key={index}>
                   <td>{user.firstName + " " + user.lastName}</td>
                   <td>{user.email}</td>
                   <td>
-                    <Button color="info" className="action-button">
+                    <Button color="info" className="action-button" >
                       <FontAwesomeIcon icon={faFile} className="icon" />
                       View CV
                     </Button>

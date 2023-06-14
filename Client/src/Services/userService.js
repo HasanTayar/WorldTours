@@ -246,21 +246,17 @@ export const requestOrganizer = async (userId) => {
   }
 };
 
-export const uploadCV = async (userId, cv) => {
+export const uploadCV = async (userId, formData) => { 
   try {
-    const formData = new FormData();
-    formData.append("cv", cv);
-    console.log(formData);
     const config = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${getToken()}`,
+      headers: { 
+        'Authorization': `Bearer ${getToken()}`,
       },
     };
 
     const response = await axios.put(
       `${API}/upload-cv/${userId}`,
-      formData,
+      formData, 
       config
     );
     return response.data;

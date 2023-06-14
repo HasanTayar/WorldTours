@@ -2,6 +2,7 @@ const Order = require('../Models/OrderModel');
 const Tour = require('../Models/TourModel');
 
 exports.createOrder = async (req, res) => {
+  console.log("create order start");
   console.log(req.body);
   try {
     const newOrder = new Order(req.body);
@@ -30,6 +31,7 @@ exports.createOrder = async (req, res) => {
 };
 
 exports.cancelOrder = async (req, res) => {
+  console.log("Cancel order start");
   try {
     const orderId = req.params.orderId;
     const order = await Order.findById(orderId);
@@ -44,13 +46,13 @@ exports.cancelOrder = async (req, res) => {
 
     // Update the order count for the tour
     const tour = await Tour.findById(order.tourId);
-    if (tour) {
-      tour.orderCount -= 1;
+    if (tour && tour.orderCount > 0) {
+     tour.orderCount -= 1;
       await tour.save();
     }
-
+    order.isCanceld = true;
     // Remove the order
-    await order.remove();
+    await order.save();
 
     res.status(200).json({
       status: 'success',
@@ -66,6 +68,7 @@ exports.cancelOrder = async (req, res) => {
 
 // Fetch all orders
 exports.fetchAllOrders = async (req, res) => {
+  console.log("fetching order start");
   try {
     const orders = await Order.find().populate('tourId').populate('userId');
     res.status(200).json({
@@ -81,6 +84,8 @@ exports.fetchAllOrders = async (req, res) => {
 
 // Approve an order
 exports.approveOrder = async (req, res) => {
+  console.log("approve order start");
+
   try {
 
     const orderId = req.params.orderId;
@@ -115,6 +120,8 @@ exports.approveOrder = async (req, res) => {
 
 // Cancel an order (organizer)
 exports.cancelOrderOrganizer = async (req, res) => {
+  console.log("canel orgainzer  order start");
+
   try {
     const orderId = req.params.orderId;
     const order = await Order.findById(orderId);
@@ -129,13 +136,14 @@ exports.cancelOrderOrganizer = async (req, res) => {
 
     // Update the order count for the tour
     const tour = await Tour.findById(order.tourId);
-    if (tour) {
+    if (tour && tour.orderCount >0) {
       tour.orderCount -= 1;
       await tour.save();
     }
 
     // Set order as not approved
     order.aprroved = false;
+    
     await order.save();
 
     res.status(200).json({
@@ -153,10 +161,11 @@ exports.cancelOrderOrganizer = async (req, res) => {
 };
 
 exports.deleteOrder = async (req, res) => {
+  console.log("delete order start");
   try {
     const orderId = req.params.orderId;
     const order = await Order.findById(orderId);
-
+    
     if (!order) {
       res.status(404).json({
         status: 'fail',

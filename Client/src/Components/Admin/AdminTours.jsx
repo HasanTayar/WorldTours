@@ -8,6 +8,7 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 import classnames from 'classnames';
 import { useNavigate } from "react-router-dom";
 import './AdminTours.css';
+import TourList from "../../Pages/Tours/TourList";
 
 const AdminTours = () => {
   const [tours, setTours] = useState([]);
@@ -78,20 +79,7 @@ const AdminTours = () => {
       </Nav>
       <TabContent activeTab={activeTab}>
         <TabPane tabId="1">
-          {tours && tours.map((tour) => {
-            const organizer = Orgainzers.find(org => org._id === tour.organizerId);
-            return (
-              <div className="tour-card"  onClick={() => goToTourPage(tour._id)}>
-              <img className="img-fit" src={tour.photoTimeline} alt="description" />
-                <h2>{tour.name}</h2>
-                <p>{tour.desc}</p>
-                <p>Price:{tour.price}$</p>
-                {organizer && <p>Organized by: {organizer.firstName} {organizer.lastName}</p>}
-                {/* Display other tour info here */}
-                
-              </div>
-            )
-          })}
+          <TourList/>
         </TabPane>
         <TabPane tabId="2">
           {reviews && reviews.map((review) => (

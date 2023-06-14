@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const orderController = require('../Controllers/OrderController');
-
+router.post('/cancel/:orderId', orderController.cancelOrder);
 // Create new Order
 router.post('/new-order', orderController.createOrder);
 // Delete Order
@@ -12,5 +12,6 @@ router.get('/orders', orderController.fetchAllOrders);
 router.patch('/:orderId/approve', orderController.approveOrder);
 // Cancel Order by Organizer
 router.patch('/:orderId/cancel-organizer', orderController.cancelOrderOrganizer);
+
 
 module.exports = router;

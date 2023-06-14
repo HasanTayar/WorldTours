@@ -14,38 +14,27 @@ exports.createSearch = async (req, res) => {
   try {
     const filter = {};
 
-    let tags = req.body.tags;
-    let organizerId = req.body.organizerId;
-    let name = req.body.name;
-    let language = req.body.language;
-    let places = req.body.places;
+    let location = req.body.location;
     let priceRange = req.body.priceRange;
-
-    if (tags && tags.length > 0) {
-      filter.tags = { $in: tags };
+    if (location) {
+      let splitLocation = location.split(',')[0].trim();
+      filter.$or = [
+        { "locations": { $elemMatch: { "locationName": splitLocation } } },
+        { name: splitLocation }
+      ];
     }
-    if (organizerId) {
-      filter.organizerId = organizerId;
-    }
-    if (name) {
-      filter.name = name;
-    }
-    if (language) {
-      filter.language = language;
-    }
-    if (places && places.length > 0) {
-      filter["locations.locationName"] = { $in: places };
-    }
+    
+    
     if (priceRange) {
       filter.price = {};
-      if (priceRange.lowPrice) {
-        filter.price.$gte = Number(priceRange.lowPrice);
+      if (priceRange.minPrice) {
+        filter.price.$gte = Number(priceRange.minPrice);
       }
-      if (priceRange.highPrice) {
-        filter.price.$lte = Number(priceRange.highPrice);
+      if (priceRange.maxPrice) {
+        filter.price.$lte = Number(priceRange.maxPrice);
       }
     }
-
+     console.log(filter);
     const tours = await Tour.find(filter).sort({ orderCount: -1 });
 
     const uniqueTours = Array.from(new Set(tours.map((tour) => tour._id))).map(
@@ -65,11 +54,7 @@ exports.createSearch = async (req, res) => {
         { userId: req.user._id },
         {
           searchCriteria: {
-            tags,
-            organizerId,
-            name,
-            language,
-            places,
+            location,
             priceRange,
           },
           $push: {

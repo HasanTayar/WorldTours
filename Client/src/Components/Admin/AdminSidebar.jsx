@@ -1,55 +1,69 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Nav, NavItem } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faBook, faComments, faShoppingCart, faSignOutAlt,  faDatabase } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faBook, faComments, faShoppingCart, faSignOutAlt, faDatabase, faBars } from "@fortawesome/free-solid-svg-icons";
 import "./AdminSidebar.css";
 
-const AdminSidebar = ({ user , onLogout}) => {
-  const [isOpen, setIsOpen] = useState(true);
+const AdminSidebar = ({ user, onLogout }) => {
+  const [isOpen, setIsOpen] = useState(window.innerWidth > 768);
+
+  const handleResize = () => {
+    setIsOpen(window.innerWidth > 768);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <>
-  
+      <button className="sidebar-toggle" onClick={() => setIsOpen(!isOpen)}>
+        <FontAwesomeIcon icon={faBars} />
+      </button>
       <div className={`admin-sidebar ${isOpen ? 'open' : ''}`}>
         <div className="admin-profile">
-          <img src={user && user.photo} alt="Admin" className="admin-photo" />
+          {isOpen && <img src={user && user.photo} alt="Admin" className="admin-photo" />}
         </div>
-        <p style={{textAlign:"center"}}>{user.firstName + " " + user.lastName}</p>
+        {isOpen && <p style={{textAlign:"center"}}>{user.firstName + " " + user.lastName}</p>}
         <Nav vertical>
-        <NavItem>
+          <NavItem>
             <Link to="/admin" className="nav-link">
               <FontAwesomeIcon icon={faDatabase} className="icon" />
-            Visualization
+              <span>Visualization</span>
             </Link>
           </NavItem>
           <NavItem>
             <Link to="/admin/users" className="nav-link">
               <FontAwesomeIcon icon={faUser} className="icon" />
-              Users
+              <span>Users</span>
             </Link>
           </NavItem>
           <NavItem>
             <Link to="/admin/tours" className="nav-link">
               <FontAwesomeIcon icon={faBook} className="icon" />
-              Tours
+              <span>Tours</span>
             </Link>
           </NavItem>
           <NavItem>
             <Link to="/admin/chats" className="nav-link">
               <FontAwesomeIcon icon={faComments} className="icon" />
-              Chat Rooms
+              <span>Chat Rooms</span>
             </Link>
           </NavItem>
           <NavItem>
             <Link to="/admin/orders" className="nav-link">
               <FontAwesomeIcon icon={faShoppingCart} className="icon" />
-              Orders
+              <span>Orders</span>
             </Link>
           </NavItem>
           <NavItem onClick={onLogout} className="nav-link">
-              <FontAwesomeIcon icon={faSignOutAlt} className="icon" />
-              Logout
+            <FontAwesomeIcon icon={faSignOutAlt} className="icon" />
+            <span>Logout</span>
           </NavItem>
         </Nav>
       </div>

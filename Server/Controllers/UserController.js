@@ -496,32 +496,39 @@ exports.requestOrganizer = async (req, res) => {
 
 // Function to handle user's CV upload
 exports.uploadCV = async (req, res) => {
+  console.log('uploadCV - START');
+  console.log('Request:', req.body, req.files, req.file, req.params);
+
   try {
     const { userId } = req.params;
+    console.log('UserId:', userId);
+
     const { filename } = req.file;
+    console.log('Filename:', filename);
 
     // Find the user by ID
     const user = await User.findById(userId);
+    console.log('User:', user);
 
     if (!user) {
+      console.error('User not found');
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Check if the user is already an organizer or has not requested to be one
-    if (user.isOrganizer || !user.isRequestingOrganizer) {
-      return res.status(400).json({ error: 'User is not eligible to upload a CV' });
-    }
 
     // Save the CV filename to the user's profile
-    user.cv = filename;
-    user.isRequestingOrganizer = true;
+    user.organizerCV = filename;
+    user.organizerRequest = true;
+
     // Save the updated user
     await user.save();
+    console.log('User saved successfully');
 
     return res.status(200).json({ message: 'CV uploaded successfully' });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: 'Server error' });
+    console.error('uploadCV - ERROR', error);
+    return res.status(500).json({ error: 'Server error', detail: error.message });
+  } finally {
+    console.log('uploadCV - END');
   }
 };
-

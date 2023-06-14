@@ -38,7 +38,10 @@ if (canceledOrder) {
   };
 
   const userOrders = Array.isArray(orders.orders)
-    ? orders.orders.filter((order) => user.isOrganizer ? order.tourId.organizerId === user._id : order.userId._id === user._id)
+    ? orders.orders.filter((order) => user.isOrganizer ? order.tourId.organizerId === user._id : order.userId._id === user._id
+    &&  !order.isCanceld 
+    )
+
     : [];
 
     return (

@@ -1,26 +1,29 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Message from './Message';
 import MessageInput from './MessageInput';
 import './SCSS/ChatArea.scss';
-const ChatArea = ({ messages, sendMessage, deleteMessage, markAsRead, getMessages, senderId }) => {
 
-
-  
-  const handleViewMessage = (messagesId) => {
-    // Call markAsRead function with the messageId
-    markAsRead(messagesId);
+const ChatArea = ({
+  messages,
+  sendMessage,
+  deleteMessage,
+  markAsRead,
+  getMessages,
+  senderId,
+}) => {
+  const handleViewMessage = (messageId) => {
+    markAsRead(messageId);
   };
 
   return (
     <div className="chat-area">
-      {messages.map((message, i) => (
+      {messages.map((message) => (
         <Message
-          key={i}
+          key={message._id}
           message={message}
           deleteMessage={deleteMessage}
           handleViewMessage={handleViewMessage}
           senderId={senderId}
-          markAsRead={markAsRead}
         />
       ))}
       <MessageInput sendMessage={sendMessage} />

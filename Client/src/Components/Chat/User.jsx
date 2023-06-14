@@ -5,24 +5,32 @@ import { faComment } from '@fortawesome/free-solid-svg-icons';
 
 const userRole = (user) => {
   if (user.isAdmin) {
-    return "Admin";
+    return 'Admin';
   } else if (user.isOrganizer && !user.isAdmin) {
-    return "Organizer";
+    return 'Organizer';
   } else {
-    return "Tourist";
+    return 'Tourist';
   }
-}
+};
 
-export default function User({ user, handleUserClick, unreadCount }) {
+export default function User({ user, handleUserClick, selectedUser, unreadCount }) {
+  const isSelected = selectedUser && selectedUser._id === user._id;
   console.log(unreadCount);
   return (
-    <div className="user" onClick={() => handleUserClick(user)}>
+    <div
+      className={`user ${isSelected ? 'selected' : ''}`}
+      onClick={() => handleUserClick(user)}
+    >
       <img src={user.photo} alt="Profile" className="user-photo" />
       <h2>
-        {user.firstName} {user.lastName} 
-        <br/>Role: {userRole(user)}
+        {user.firstName} {user.lastName}
+        <br />Role: {userRole(user)}
       </h2>
-      {unreadCount > 0 && <span>{unreadCount}</span>}
+      {unreadCount > 0 && (
+        <span className="unread-count">
+          {unreadCount > 9 ? '9+' : unreadCount}
+        </span>
+      )}
     </div>
   );
 }

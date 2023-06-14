@@ -1,63 +1,78 @@
 .admin-sidebar {
-  background-color: #353535;  
+  background-color: #353535;
   color: #ffffff;
-  padding: 30px;  
+  padding: 30px;
   position: fixed;
   left: 0;
   top: 0;
   height: 100%;
-  width: 0;
+  width: 80px;
   overflow-x: hidden;
   transition: 0.5s;
-  visibility: hidden;  /* new */
-  opacity: 0; /* new */
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center; /* Align icons to center when sidebar is closed */
 }
 
 .admin-sidebar.open {
   width: 250px;
-  visibility: visible; /* new */
-  opacity: 1; /* new */
+  align-items: flex-start; /* Align items to start when sidebar is open */
 }
 
-.admin-sidebar .admin-profile {
+.admin-profile {
   display: flex;
   align-items: center;
   margin-bottom: 30px;
+  width: 100%; /* Ensure profile section takes full width */
 }
 
-.admin-sidebar .admin-profile .admin-photo {
-  border-radius: 50%; 
+.admin-profile .admin-photo {
+  border-radius: 50%;
   margin-right: 10px;
   width: auto;
   height: 200px;
 }
 
-.admin-sidebar .nav-link {
+.nav-link {
   color: #ffffff;
   font-size: 18px;
-  padding: 15px 30px; 
+  padding: 15px 30px;
   display: flex;
   align-items: center;
   text-decoration: none;
   border-radius: 4px;
+  flex-grow: 1;
+  justify-content: center; /* Center content when sidebar is closed */
 }
 
-.admin-sidebar .nav-link:hover {
-  background-color: #636363; 
+.nav-link:hover {
+  background-color: #636363;
   color: #f9f9f9;
 }
 
-.admin-sidebar .nav-link.active {
-  background-color: #ff6347; 
+.nav-link.active {
   color: #ffffff;
 }
 
-.admin-sidebar .icon {
-  margin-right: 15px;  
+.icon {
+  margin-right: 15px;
+}
+
+.nav-link span {
+  display: none; /* Hide text initially */
+}
+
+.admin-sidebar.open .nav-link {
+  justify-content: flex-start; /* Align items to start when sidebar is open */
+}
+
+.admin-sidebar.open .nav-link span {
+  display: inline; /* Show text when sidebar is open */
 }
 
 .sidebar-toggle {
-  position: absolute;
+  position: fixed;
   top: 10px;
   left: 10px;
   z-index: 2;

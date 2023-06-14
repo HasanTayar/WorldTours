@@ -3,7 +3,7 @@ import {Typography , Box} from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartBar, faChartPie } from '@fortawesome/free-solid-svg-icons';
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   PieChart, Pie, Cell
 } from 'recharts';
 import { fetchAllUsers } from '../../Services/userService';
@@ -29,21 +29,23 @@ const DataVisualization = () => {
     fetchData();
   }, []);
 
-  const approvedOrders = orders.filter((order) => order.aprroved);
-  const unapprovedOrders = orders.filter((order) => !order.aprroved);
+  const approvedOrders = orders.filter((order) => order.approved);
+  const unapprovedOrders = orders.filter((order) => !order.approved && !order.isCanceld);
+  const cancelledOrders = orders.filter((order) => order.isCanceld);
 
   const totalApprovedPrice = approvedOrders.reduce((total, order) => total + order.price, 0);
   const totalUnapprovedPrice = unapprovedOrders.reduce((total, order) => total + order.price, 0);
 
   const approvedOrdersCount = approvedOrders.length;
   const unapprovedOrdersCount = unapprovedOrders.length;
-  const organizers = users.filter((user) => user.isOrganizer);
-  const organizerCount = organizers.length;
+  const cancelledOrdersCount = cancelledOrders.length;
+  const organizerRequestCount = users.filter((user) => user.organizerRequest).length;
 
-  const dataBar = [
+  const dataLine = [
     { name: 'Approved Orders', value: approvedOrdersCount },
     { name: 'Unapproved Orders', value: unapprovedOrdersCount },
-    { name: 'Organizers', value: organizerCount },
+    { name: 'Cancelled Orders', value: cancelledOrdersCount },
+    { name: 'Organizer Requests', value: organizerRequestCount },
   ];
 
   const dataPie = [
@@ -61,14 +63,14 @@ const DataVisualization = () => {
         <Typography variant="h6" gutterBottom>
           <FontAwesomeIcon icon={faChartBar} className="icon" /> Data
         </Typography>
-        <BarChart className="chart" width={800} height={300} data={dataBar}>
+        <LineChart className="chart" width={800} height={300} data={dataLine}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="value" fill="#8884d8" />
-        </BarChart>
+          <Line type="monotone" dataKey="value" stroke="#8884d8" activeDot={{ r: 8 }} />
+        </LineChart>
       </Box>
       
       <Box className="chart-container">
