@@ -12,9 +12,18 @@ const storage = multer.diskStorage({
     cb(null, file.originalname);
   }
 });
+const storageCv = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, '../Client/public/Cv');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
 
 const upload = multer({ storage: storage });
 
+const uploadCv = multer({ storage: storageCv });
 const router = express.Router();
 
 router.get('/admins', UserController.getAdmins);
@@ -30,5 +39,8 @@ router.post('/verify-email', UserController.verifyEmail);
 router.get('/userByToken', UserController.getUserByToken);
 router.get('/users', passport.authenticate('jwt', { session: false }), UserController.getAllUsers);
 router.get('/:userEmail', UserController.getUserProfile);
+router.put('/request-organizer/:userId', UserController.requestOrganizer);
+router.put('/upload-cv/:userId',uploadCv.single('cv'), UserController.uploadCV);
+
 
 module.exports = router;

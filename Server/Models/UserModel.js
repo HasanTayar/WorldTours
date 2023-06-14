@@ -36,6 +36,8 @@ const UserSchema = new mongoose.Schema({
     contactEmail: String,
     phone: String,
   },
+  organizerRequest: { type: Boolean, default: false },
+  organizerCV: { type: String },
   topPicks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tour' }],
   createdAt: { type: Date, default: Date.now },
 });

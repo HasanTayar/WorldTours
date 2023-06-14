@@ -9,12 +9,19 @@ export const checkUserDetails = async (email, password, setError) => {
   setError("");
   try {
     const response = await axios.post(`${API}/login`, { email, password });
-    setToken(response.data);
-    
-    return response.data; // Return the token on success
+          setToken(response.data);
+    // Depending on your actual response, you may need to modify this
+    if (response.status === 401 && response.data.message === "Email not verified. A new verification link has been sent to your email.") {
+      // If the response indicates the email is not verified, redirect to verification page
+    } else if (response.status === 200) {
+      console.log(response.data);
+      return response.data;
+    } else {
+      throw new Error("Unhandled response status");
+    }
   } catch (error) {
     console.error("error", error);
-    setError(error);
+    setError(error.response.data.message);
     return false;
   }
 };
@@ -178,3 +185,87 @@ export const verifyEmail = async (token) => {
       throw error;
     }
   };
+  // Get all admins
+export const getAdmins = async () => {
+  try {
+    const response = await axios.get(`${API}/admins`, {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+// Delete user profile
+export const deleteUserProfile = async () => {
+  try {
+    const response = await axios.delete(`${API}/delete-profile`, {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+// Set user as admin
+export const setAdmin = async (userId) => {
+  try {
+    const response = await axios.post(`${API}/set-admin`, { userId }, {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+
+
+export const requestOrganizer = async (userId) => {
+  try {
+    const response = await axios.put(`${API}/request-organizer/${userId}`, null, {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const uploadCV = async (userId, cv) => {
+  try {
+    const formData = new FormData();
+    formData.append("cv", cv);
+    console.log(formData);
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${getToken()}`,
+      },
+    };
+
+    const response = await axios.put(
+      `${API}/upload-cv/${userId}`,
+      formData,
+      config
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

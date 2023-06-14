@@ -11,6 +11,7 @@ const SideBar = ({renderSettingContent , handleSelect}) =>{
                     <Nav.Link eventKey="accountSettings">Account Settings</Nav.Link>
                     <Nav.Link eventKey="passwordSettings">Password Settings</Nav.Link>
                     <Nav.Link eventKey="PaymentMethods">Payment Settings</Nav.Link>
+                    <Nav.Link eventKey="OrganizerRequest">Organizer Request</Nav.Link>
                 </Nav>
             </Navbar>
         </Col>

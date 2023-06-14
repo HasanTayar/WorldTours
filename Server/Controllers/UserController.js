@@ -464,5 +464,64 @@ exports.getUserById = async (req, res) => {
       });
   }
 };
+// Function to handle user's request to become an organizer
+exports.requestOrganizer = async (req, res) => {
+  try {
+    const { userId } = req.params;
 
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Check if the user is already an organizer or has already requested to be an organizer
+    if (user.isOrganizer || user.isRequestingOrganizer) {
+      return res.status(400).json({ error: 'User is already an organizer or has already requested to be one' });
+    }
+
+    // Set the user's requesting organizer flag to true
+    user.isRequestingOrganizer = true;
+
+    // Save the updated user
+    await user.save();
+
+    return res.status(200).json({ message: 'Organizer request submitted successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Server error' });
+  }
+};
+
+// Function to handle user's CV upload
+exports.uploadCV = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { filename } = req.file;
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Check if the user is already an organizer or has not requested to be one
+    if (user.isOrganizer || !user.isRequestingOrganizer) {
+      return res.status(400).json({ error: 'User is not eligible to upload a CV' });
+    }
+
+    // Save the CV filename to the user's profile
+    user.cv = filename;
+    user.isRequestingOrganizer = true;
+    // Save the updated user
+    await user.save();
+
+    return res.status(200).json({ message: 'CV uploaded successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Server error' });
+  }
+};
 

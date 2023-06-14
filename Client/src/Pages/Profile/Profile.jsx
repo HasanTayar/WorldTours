@@ -1,11 +1,12 @@
 import { useState } from "react";
 import Payment from "../payment/Payment";
-import axios from "axios";
+
 import "./Profile.css";
 import AccountSettings from "../../Components/Profile/AccountSettings";
 import PublicView from "../../Components/Profile/PublicView";
 import PasswordSettings from "../../Components/Profile/PasswordSettings";
 import SideBar from "../../Components/Profile/SideBar";
+import OrganizerRequest from "../../Components/Profile/OrganizerRequest";
 import { updateUserProfile } from "../../Services/userService";
 const Profile = ({ user }) => {
   const [activeSetting, setActiveSetting] = useState("publicView");
@@ -93,6 +94,8 @@ const handleSelect = (eventKey) => {
         return <PasswordSettings />;
       case "PaymentMethods":
         return <Payment id={user._id} />;
+        case "OrganizerRequest":
+          return <OrganizerRequest user={user}/>;
       default:
         return (
           <PublicView
