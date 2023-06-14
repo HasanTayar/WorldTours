@@ -15,7 +15,6 @@ const userRole = (user) => {
 
 export default function User({ user, handleUserClick, selectedUser, unreadCount }) {
   const isSelected = selectedUser && selectedUser._id === user._id;
-  console.log(unreadCount);
   return (
     <div
       className={`user ${isSelected ? 'selected' : ''}`}
