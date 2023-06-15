@@ -20,7 +20,7 @@ Welcome to WorldTours! This project is a comprehensive web application for manag
 
 The WorldTours project is built using the following technologies:
 
-- Frontend: React for building the user interface and Redux for state management.
+- Frontend: React for building the user interface.
 - Backend: Express.js, a Node.js web application framework, for creating the API and handling server-side logic.
 - Database: MongoDB for storing application data.
 - Socket.IO for real-time communication in the Chat system module.
