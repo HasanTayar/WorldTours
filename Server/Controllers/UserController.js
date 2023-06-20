@@ -37,7 +37,7 @@ exports.signup = async (req, res) => {
 
     // Configure the email
     const verificationEmail = {
-      from: process.env.EMAIL_USER,
+      from: `"World Tours" <${process.env.EMAIL_USER}>`,
       to: savedUser.email,
       subject: "Please verify your email",
       html: `<p>Welcome to World Tours, ${savedUser.firstName}!</p>
@@ -123,7 +123,7 @@ exports.login = async (req, res) => {
         );
 
         const verificationEmail = {
-          from: process.env.EMAIL_USER,
+          from: `"World Tours" <${process.env.EMAIL_USER}>`,
           to: user.email,
           subject: "Please verify your email",
           html: `<p>Welcome to World Tours, ${user.firstName}!</p>
@@ -172,7 +172,7 @@ exports.forgotPassword = async (req, res) => {
       await user.save();
 
       const resetEmail = {
-        from: process.env.EMAIL_USER,
+        from: `"World Tours" <${process.env.EMAIL_USER}>`,
         to: user.email,
         subject: "Password reset request",
         html: `<p>Hi ${user.firstName},</p>
@@ -464,8 +464,9 @@ exports.getUserById = async (req, res) => {
       });
   }
 };
-// Function to handle user's request to become an organizer
-exports.requestOrganizer = async (req, res) => {
+// Function to  user's prombot to become an organizer
+exports.setOrganizer = async (req, res) => {
+  console.log("set orgainzer start :")
   try {
     const { userId } = req.params;
 
@@ -476,15 +477,20 @@ exports.requestOrganizer = async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Check if the user is already an organizer or has already requested to be an organizer
-    if (user.isOrganizer || user.isRequestingOrganizer) {
-      return res.status(400).json({ error: 'User is already an organizer or has already requested to be one' });
-    }
-
-    // Set the user's requesting organizer flag to true
-    user.isRequestingOrganizer = true;
-
+    user.isOrganizer  = true;
+    user.organizerRequest = false;
+    const organizerWelcomeEmail = {
+      from: `"World Tours" <${process.env.EMAIL_USER}>`,
+      to: user.email,
+      subject: "Congratulations on becoming an Organizer at World Tours!",
+      html: `<p>Welcome, ${user.firstName}!</p>
+             <p>Congratulations on becoming an Organizer.</p>
+             <p>You can now upload and manage your own tours. Enjoy the new possibilities!</p>
+     `
+  };
+    await transporter.sendMail(organizerWelcomeEmail);
     // Save the updated user
+  
     await user.save();
 
     return res.status(200).json({ message: 'Organizer request submitted successfully' });

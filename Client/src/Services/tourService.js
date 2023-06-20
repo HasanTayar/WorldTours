@@ -90,8 +90,18 @@ export const deleteTour = async (tourId) => {
 };
 export const getNearbyTours = async (lat, long) => {
   try {
-    const response = await axios.get(`${API}/nearby?userLat=${lat}&userLong=${long}`);
-    return response.data.tours;
+    // Reverse Geocoding
+    const geoResponse = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&key=${`${import.meta.env.VITE_GOOGLE_API}`}`);
+    
+    // Finding country from the response
+    const geoData = geoResponse.data;
+    const countryComponent = geoData.results[0].address_components.find(component => component.types.includes('country'));
+    const userCountry = countryComponent.long_name;
+
+    // Fetching nearby tours
+    const tourResponse = await axios.get(`${API}/nearby?userLat=${lat}&userLong=${long}&userCountry=${userCountry}`);
+    
+    return tourResponse.data.tours;
   } catch (error) {
     console.error("Error fetching nearby tours:", error);
     throw error;

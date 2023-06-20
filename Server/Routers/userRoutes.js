@@ -39,8 +39,8 @@ router.post('/verify-email', UserController.verifyEmail);
 router.get('/userByToken', UserController.getUserByToken);
 router.get('/users', passport.authenticate('jwt', { session: false }), UserController.getAllUsers);
 router.get('/:userEmail', UserController.getUserProfile);
-router.put('/request-organizer/:userId', UserController.requestOrganizer);
+router.post('/set-orgainzer/:userId', UserController.setOrganizer);
 router.put('/upload-cv/:userId',uploadCv.single('cv'), UserController.uploadCV);
-
+router.post('/forget-password' , UserController.forgotPassword);
 
 module.exports = router;

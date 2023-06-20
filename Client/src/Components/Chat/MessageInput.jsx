@@ -19,12 +19,14 @@ const MessageInput = ({ sendMessage }) => {
     }
   };
 
+
+
   return (
     <InputGroup>
-      <Input
-        type="text"
-        value={messageBody}
-        onChange={(e) => setMessageBody(e.target.value)}
+      <Input 
+        type="text" 
+        value={messageBody} 
+        onChange={(e) => setMessageBody(e.target.value)} 
         onKeyPress={handleKeyPress}
       />
       <Button color="primary" onClick={handleSendMessage}>

@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import EmailForm from "../../Components/auth/EmailForm";
 import LoginForm from "../../Components/auth/LoginForm";
-import { checkUserDetails, getUserByEmail, getUserByToken } from "../../Services/userService";
+import { checkUserDetails, getUserByEmail, getUserByToken, forgotPassword } from "../../Services/userService";
 import Footer from "../../Components/auth/Footer";
+
 function Login({ setIsLoggedIn, setUser }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -12,9 +13,20 @@ function Login({ setIsLoggedIn, setUser }) {
   const [localUser, setLocalUser] = useState([]);
   const [error, setError] = useState("");
   const [showPasswordInput, setShowPasswordInput] = useState(false);
-  function handleSignupClick() {
+  const [passwordResetEmailSent, setPasswordResetEmailSent] = useState(false);
+  
+  const handleSignupClick = () => {
     navigate("/register");
   }
+
+  const handleForgotPassword = async () => {
+    const success = await forgotPassword(email, setError);
+
+    if (success) {
+      setPasswordResetEmailSent(true);
+      setShowPasswordInput(false);
+    }
+  };
 
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
@@ -27,11 +39,11 @@ function Login({ setIsLoggedIn, setUser }) {
 
     if (success) {
       await getUserByToken(setUser, setIsLoggedIn, setError);
-      // Check if the user is an admin
+    
       if (localUser.isAdmin) {
-        navigate("/admin"); // Redirect to the admin dashboard
+        navigate("/admin");
       } else {
-        navigate("/"); // Redirect to the regular user dashboard
+        navigate("/");
       }
     }
   };
@@ -40,6 +52,11 @@ function Login({ setIsLoggedIn, setUser }) {
     <div className="login-container">
       <div className="login-content">
         <div className="login-form">
+          {passwordResetEmailSent && (
+            <div className="alert alert-success">
+              A reset password email has been sent. Please check your inbox.
+            </div>
+          )}
           {error && <div className="alert alert-danger">{error}</div>}
           {!showPasswordInput ? (
             <EmailForm
@@ -59,11 +76,11 @@ function Login({ setIsLoggedIn, setUser }) {
               localUser={localUser}
               navigate={navigate}
               onSubmit={checkInputs}
+              onForgotPassword={handleForgotPassword}
             />
           )}
           <Footer handleSignupClick={() => handleSignupClick()} />
         </div>
-
         <div className="login-image">
           <img src="https://source.unsplash.com/random/800x600?travel" alt="Travel" />
         </div>

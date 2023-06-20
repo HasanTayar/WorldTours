@@ -13,4 +13,4 @@ const SearchBar = ({ search, handleSearch }) => (
   </InputGroup>
 );
 
-export default SearchBar;
+export default SearchBar; 

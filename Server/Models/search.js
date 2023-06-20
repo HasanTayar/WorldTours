@@ -3,14 +3,6 @@ const mongoose = require('mongoose');
 const Search = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   searchCriteria: {
-    name: String,
-    tags: [String],
-    priceRange: {
-      lowPrice: String,
-      highPrice: String,
-    },
-    organizerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    language: String, // new field
     locations: [
       {
         locationName: String,

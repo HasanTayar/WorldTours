@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Nav, NavItem } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faBook, faComments, faShoppingCart, faSignOutAlt, faDatabase, faBars } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faBook, faComments, faShoppingCart, faSignOutAlt, faDatabase, faBars , faCog} from "@fortawesome/free-solid-svg-icons";
+
 import "./AdminSidebar.css";
 
 const AdminSidebar = ({ user, onLogout }) => {
-  const [isOpen, setIsOpen] = useState(window.innerWidth > 768);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleResize = () => {
     setIsOpen(window.innerWidth > 768);
@@ -59,6 +60,12 @@ const AdminSidebar = ({ user, onLogout }) => {
             <Link to="/admin/orders" className="nav-link">
               <FontAwesomeIcon icon={faShoppingCart} className="icon" />
               <span>Orders</span>
+            </Link>
+          </NavItem>
+          <NavItem>
+            <Link to="/profile" className="nav-link">
+              <FontAwesomeIcon icon={faCog} className="icon" />
+              <span>Settings</span>
             </Link>
           </NavItem>
           <NavItem onClick={onLogout} className="nav-link">

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, CardGroup, OverlayTrigger, Popover, PopoverHeader, PopoverBody, Button } from "react-bootstrap";
+import { Card, CardGroup, OverlayTrigger, Popover, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const NearbyTours = ({ nearbyTours }) => {
@@ -11,25 +11,25 @@ const NearbyTours = ({ nearbyTours }) => {
 
   const popover = (tour) => (
     <Popover id="popover-basic">
-      <PopoverHeader as="h3">{tour.name}</PopoverHeader>
-      <PopoverBody>{tour.desc}</PopoverBody>
+      <Popover.Header as="h3">{tour.tour.name}</Popover.Header>
+      <Popover.Body>{tour.tour.desc}</Popover.Body>
     </Popover>
   );
 
   if (nearbyTours.length === 0) {
     return null; // Don't render anything if nearbyTours array is empty
   }
-
+  console.log(nearbyTours);
   return (
     <div className="mb-4">
       <CardGroup>
         {nearbyTours.slice(0, visible).map((tour) => (
-          <OverlayTrigger key={tour._id} trigger={['hover', 'focus']} placement="bottom" overlay={popover(tour)}>
-            <Card key={tour._id}>
-              <Link to={`/tour/${tour._id}`}>
-                <Card.Img variant="top" src={tour.photoTimeline} style={{ width: "100%", height: "200px" }} />
+          <OverlayTrigger key={tour.tour._id} trigger={['hover', 'focus']} placement="bottom" overlay={popover(tour)}>
+            <Card key={tour.tour._id}>
+              <Link to={`/tour/${tour.tour._id}`}>
+                <Card.Img variant="top" src={tour.tour.photoTimeline} style={{ width: "100%", height: "200px" }} />
                 <Card.Body>
-                  <Card.Title>{tour.name}</Card.Title>
+                  <Card.Title>{tour.tour.name}</Card.Title>
                 </Card.Body>
               </Link>
             </Card>

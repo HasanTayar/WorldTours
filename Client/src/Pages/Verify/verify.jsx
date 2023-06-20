@@ -14,6 +14,7 @@ export default function Verify() {
   useEffect(() => {
     async function verify() {
       const { success, message } = await verifyEmail(token);
+      console.log(success)
       setLoading(false);
       if (!success) {
         setError(message);

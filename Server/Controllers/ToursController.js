@@ -1,23 +1,25 @@
 const Tour = require("../Models/TourModel");
-
+const Review = require("../Models/Review");
 const updateIsPopular = async () => {
   try {
-    const topTours = await Tour.find().sort({ orderCount: -1 }).limit(5);
-    const topTourIds = topTours.map((tour) => tour._id);
-    await Tour.updateMany(
-      { _id: { $in: topTourIds } },
-      { $set: { isPopular: true } }
-    );
+    const tours = await Tour.find();
 
-    await Tour.updateMany(
-      { _id: { $nin: topTourIds } },
-      { $set: { isPopular: false } }
-    );
+    for (let tour of tours) {
+      const reviews = await Review.find({ tourId: tour._id });
+      const totalRating = reviews.reduce((sum, review) => sum + parseFloat(review.rating), 0);
+      const avgRating = totalRating / reviews.length;
+      
+      const isPopular = avgRating > 4 && reviews.length > 50 && tour.orderCount > 100;
+
+      await Tour.updateOne(
+        { _id: tour._id },
+        { $set: { isPopular: isPopular } }
+      );
+    }
   } catch (err) {
     console.error("Error updating isPopular field:", err);
   }
 };
-
 exports.createTour = async (req, res) => {
   try {
     console.log(req.body);
@@ -174,15 +176,39 @@ const haversineDistance = (lat1, lon1, lat2, lon2) => {
   return 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)) * earthRadiusInKm;
 };
 
-// Get tours by user location
+const axios = require('axios');
+
+// This function is a placeholder. 
+// You would need to implement it using an API or database to get the country from a city name.
+const getCountryFromCity = async (city) => {
+  // Fetch the country for the provided city
+  // This is a mockup, replace it with your real implementation
+  // For instance, if you use the OpenCage Geocoding API, you would send a request and parse the 'country' from the response
+   const response = await axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${city}&key=444c8d9d26a3486eb666df53c28a5b49`);
+
+   return response.data.results[0].components.country;
+  return "Some Country"; 
+};
+
 exports.getToursByLocation = async (req, res) => {
-  const { userLat, userLong } = req.query;
+  const { userLat, userLong, userCountry } = req.query;
   console.log(req.query);
 
   try {
     const tours = await Tour.find();
 
-    const sortedTours = tours
+    const countryTours = [];
+
+    for (const tour of tours) {
+      for (const loc of tour.locations) {
+        if (await getCountryFromCity(loc.locationName) === userCountry) {
+          countryTours.push(tour);
+          break;
+        }
+      }
+    }
+
+    const sortedTours = countryTours
       .map((tour) => {
         const nearestLocation = tour.locations.reduce(
           (min, loc) => {
@@ -203,11 +229,14 @@ exports.getToursByLocation = async (req, res) => {
       .sort((a, b) => a.distance - b.distance);
 
     res.status(200).send({ tours: sortedTours });
+    console.log(sortedTours);
   } catch (err) {
     console.error("Error fetching tours by user location:", err);
     res.status(500).send({ message: "Error fetching tours by user location" });
   }
 };
+
+
 
 // Upload photos for a tour
 exports.uploadTourPhotos = async (req, res) => {

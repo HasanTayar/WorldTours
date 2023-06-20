@@ -94,8 +94,11 @@ const handleSelect = (eventKey) => {
         return <PasswordSettings />;
       case "PaymentMethods":
         return <Payment id={user._id} />;
+        
         case "OrganizerRequest":
-          return <OrganizerRequest user={user}/>;
+          return user.isOrganizer ? 
+          <p style={{ color: 'red', fontSize: '18px' }}>You are already an organizer. There's no need to make a request.</p> 
+          : <OrganizerRequest user={user}/>;
       default:
         return (
           <PublicView

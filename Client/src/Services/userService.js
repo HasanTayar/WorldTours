@@ -108,7 +108,7 @@ export const registerUser = async (formData) => {
 export async function updateUserProfile(updatedData) {
   console.table(updatedData);
   try {
-    const response = await axios.put(`${API}/updateprofile`, updatedData, {
+    const response = await axios.put(`${API}/update-profile`, updatedData, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -128,6 +128,7 @@ export async function updateUserProfile(updatedData) {
 export const verifyEmail = async (token) => {
     try {
       const response = await axios.post(`${API}/verify-email`, { token });
+      console.log( response.data);
       if (!response.ok) {
         throw new Error(response.data.message);
       }
@@ -229,12 +230,10 @@ export const setAdmin = async (userId) => {
     throw error;
   }
 };
-
-
-
-export const requestOrganizer = async (userId) => {
+// Set user as orgainzer
+export const setOrgainzer = async (userId) => {
   try {
-    const response = await axios.put(`${API}/request-organizer/${userId}`, null, {
+    const response = await axios.post(`${API}/set-orgainzer/${ userId }`, {
       headers: {
         Authorization: `Bearer ${getToken()}`,
       },
@@ -245,6 +244,8 @@ export const requestOrganizer = async (userId) => {
     throw error;
   }
 };
+
+
 
 export const uploadCV = async (userId, formData) => { 
   try {

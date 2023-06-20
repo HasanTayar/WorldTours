@@ -3,46 +3,45 @@ import { FormGroup, Label, Button, Input, Alert } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { submitReview } from '../../Services/reviewServices';
-import './ReviewForm.css'; 
+import './ReviewForm.css';
 
 export default function ReviewForm({ hashedToken }) {
-
   const [tourText, setTourText] = useState("");
   const [tourRating, setTourRating] = useState(0);
 
   const [organizerText, setOrganizerText] = useState("");
   const [organizerRating, setOrganizerRating] = useState(0);
 
-  const [message, setMessage] = useState(""); 
+  const [message, setMessage] = useState("");
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const tourRes = await submitReview(hashedToken, tourText, tourRating);
     const organizerRes = await submitReview(hashedToken, organizerText, organizerRating);
-    if(tourRes.data.message && organizerRes.data.message) {
+    if (tourRes.data.message && organizerRes.data.message) {
       setMessage('Review submitted successfully');
     }
-  }
+  };
 
   const createRating = (rating, setRating) => {
-    let ratingArray = [];
+    const ratingArray = [];
     for (let i = 0; i < 5; i++) {
       ratingArray.push(
         <FontAwesomeIcon
           icon={faStar}
           key={i}
-          className="star" // <- added CSS class
-          onClick={() => setRating(i+1)}
-          color={i < rating ? 'gold' : 'grey'}
+          className={`star ${i < rating ? 'active' : ''}`}
+          onClick={() => setRating(i + 1)}
+          style={{color:'yellowgreen'}}
         />
-      )
+      );
     }
     return ratingArray;
-  }
+  };
 
   return (
-    <div className="review-form"> 
-      {message && <Alert color="success">{message}</Alert>} 
+    <div className="review-form">
+      {message && <Alert color="success">{message}</Alert>}
       <form noValidate autoComplete="off" onSubmit={handleSubmit}>
         <h2>Tour Review</h2>
         <FormGroup>
@@ -52,37 +51,35 @@ export default function ReviewForm({ hashedToken }) {
             name="tourText"
             id="tourText"
             value={tourText}
-            onChange={e => setTourText(e.target.value)}
+            onChange={(e) => setTourText(e.target.value)}
           />
         </FormGroup>
 
         <FormGroup>
           <Label for="tourRating">Tour Rating</Label>
-          <div className="rating"> {/* <- added CSS class */}
-            {createRating(tourRating, setTourRating)}
-          </div>
+          <div className="rating">{createRating(tourRating, setTourRating)}</div>
         </FormGroup>
 
         <h2>Organizer Review</h2>
         <FormGroup>
           <Label for="organizerText">Organizer Review Text</Label>
           <Input
-             type="textarea"
+            type="textarea"
             name="organizerText"
             id="organizerText"
             value={organizerText}
-            onChange={e => setOrganizerText(e.target.value)}
+            onChange={(e) => setOrganizerText(e.target.value)}
           />
         </FormGroup>
 
         <FormGroup>
           <Label for="organizerRating">Organizer Rating</Label>
-          <div className="rating"> {/* <- added CSS class */}
-            {createRating(organizerRating, setOrganizerRating)}
-          </div>
+          <div className="rating">{createRating(organizerRating, setOrganizerRating)}</div>
         </FormGroup>
 
-        <Button color="primary" type="submit">Submit</Button>
+        <Button color="primary" type="submit">
+          Submit
+        </Button>
       </form>
     </div>
   );

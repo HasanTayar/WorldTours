@@ -1,28 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import useChat from '../../Services/ChatService';
-import UserList from '../../Components/Chat/UserList';
-import ChatArea from '../../Components/Chat/ChatArea';
-import SearchBar from '../../Components/Chat/SearchBar';
-import { fetchAllUsers } from '../../Services/userService';
-import { initiateChat } from '../../Services/chatRoomsServices';
+import React, { useState, useEffect, useCallback } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import useChat from "../../Services/ChatService";
+import UserList from "../../Components/Chat/UserList";
+import ChatArea from "../../Components/Chat/ChatArea";
+import SearchBar from "../../Components/Chat/SearchBar";
+import { fetchAllUsers } from "../../Services/userService";
+import axios from "axios";
 import './chat.scss';
-import { getMessages } from '../../Services/chatRoomsServices';
 const ChatPage = ({ user }) => {
   const { userId: receiverId } = useParams();
   const navigate = useNavigate();
   const senderId = user._id;
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [search, setSearch] = useState('');
   const [users, setUsers] = useState([]);
-  const [unreadMessages, setUnreadMessages] = useState({});
-
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [search, setSearch] = useState("");
+  
   const {
     messages,
     sendMessage,
     deleteMessage,
     markAsRead,
-
+    getMessages,
+    roomId,
+    unreadMessages,
+    setUnreadMessages,
   } = useChat(senderId, receiverId);
 
   useEffect(() => {
@@ -31,32 +32,41 @@ const ChatPage = ({ user }) => {
       setUsers(fetchedUsers);
     };
     fetchUsers();
-  }, []);
+  }, [receiverId]);
 
   useEffect(() => {
-    const initializeChat = async () => {
-      if (selectedUser) {
-        try {
-          const roomId = await initiateChat(senderId, selectedUser._id);
-          await getMessages(roomId);
-          setUnreadMessages((prevState) => ({
-            ...prevState,
-            [selectedUser._id]: 0,
-          }));
-        } catch (error) {
-          console.error('Error initiating chat:', error);
-        }
-      }
-    };
+    if (selectedUser) {
+      initiateChatRoom(senderId, receiverId);
+    }
+  }, [senderId, receiverId, selectedUser]);
 
-    initializeChat();
-  }, [selectedUser, senderId, getMessages]);
+  useEffect(() => {
+    if (roomId.current) {
+      getMessages();
+    }
+  }, [roomId, getMessages]);
+
+  const initiateChatRoom = useCallback(
+    async (senderId, receiverId) => {
+      try {
+        const response = await axios.post(`http://localhost:5000/chatRoom/initiate`, {
+          senderId,
+          receiverId,
+        });
+        roomId.current = response.data.roomId;
+        getMessages();
+      } catch (error) {
+        console.error("Error initiating chat room:", error);
+      }
+    },
+    [getMessages, roomId]
+  );
 
   const handleUserClick = (user) => {
     setSelectedUser(user);
     navigate(`/chat/${user._id}`);
-    setUnreadMessages((prevState) => ({
-      ...prevState,
+    setUnreadMessages((prevUnreadMessages) => ({
+      ...prevUnreadMessages,
       [user._id]: 0,
     }));
   };
@@ -80,6 +90,7 @@ const ChatPage = ({ user }) => {
           handleUserClick={handleUserClick}
           selectedUser={selectedUser}
           unreadMessages={unreadMessages}
+          currentUserID={senderId}
         />
       </div>
       <div className="chat-content">
@@ -91,7 +102,6 @@ const ChatPage = ({ user }) => {
             markAsRead={markAsRead}
             getMessages={getMessages}
             senderId={senderId}
-            receiverId={selectedUser._id}
           />
         )}
       </div>

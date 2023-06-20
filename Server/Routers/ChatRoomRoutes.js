@@ -1,63 +1,35 @@
 const express = require('express');
-const chatService = require('../Services/chatService');
 const router = express.Router();
+const ChatRoom = require('../Models/ChatRoom');
+const { isValidObjectId } = require('mongoose');
 
 router.post('/initiate', async (req, res) => {
   try {
     const { senderId, receiverId } = req.body;
-    const room = await chatService.createChatRoom([senderId, receiverId]);
-    return res.json({ roomId: room._id });
-  } catch (error) {
-    return res.status(500).json({ error: 'Error initiating chat room' });
-  }
-});
+    console.log(req.body);
+    if (!isValidObjectId(senderId) || !isValidObjectId(receiverId)) {
+      return res.status(400).json({ error: 'Invalid senderId or receiverId' });
+    }
 
-router.post('/message', async (req, res) => {
-  try {
-    const { roomId, senderId, content } = req.body;
-    const message = await chatService.saveMessage(roomId, senderId, content);
-    return res.json(message);
-  } catch (error) {
-    return res.status(500).json({ error: 'Error saving message' });
-  }
-});
+    const existingChatRoom = await ChatRoom.findOne({
+      users: { $all: [senderId, receiverId] },
+    });
 
-router.put('/message/:id/read', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const message = await chatService.markMessageAsRead(id);
-    return res.json(message);
-  } catch (error) {
-    return res.status(500).json({ error: 'Error marking message as read' });
-  }
-});
+    if (existingChatRoom) {
+      return res.json({ roomId: existingChatRoom._id });
+    }
 
-router.delete('/message/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const message = await chatService.deleteMessage(id);
-    return res.json(message);
-  } catch (error) {
-    return res.status(500).json({ error: 'Error deleting message' });
-  }
-});
+    // Create a new chat room
+    const newChatRoom = new ChatRoom({
+      users: [senderId, receiverId],
+    });
 
-router.get('/chatrooms', async (req, res) => {
-  try {
-    const rooms = await ChatRoom.find();
-    return res.json(rooms);
-  } catch (error) {
-    return res.status(500).json({ error: 'Error fetching chat rooms' });
-  }
-});
+    const savedChatRoom = await newChatRoom.save();
 
-router.get('/messages/:roomId', async (req, res) => {
-  try {
-    const { roomId } = req.params;
-    const messages = await chatService.getMessages(roomId);
-    return res.json(messages);
+    res.json({ roomId: savedChatRoom._id });
   } catch (error) {
-    return res.status(500).json({ error: 'Error fetching messages' });
+    console.error('Error initiating chat room:', error);
+    res.status(500).json({ error: 'Failed to initiate chat room' });
   }
 });
 
