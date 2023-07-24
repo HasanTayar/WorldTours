@@ -17,7 +17,7 @@ const OrganizerSettings = ({
   };
   return (
     <>
-      <Form.Group className="mb-3" controlId="formBasicPhoneNumber">
+          <Form.Group className="mb-3" controlId="formBasicPhoneNumber">
         <Form.Label>Phone Number</Form.Label>
         <Form.Control
           type="text"
@@ -26,13 +26,11 @@ const OrganizerSettings = ({
         />
       </Form.Group>
 
-      {
-        <LocationField
-          user={user}
-          newLocation={newLocation}
-          handleLocationSelect={handleLocationSelect}
-        />
-      }
+      <LocationField
+        user={user}
+        newLocation={newLocation}
+        handleLocationSelect={handleLocationSelect}
+      />
 
       <Form.Group controlId="languages">
         <Form.Label>Languages</Form.Label>

@@ -9,7 +9,6 @@ import { Container } from "react-bootstrap";
 import Header from "../../Components/Home/Headr";
 import "./Home.css"; 
 import { useNavigate } from "react-router-dom";
-//:: TODO: Fix the issue with showing the nearby tours if not found
 
 
 const Home = ({ isLoggedIn  , user}) => {

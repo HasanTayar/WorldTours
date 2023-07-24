@@ -10,9 +10,7 @@ export const checkUserDetails = async (email, password, setError) => {
   try {
     const response = await axios.post(`${API}/login`, { email, password });
           setToken(response.data);
-    // Depending on your actual response, you may need to modify this
     if (response.status === 401 && response.data.message === "Email not verified. A new verification link has been sent to your email.") {
-      // If the response indicates the email is not verified, redirect to verification page
     } else if (response.status === 200) {
       console.log(response.data);
       return response.data;
@@ -266,3 +264,21 @@ export const uploadCV = async (userId, formData) => {
     throw error;
   }
 };
+export const updatePasswordService = async (userId, currentPassword, newPassword) => {
+  try {
+    const response = await axios.put(`${API}/${userId}/update-password`, {
+      currentPassword,
+      newPassword
+    });
+
+    if (response.status === 200) {
+      return { success: true, message: 'Password updated successfully' };
+    } else {
+      throw new Error(response.data.message || 'An error occurred while updating the password.');
+    }
+  } catch (error) {
+    console.error('Error updating password:', error);
+    return { success: false, message: error.response?.data?.message || 'An error occurred while updating your password. Please try again.' };
+  }
+};
+

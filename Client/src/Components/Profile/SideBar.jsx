@@ -1,6 +1,6 @@
 import {Navbar , Nav , Col , Row , Container , Card} from 'react-bootstrap';  
 
-const SideBar = ({renderSettingContent , handleSelect}) =>{
+const SideBar = ({renderSettingContent , handleSelect , user}) =>{
     return (
     <Container>
     <Row>
@@ -11,7 +11,10 @@ const SideBar = ({renderSettingContent , handleSelect}) =>{
                     <Nav.Link eventKey="accountSettings">Account Settings</Nav.Link>
                     <Nav.Link eventKey="passwordSettings">Password Settings</Nav.Link>
                     <Nav.Link eventKey="PaymentMethods">Payment Settings</Nav.Link>
-                    <Nav.Link eventKey="OrganizerRequest">Organizer Request</Nav.Link>
+                    {!user.isOrgainzer && (
+                        <Nav.Link eventKey="OrganizerRequest">Organizer Request</Nav.Link>
+                    )}
+                
                 </Nav>
             </Navbar>
         </Col>

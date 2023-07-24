@@ -2,11 +2,9 @@ import Email from "./AccountSettingsComponents/Email";
 import Bio from "./AccountSettingsComponents/Bio";
 import Name from "./AccountSettingsComponents/Name";
 import Photo from "./AccountSettingsComponents/Photo";
-import SocialMedia from "./AccountSettingsComponents/SocialMedia";
 import OrganizerSettings from "./AccountSettingsComponents/OrganizerSettings";
 import { Button, Form } from "react-bootstrap";
 
-const newLocation = "";
 const AccountSettings = ({
   user,
   handleSubmit,
@@ -20,10 +18,12 @@ const AccountSettings = ({
   handlePhotoChange,
   setNewFirstName,
   setNewLastName,
+  setNewLocation
 }) => {
   return (
     <Form onSubmit={handleSubmit}>
       <Photo
+        user={user}
         previewPhoto={previewPhoto}
         handlePhotoChange={handlePhotoChange}
       />
@@ -43,6 +43,7 @@ const AccountSettings = ({
               setNewLanguages={setNewLanguages}
               setNewCertifications={setNewCertifications}
               setNewSpecialties={setNewSpecialties}
+              setNewLocation={setNewLocation}
             />
           )}
         </div>

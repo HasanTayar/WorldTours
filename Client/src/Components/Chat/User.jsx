@@ -3,7 +3,7 @@
   import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
   import { faComment } from '@fortawesome/free-solid-svg-icons';
 
-  const User = ({ user, handleUserClick, selectedUser, unreadCount, isCurrentUser }) => {
+  const User = ({ user, handleUserClick, selectedUser, isCurrentUser }) => {
     const userRole = () => {
       if (user.isAdmin) {
         return "Admin";
@@ -23,7 +23,6 @@
         <h2>
           {user.firstName} {user.lastName} <br />Role: {userRole()}
         </h2>
-        {unreadCount > 0 && !isCurrentUser && <span>{unreadCount}</span>}
       </div>
     );
   };

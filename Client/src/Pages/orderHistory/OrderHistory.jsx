@@ -1,82 +1,73 @@
-import { useState, useEffect } from "react";
-import { Table, Button } from "react-bootstrap";
-import { fetchAllOrders, approveOrder, cancelOrder } from "../../Services/orderService";
-import "./OrderHistory.scss";
-import OrderRow from "../../Components/Orders/OrderRow";
+import React, { useState, useEffect } from "react";
+import { fetchAllOrders, approveOrder, cancelOrder } from '../../Services/orderService';
+import { Card, CardBody, CardTitle, Button, Badge, Row, Col } from 'reactstrap';
+import { FaCheckCircle } from 'react-icons/fa';
+import { FaTimesCircle } from 'react-icons/fa';
+
 const OrderHistory = ({ user }) => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      const fetchedOrders = await fetchAllOrders();
-      setOrders(fetchedOrders);
+    const getOrders = async () => {
+      const allOrders = await fetchAllOrders();
+      setOrders(allOrders.filter(order => order.userId._id === user._id || order.tourId.organizerId === user._id));
     };
-    fetchOrders();
-  }, [orders]);
+    getOrders();
+  }, [user._id]);
+  
 
-  const handleApprove = async (orderId) => {
-    const approvedOrder = await approveOrder(orderId);
-    if (approvedOrder) {
-      setOrders(orders.map((order) => (order._id === orderId ? approvedOrder : order)));
+  const handleApprove = async (id) => {
+    const updatedOrder = await approveOrder(id);
+    if (updatedOrder) {
+      const allOrders = await fetchAllOrders();
+      setOrders(allOrders.filter(order => order.tourId.organizerId === user._id && !order.isCanceld));
+
     }
-    
-  };
 
-  const handleCancel = async (orderId) => {
-    const canceledOrder = await cancelOrder(orderId);
-if (canceledOrder) {
-  setOrders(orders.map((order) => (order._id === orderId ? canceledOrder : order)));
 }
 
-    
-  };
+const handleCancel = async (id) => {
+    const updatedOrder = await cancelOrder(id);
+    if (updatedOrder) {
+      const allOrders = await fetchAllOrders();
+      setOrders(allOrders.filter(order => order.tourId.organizerId === user._id && !order.isCanceld));
+    }
+}
+console.log(orders);
 
-  const calculateEndDate = (startDate, duration) => {
-    const endDate = new Date(startDate);
-    endDate.setDate(endDate.getDate() + duration);
-    return endDate.toLocaleDateString();
-  };
+return (
+  <div>
+    <h1>Order History</h1>
+    <Row>
+      {orders.map(order => (
+        <Col md={4} key={order._id}>
+          <Card style={{minWidth:"300px"}}>
+            <CardBody>
+              <CardTitle tag="h5">{order.tourId.name}</CardTitle>
+              <p>{`Order ID: ${order._id}`}</p>
+              <p>{`Coustmer: ${order.userId.firstName} ${order.userId.lastName}`}</p>
+          
+              <p>{`Price: ${order.price}`}</p><br></br>
+              <p>{`Approved: ${order.aprroved ? "Yes" : "No"}`}</p>
+              {order.aprroved ? <FaCheckCircle /> : <FaTimesCircle />}
+              {order.isDone && <Badge color="success">Done</Badge>}
+              {user.isOrganizer &&
+                <div>
+                  <Button color="success" onClick={() => handleApprove(order._id)}>Approve</Button>
+                  <Button color="danger" onClick={() => handleCancel(order._id)}>Cancel</Button>
+                </div>
+              }
+              {!user.isOrganizer === "normal" && order.userId._id === user._id && !order.isDone &&
+                <Button color="danger" onClick={() => handleCancel(order._id)}>Cancel</Button>
+              }
+            </CardBody>
+          </Card>
+        </Col>
+      ))}
+    </Row>
+  </div>
+);
 
-  const userOrders = Array.isArray(orders.orders)
-    ? orders.orders.filter((order) => user.isOrganizer ? order.tourId.organizerId === user._id : order.userId._id === user._id
-    &&  !order.isCanceld 
-    )
-
-    : [];
-
-    return (
-      <div className="order-history">
-        <h2>Order History</h2>
-        <div className="table-responsive">
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>Tour Name</th>
-                {user.isOrganizer && <th>User Details</th>}
-                <th>Price</th>
-                {user.isOrganizer && <th>Start Date</th>}
-                {user.isOrganizer && <th>End Date</th>}
-                <th>Status</th>
-                {user.isOrganizer && <th>Actions</th>}
-                {!user.isOrganizer && <th>Cancel Order</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {userOrders.map((order) => (
-                <OrderRow
-                  key={order._id}
-                  order={order}
-                  user={user}
-                  handleApprove={handleApprove}
-                  handleCancel={handleCancel}
-                />
-              ))}
-            </tbody>
-          </Table>
-        </div>
-      </div>
-    );
-  };
-
+};
 
 export default OrderHistory;

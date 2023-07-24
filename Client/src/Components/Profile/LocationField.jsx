@@ -1,16 +1,15 @@
-
-import { Form } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import GooglePlaceAutocomplete from "../../Services/Google/GooglePlaceAutocomplete";
+import { useState } from "react";
 
 const LocationField = ({ user, newLocation, handleLocationSelect }) => {
-  if (user.location) {
-    return (
-      <Form.Group controlId="location">
-        <Form.Label>Location</Form.Label>
-        <Form.Control type="text" defaultValue={user.location} readOnly />
-      </Form.Group>
-    );
-  } else {
+  const [editing, setEditing] = useState(false);
+
+  const handleEditClick = () => {
+    setEditing(true);
+  };
+
+  if (editing || !user.location) {
     return (
       <Form.Group controlId="location">
         <Form.Label>Location</Form.Label>
@@ -19,6 +18,14 @@ const LocationField = ({ user, newLocation, handleLocationSelect }) => {
           field={{ value: newLocation }}
           className="form-control"
         />
+      </Form.Group>
+    );
+  } else {
+    return (
+      <Form.Group controlId="location">
+        <Form.Label>Location</Form.Label>
+        <Form.Control type="text" defaultValue={user.location} readOnly />
+        <Button onClick={handleEditClick} variant="primary">Edit</Button>
       </Form.Group>
     );
   }

@@ -89,7 +89,6 @@ const ChatPage = ({ user }) => {
           users={filteredUsers}
           handleUserClick={handleUserClick}
           selectedUser={selectedUser}
-          unreadMessages={unreadMessages}
           currentUserID={senderId}
         />
       </div>

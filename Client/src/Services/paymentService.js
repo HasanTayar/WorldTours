@@ -9,9 +9,10 @@ export const getPaymentMethods = async (userId) => {
     }
   } catch (e) {
     console.error("Error While fetching Payment Methods:", e);
+    throw e;
   }
-  return {};  
 };
+
 
 
 export const addPaymentMethod = async (userId, cardNumber, expiryDate, cvv) => {
@@ -30,14 +31,16 @@ export const addPaymentMethod = async (userId, cardNumber, expiryDate, cvv) => {
   }
 };
 
-export const deletePaymentMethod = async (cardId, setSavedCards) => {
+export const deletePaymentMethod = async (cardId) => {
   try {
     const response = await axios.delete(`${API}/delete/${cardId}`);
     console.log(cardId);
-    if (response) {
-      setSavedCards(savedCards.filter((card) => card._id !== cardId));
+    if (response.status === 200) {
+      return response.data;
     }
   } catch (error) {
     console.error("Error deleting payment method", error);
+    throw error;
   }
 };
+

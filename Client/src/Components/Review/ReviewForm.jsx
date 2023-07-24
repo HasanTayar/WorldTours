@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { FormGroup, Label, Button, Input, Alert } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
+import StarRatings from 'react-star-ratings';
 import { submitReview } from '../../Services/reviewServices';
 import './ReviewForm.css';
 
@@ -23,22 +22,6 @@ export default function ReviewForm({ hashedToken }) {
     }
   };
 
-  const createRating = (rating, setRating) => {
-    const ratingArray = [];
-    for (let i = 0; i < 5; i++) {
-      ratingArray.push(
-        <FontAwesomeIcon
-          icon={faStar}
-          key={i}
-          className={`star ${i < rating ? 'active' : ''}`}
-          onClick={() => setRating(i + 1)}
-          style={{color:'yellowgreen'}}
-        />
-      );
-    }
-    return ratingArray;
-  };
-
   return (
     <div className="review-form">
       {message && <Alert color="success">{message}</Alert>}
@@ -57,7 +40,13 @@ export default function ReviewForm({ hashedToken }) {
 
         <FormGroup>
           <Label for="tourRating">Tour Rating</Label>
-          <div className="rating">{createRating(tourRating, setTourRating)}</div>
+          <StarRatings
+            rating={tourRating}
+            starRatedColor="yellowgreen"
+            changeRating={setTourRating}
+            numberOfStars={5}
+            name='tourRating'
+          />
         </FormGroup>
 
         <h2>Organizer Review</h2>
@@ -74,7 +63,13 @@ export default function ReviewForm({ hashedToken }) {
 
         <FormGroup>
           <Label for="organizerRating">Organizer Rating</Label>
-          <div className="rating">{createRating(organizerRating, setOrganizerRating)}</div>
+          <StarRatings
+            rating={organizerRating}
+            starRatedColor="yellowgreen"
+            changeRating={setOrganizerRating}
+            numberOfStars={5}
+            name='organizerRating'
+          />
         </FormGroup>
 
         <Button color="primary" type="submit">

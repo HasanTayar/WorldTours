@@ -55,19 +55,26 @@ const handleSelect = (eventKey) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    const updatedUser = {
-      email: newEmail ? newEmail : email,
-      firstName: newFirstName ? newFirstName : firstName,
-      lastName: newLastName ? newLastName : lastName,
-      phoneNumber: newPhoneNumber ? newPhoneNumber : phoneNumber,
-      bio: newBio ? newBio : bio,
-      location: newLocation ? newLocation : location,
-      languages: newLanguages ? newLanguages : languages,
-      certifications: newCertifications ? newCertifications : certifications,
-      specialties: newSpecialties ? newSpecialties : specialties,
-    };
-    updateUserProfile(updatedUser);
+  
+    const formData = new FormData();
+    formData.append("email", newEmail ? newEmail : email);
+    formData.append("firstName", newFirstName ? newFirstName : firstName);
+    formData.append("lastName", newLastName ? newLastName : lastName);
+    formData.append("phoneNumber", newPhoneNumber ? newPhoneNumber : phoneNumber);
+    formData.append("bio", newBio ? newBio : bio);
+    formData.append("location", newLocation ? newLocation : location);
+    formData.append("languages", newLanguages ? newLanguages : languages);
+    formData.append("certifications", newCertifications ? newCertifications : certifications);
+    formData.append("specialties", newSpecialties ? newSpecialties : specialties);
+    
+    // Attach the photo to the form data only if one has been selected.
+    if (userPhoto) {
+      formData.append("photo", userPhoto);
+    }
+  
+    updateUserProfile(formData);
   };
+  
 
   const renderSettingContent = () => {
     switch (activeSetting) {
@@ -91,7 +98,7 @@ const handleSelect = (eventKey) => {
         );
 
       case "passwordSettings":
-        return <PasswordSettings />;
+        return <PasswordSettings user={user}/>;
       case "PaymentMethods":
         return <Payment id={user._id} />;
         
@@ -108,7 +115,7 @@ const handleSelect = (eventKey) => {
     }
   };
 
-  return <SideBar renderSettingContent={renderSettingContent} handleSelect={handleSelect}/>;
+  return <SideBar renderSettingContent={renderSettingContent} handleSelect={handleSelect} user={user}/>;
 };
 
 export default Profile;

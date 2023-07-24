@@ -5,18 +5,33 @@ import { faUsers, faUserShield } from '@fortawesome/free-solid-svg-icons';
 import classnames from 'classnames';
 import { fetchAllOrders, cancelOrderTours as apiCancelOrder } from '../../Services/orderService';
 import './AdminOrder.css';
+import { fetchUserById } from '../../Services/userService';
 
-const AdminOrder = ({ admin }) => {
+const AdminOrder = ({ admin }) => { 
   const [activeTab, setActiveTab] = useState('1');
   const [orders, setOrders] = useState([]);
+  const [organizerNames, setOrganizerNames] = useState({});
 
   useEffect(() => {
     const fetchOrders = async () => {
       const fetchedOrders = await fetchAllOrders();
       setOrders(fetchedOrders);
     };
+
+    const fetchOrganizerNames = async () => {
+      const fetchedNames = {};
+      for (const order of orders) {
+        if (order.tourId.organizerId && !(order.tourId.organizerId in fetchedNames)) {
+          const user = await fetchUserById(order.tourId.organizerId);
+          fetchedNames[order.tourId.organizerId] = user.firstName + " " + user.lastName;
+        }
+      }
+      setOrganizerNames(fetchedNames);
+    };
+
     fetchOrders();
-  }, []);
+    fetchOrganizerNames();
+  }, [orders]);
 
   const adminOrders = Array.isArray(orders)
     ? orders.filter((order) => order.userId._id === admin._id && !order.isCanceld)
@@ -34,7 +49,7 @@ const AdminOrder = ({ admin }) => {
     await apiCancelOrder(orderId);
     setOrders(orders.filter(order => order._id !== orderId));
   }
-  console.log(userOrders);
+
   return (
     <div className="admin-order">
       <h2>Admin Order</h2>
@@ -111,7 +126,7 @@ const AdminOrder = ({ admin }) => {
                   {userOrders.map(order => (
                     <tr key={order._id}>
                       <td>{order.tourId.name}</td>
-                      <td>{order.tourId.organizerId && order.tourId.organizerId.firstName + " " + order.tourId.organizerId.lastName}</td>
+                      <td>{organizerNames[order.tourId.organizerId]}</td>
                       <td>{order.name}</td>
                       <td>{order.email}</td>
                       <td>{order.phone}</td>
@@ -120,7 +135,6 @@ const AdminOrder = ({ admin }) => {
                       <td>{order.isCanceld ? 'Yes' : 'No'}</td>
                       <td>{order.approved ? 'Yes' : 'No'}</td>
                       <td>{order.isDone ? 'Yes' : 'No'}</td>
-                     
                     </tr>
                   ))}
                 </tbody>

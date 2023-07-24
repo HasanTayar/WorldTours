@@ -11,6 +11,7 @@ import {
 
 const Payment = ({ id }) => {
   const userId = id ;
+  console.log(id);
   const [cardNumber, setCardNumber] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
   const [cvv, setCvv] = useState("");
@@ -26,12 +27,25 @@ const Payment = ({ id }) => {
   };
 
   useEffect(() => {
-    getPaymentMethods(id, setSavedCards);
-  }, []);
+    getPaymentMethods(userId)
+      .then((data) => {
+        setSavedCards(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [userId]);
+  
 
   const handleDeleteCard = async (cardId) => {
-    await deletePaymentMethod(cardId, setSavedCards);
+    try {
+      await deletePaymentMethod(cardId);
+      setSavedCards(savedCards.filter((card) => card._id !== cardId));
+    } catch (error) {
+      console.error(error);
+    }
   };
+  
 
   return (
     <div className="add-payment-form">
