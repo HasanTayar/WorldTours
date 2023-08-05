@@ -6,8 +6,7 @@ const Days = ({
     index,
     handleDayInputChange,
     handleDayPhotoChange,
-    handleLocationSelect,
-    removeDay,
+    removeDay, 
   }) => {
     return (
       <div>
@@ -20,13 +19,6 @@ const Days = ({
           />
         </FormGroup>
   
-        <GooglePlaceAutocomplete
-          controlId={`location-day-${index + 1}`}
-          label={`Day ${index + 1} Location`}
-          onLocationSelect={(location) =>
-            handleLocationSelect(location, index + 1)
-          }
-        />
         <FormGroup>
           <FormLabel>{`Day ${index + 1} Description`}</FormLabel>
           <FormControl

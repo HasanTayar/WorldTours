@@ -229,19 +229,24 @@ export const setAdmin = async (userId) => {
   }
 };
 // Set user as orgainzer
-export const setOrgainzer = async (userId) => {
+export const setOrganizer = async (userId, location) => {
   try {
-    const response = await axios.post(`${API}/set-orgainzer/${ userId }`, {
-      headers: {
-        Authorization: `Bearer ${getToken()}`,
-      },
-    });
+    const response = await axios.post(
+      `${API}/set-organizer/${userId}`,
+      { location },
+      {
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error(error);
     throw error;
   }
 };
+
 
 
 

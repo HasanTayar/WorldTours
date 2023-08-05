@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useRef } from "react";
 import {
   Table,
   Button,
@@ -7,6 +8,10 @@ import {
   NavLink,
   TabContent,
   TabPane,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -15,29 +20,35 @@ import {
   faArrowUp,
   faFile,
 } from "@fortawesome/free-solid-svg-icons";
-import { useState, useEffect } from "react";
 import classnames from "classnames";
 import "./UserManagement.css";
 import {
   fetchAllUsers,
   setAdmin,
-  setOrgainzer,
+  setOrganizer,
   deleteUserProfile,
 } from "../../Services/userService";
+import GooglePlaceAutocomplete from '../../Services/Google/GooglePlaceAutocomplete'; // Make sure this path is correct
 
 function UserManagement({ user }) {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("1");
   const currentUserID = user._id;
+  const [modal, setModal] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [place, setPlace] = useState(null);
 
   const toggleTab = (tab) => {
     if (activeTab !== tab) setActiveTab(tab);
   };
 
+  const toggleModal = () => setModal(!modal);
+
   useEffect(() => {
     fetchAllUsers().then((users) => setUsers(users));
   }, []);
+
   const handleSetAdmin = async (userId) => {
     await setAdmin(userId);
     const updatedUsers = await fetchAllUsers();
@@ -45,9 +56,14 @@ function UserManagement({ user }) {
   };
 
   const handleSetOrganizer = async (userId) => {
-    await setOrgainzer(userId);
+    await setOrganizer(userId, place);
     const updatedUsers = await fetchAllUsers();
     setUsers(updatedUsers);
+  };
+
+  const handlePromoteToOrganizer = (userId) => {
+    setSelectedUserId(userId);
+    toggleModal();
   };
 
   return (
@@ -120,7 +136,7 @@ function UserManagement({ user }) {
                           <FontAwesomeIcon icon={faEnvelope} className="icon" />
                           Contact
                         </Button>
-
+  
                         {!user.isAdmin && (
                           <Button
                             color="warning"
@@ -135,6 +151,13 @@ function UserManagement({ user }) {
                               className="icon"
                             />
                             Promote to Admin
+                          </Button>
+                        )}
+  
+                         
+                        {user.isOrganizer && (
+                          <Button color="primary" onClick={() => handlePromoteToOrganizer(user._id)}>
+                            Edit Location
                           </Button>
                         )}
                       </td>
@@ -191,10 +214,7 @@ function UserManagement({ user }) {
                         <Button
                           color="info"
                           className="action-button"
-                          onClick={() => {
-                       
-                            handleSetOrganizer(user._id);
-                          }}
+                          onClick={() => handlePromoteToOrganizer(user._id)}
                         >
                           <FontAwesomeIcon icon={faArrowUp} className="icon" />
                           Promote to Organizer
@@ -206,8 +226,31 @@ function UserManagement({ user }) {
           </Table>
         </TabPane>
       </TabContent>
+      <Modal isOpen={modal} toggle={toggleModal}>
+        <ModalHeader toggle={toggleModal}>Set Organizer Location</ModalHeader>
+        <ModalBody>
+          <GooglePlaceAutocomplete
+            controlId="location"
+            field={{ name: "location", value: place || "" }}
+            onLocationSelect={(place) => setPlace(place)}
+          />
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            color="primary"
+            onClick={() => {
+              handleSetOrganizer(selectedUserId);
+              toggleModal();
+            }}
+          >
+            Submit
+          </Button>
+          <Button color="secondary" onClick={toggleModal}>Cancel</Button>
+        </ModalFooter>
+      </Modal>
     </div>
   );
+  
 }
 
 export default UserManagement;

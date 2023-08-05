@@ -11,6 +11,30 @@ export const addOrder = async (data) => {
     return false;
   }
 };
+export const fetchBookedDatesForTour = async (tourId) => {
+  const response = await fetch(`${API}/tours/${tourId}/booked-dates`);
+  const data = await response.json();
+  return data.bookedDates;
+};
+
+export const fetchOrdersForTour = async (tourId) => {
+ 
+  try {
+    const allOrders = await fetchAllOrders();
+    const tourOrders = allOrders.filter(order => 
+      order.tourId._id === tourId  &&
+      order.aprroved &&
+      !order.isCanceld && 
+      !order.isDone
+    );
+      console.log(allOrders)
+    return tourOrders;
+  } catch (error) {
+    console.error("Error fetching orders for tour:", error);
+    return [];
+  }
+};
+
 
 export const fetchAllOrders = async () => {
   try {

@@ -12,6 +12,7 @@ router.get('/orders', orderController.fetchAllOrders);
 router.patch('/:orderId/approve', orderController.approveOrder);
 // Cancel Order by Organizer
 router.patch('/:orderId/cancel-organizer', orderController.cancelOrderOrganizer);
-
+// Get all booked dates for a tour
+router.get('/tours/:tourId/booked-dates', orderController.fetchBookedDatesForTour);
 
 module.exports = router;

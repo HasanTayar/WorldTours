@@ -5,6 +5,9 @@
 .user-management h2 {
   margin-bottom: 20px;
 }
+.pac-container {
+  z-index: 1051 !important;
+}
 
 .user-management table {
   width: 100%;

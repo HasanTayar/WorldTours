@@ -195,3 +195,20 @@ exports.deleteOrder = async (req, res) => {
     });
   }
 };
+// Fetch all booked dates for a specific tour
+exports.fetchBookedDatesForTour = async (req, res) => {
+  console.log("Fetching booked dates start");
+  try {
+    const tourId = req.params.tourId;
+    const orders = await Order.find({ tourId: tourId, isCanceld: false , isDone:false});
+    const bookedDates = orders.map(order => order.selectedDate);
+    res.status(200).json({
+      bookedDates
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: 'fail',
+      message: error.message,
+    });
+  }
+};

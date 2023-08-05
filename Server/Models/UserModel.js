@@ -12,6 +12,7 @@ const UserSchema = new mongoose.Schema({
     type : String,
     default: image,
   },
+  location:{type:String},
   isVerified: { type: Boolean, default: false },
   isAdmin: { type: Boolean, default: false },
   isOrganizer: { type: Boolean, default: false },

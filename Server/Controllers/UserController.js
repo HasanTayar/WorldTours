@@ -466,9 +466,11 @@ exports.getUserById = async (req, res) => {
 };
 // Function to  user's prombot to become an organizer
 exports.setOrganizer = async (req, res) => {
-  console.log("set orgainzer start :")
+  console.log("set organizer start :")
   try {
+    console.log(req.body);
     const { userId } = req.params;
+    const { location } = req.body;
 
     // Find the user by ID
     const user = await User.findById(userId);
@@ -477,8 +479,11 @@ exports.setOrganizer = async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    user.isOrganizer  = true;
+    user.isOrganizer = true;
     user.organizerRequest = false;
+    
+    user.location = location.name; 
+
     const organizerWelcomeEmail = {
       from: `"World Tours" <${process.env.EMAIL_USER}>`,
       to: user.email,
@@ -487,18 +492,18 @@ exports.setOrganizer = async (req, res) => {
              <p>Congratulations on becoming an Organizer.</p>
              <p>You can now upload and manage your own tours. Enjoy the new possibilities!</p>
      `
-  };
+    };
     await transporter.sendMail(organizerWelcomeEmail);
     // Save the updated user
-  
     await user.save();
 
-    return res.status(200).json({ message: 'Organizer request submitted successfully' });
+    return res.status(200).json({ message: 'Organizer prombitet successfully' });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Server error' });
   }
 };
+
 
 // Function to handle user's CV upload
 exports.uploadCV = async (req, res) => {

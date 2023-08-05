@@ -101,6 +101,7 @@ const TourDetails = ({isLoggedIn , user}) => {
             <>
               <div className="date-picker">
                 <CustomDatePicker
+                  tourId={tour._id}
                   tourDays={tour.days ? tour.days.length : 0}
                   onSelectDate={(date) => {
                     setSelectedDate(date);

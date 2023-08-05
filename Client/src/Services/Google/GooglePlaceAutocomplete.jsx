@@ -1,10 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Autocomplete } from '@react-google-maps/api';
 import { FormGroup, FormLabel, FormControl } from 'react-bootstrap';
 
-const GooglePlaceAutocomplete = ({ onLocationSelect, field, className, label, controlId }) => {
+const GooglePlaceAutocomplete = ({ onLocationSelect, className, label, controlId }) => {
   const autocompleteRef = useRef(null);
+  const [inputValue, setInputValue] = useState(''); // Use a local state for the input value
 
   const onLoad = (autocomplete) => {
     autocompleteRef.current = autocomplete;
@@ -13,7 +14,6 @@ const GooglePlaceAutocomplete = ({ onLocationSelect, field, className, label, co
   const handlePlaceSelect = () => {
     if (autocompleteRef.current) {
       const place = autocompleteRef.current.getPlace();
-      
       console.log('autocomplete:', place);
       onLocationSelect(place);
     }
@@ -23,7 +23,13 @@ const GooglePlaceAutocomplete = ({ onLocationSelect, field, className, label, co
     <FormGroup controlId={controlId}>
       {label && <FormLabel>{label}</FormLabel>}
       <Autocomplete onLoad={onLoad} onPlaceChanged={handlePlaceSelect}>
-        <FormControl as="input" type="text" className={className} {...field} />
+        <FormControl
+          as="input"
+          type="text"
+          className={className}
+          value={inputValue} // Use local state value
+          onChange={e => setInputValue(e.target.value)} // Update local state on change
+        />
       </Autocomplete>
     </FormGroup>
   );
@@ -31,7 +37,6 @@ const GooglePlaceAutocomplete = ({ onLocationSelect, field, className, label, co
 
 GooglePlaceAutocomplete.propTypes = {
   onLocationSelect: PropTypes.func.isRequired,
-  field: PropTypes.object.isRequired,
   className: PropTypes.string,
   label: PropTypes.string,
   controlId: PropTypes.string.isRequired

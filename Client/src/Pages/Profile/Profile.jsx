@@ -16,7 +16,6 @@ const Profile = ({ user }) => {
     lastName = user ? user.lastName : "",
     phoneNumber = user ? user.phoneNumber : "",
     bio = user ? user.bio : "",
-    location = user ? user.location : "",
     languages = user ? user.languages : [],
     socialMediaLinks = user ? user.socialMediaLinks : [],
     certifications = user ? user.certifications : [],
@@ -28,10 +27,7 @@ const Profile = ({ user }) => {
   const [newLastName, setNewLastName] = useState(lastName);
   const [newPhoneNumber, setNewPhoneNumber] = useState(phoneNumber);
   const [newBio, setNewBio] = useState(bio);
-  const [newLocation, setNewLocation] = useState(location);
   const [newLanguages, setNewLanguages] = useState(languages);
-  const [newSocialMediaLinks, setNewSocialMediaLinks] =
-    useState(socialMediaLinks);
   const [newCertifications, setNewCertifications] = useState(certifications);
   const [newSpecialties, setNewSpecialties] = useState(specialties);
   const [userPhoto, setUserPhoto] = useState(user.photo ? user.photo : null);
@@ -86,7 +82,6 @@ const handleSelect = (eventKey) => {
             previewPhoto={previewPhoto}
             setNewEmail={setNewEmail}
             setNewBio={setNewBio}
-            setNewSocialMediaLinks={setNewSocialMediaLinks}
             setNewPhoneNumber={setNewPhoneNumber}
             setNewCertifications={setNewCertifications}
             setNewLanguages={setNewLanguages}

@@ -55,17 +55,20 @@
     background-color: #f2d8c2;
   }
 
+  .approved-day {
+    background-color: red; // set your desired color here
+  }
+
   .custom-popper {
     z-index: 999;
   }
-  
-  // changes start here
+
   .react-datepicker-wrapper {
     display: inline-block;
   }
 
   .react-datepicker__input-container input {
-    background-color: #ff7700; // set your desired color here
+    background-color: #5b5b5b; // set your desired color here
     border: none;
     border-radius: 5px;
     padding: 0.5rem;

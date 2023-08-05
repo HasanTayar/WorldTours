@@ -113,13 +113,6 @@ const CreateTour = ({ user }) => {
                   handleInputChange={handleInputChange}
                   setTimelinePhoto={setTimelinePhoto}
                 />
-                <GooglePlaceAutocomplete
-                  controlId="location"
-                  label="Location"
-                  onLocationSelect={(location) =>
-                    handleLocationSelect(location, 0)
-                  }
-                />
 
                 <Tags
                   tags={tags}
@@ -134,7 +127,7 @@ const CreateTour = ({ user }) => {
                     index={index}
                     handleDayInputChange={handleDayInputChange}
                     handleDayPhotoChange={handleDayPhotoChange}
-                    handleLocationSelect={handleLocationSelect}
+                 
                     removeDay={removeDay}
                   />
                 ))}

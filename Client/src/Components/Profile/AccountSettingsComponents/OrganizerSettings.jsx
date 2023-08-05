@@ -1,6 +1,4 @@
 import { Form } from "react-bootstrap";
-import LocationField from "../LocationField";
-import { useState } from "react";
 
 
 
@@ -11,10 +9,7 @@ const OrganizerSettings = ({
   setNewCertifications,
   setNewSpecialties,
 }) => {
-  const [newLocation , setNewLocation] = useState(user.location);
-  const handleLocationSelect = (place) => {
-    setNewLocation(place.formatted_address);
-  };
+
   return (
     <>
           <Form.Group className="mb-3" controlId="formBasicPhoneNumber">
@@ -26,11 +21,7 @@ const OrganizerSettings = ({
         />
       </Form.Group>
 
-      <LocationField
-        user={user}
-        newLocation={newLocation}
-        handleLocationSelect={handleLocationSelect}
-      />
+
 
       <Form.Group controlId="languages">
         <Form.Label>Languages</Form.Label>

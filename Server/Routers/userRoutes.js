@@ -40,7 +40,7 @@ router.post('/verify-email', UserController.verifyEmail);
 router.get('/userByToken', UserController.getUserByToken);
 router.get('/users', passport.authenticate('jwt', { session: false }), UserController.getAllUsers);
 router.get('/:userEmail', UserController.getUserProfile);
-router.post('/set-orgainzer/:userId', UserController.setOrganizer);
+router.post('/set-organizer/:userId', UserController.setOrganizer);
 router.put('/upload-cv/:userId',uploadCv.single('cv'), UserController.uploadCV);
 router.post('/forget-password' , UserController.forgotPassword);
 router.put('/:userId/update-password', async (req, res) => {
