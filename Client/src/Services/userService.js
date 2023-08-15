@@ -200,12 +200,16 @@ export const getAdmins = async () => {
 };
 
 // Delete user profile
-export const deleteUserProfile = async () => {
+export const deleteUserProfile = async (userId) => {
   try {
-    const response = await axios.delete(`${API}/delete-profile`, {
+    const response = await axios({
+      method: 'DELETE',
+      url: `${API}/delete-profile`,
       headers: {
         Authorization: `Bearer ${getToken()}`,
+        'Content-Type': 'application/json',
       },
+      data: { userId: userId }
     });
     return response.data;
   } catch (error) {

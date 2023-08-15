@@ -324,7 +324,7 @@ exports.updateUserProfile = async (req, res) => {
 exports.deleteUserProfile = async (req, res) => {
   console.log(req);
   try {
-    const userId = req.user._id;
+    const userId = req.body.userId;
     const user = await User.findByIdAndDelete(userId);
 
     if (!user) {
