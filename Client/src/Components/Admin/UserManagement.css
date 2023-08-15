@@ -1,37 +1,5 @@
 .user-management {
   margin-top: 20px;
-}
-
-.user-management h2 {
-  margin-bottom: 20px;
-}
-.pac-container {
-  z-index: 1051 !important;
-}
-
-.user-management table {
-  width: 100%;
-}
-
-.user-management th,
-.user-management td {
-  padding: 10px;
-}
-
-.user-management th {
-  background-color: #f2f2f2;
-  font-weight: bold;
-}
-
-.user-management .action-button {
-  margin-right: 5px;
-}
-
-.user-management .icon {
-  margin-right: 5px;
-}
-.user-management {
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -41,13 +9,51 @@
   margin-bottom: 20px;
 }
 
+.pac-container {
+  z-index: 1051 !important;
+}
+
 .user-management .input-search {
   width: 100%;
   max-width: 600px;
+  margin-bottom: 15px; /* Create some space below the search input */
+}
+
+.user-management table {
+  width: 100%;
+  border-collapse: collapse; /* Add this to make borders look better */
+}
+
+.user-management th,
+.user-management td {
+  padding: 10px;
+  text-align: left;
+}
+
+.user-management th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.user-management .action-button {
+  margin-right: 5px;
+  margin-bottom: 5px; 
+}
+
+.user-management .icon {
+  margin-right: 5px;
 }
 
 .user-management nav, 
 .user-management .tab-content {
   width: 100%;
   max-width: 1000px;
+}
+
+@media (max-width: 768px) {
+  .user-management .action-button {
+    display: block;
+    width: 100%;
+    margin-right: 0;
+  }
 }

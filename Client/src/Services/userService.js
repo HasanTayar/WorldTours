@@ -286,4 +286,44 @@ export const updatePasswordService = async (userId, currentPassword, newPassword
     return { success: false, message: error.response?.data?.message || 'An error occurred while updating your password. Please try again.' };
   }
 };
+export const unpromoteAdmin = async (userId) => {
+  try {
+    const config = {
+      headers: { 
+        'Authorization': `Bearer ${getToken()}`,
+      },
+    };
+
+    const response = await axios.post(`${API}/unpromote-admin/${userId}`, {}, config);
+    
+    if (response.status === 200) {
+      return { success: true, message: 'Admin unpromoted successfully' };
+    } else {
+      throw new Error(response.data.message || 'An error occurred while unpromoting the admin.');
+    }
+  } catch (error) {
+    console.error('Error unpromoting admin:', error);
+    return { success: false, message: error.response?.data?.message || 'An error occurred while unpromoting the admin. Please try again.' };
+  }
+};
+export const unpromoteOrganizer = async (userId) => {
+  try {
+    const config = {
+      headers: { 
+        'Authorization': `Bearer ${getToken()}`,
+      },
+    };
+
+    const response = await axios.post(`${API}/unpromote-organizer/${userId}`, {}, config);
+    
+    if (response.status === 200) {
+      return { success: true, message: 'Organizer unpromoted successfully' };
+    } else {
+      throw new Error(response.data.message || 'An error occurred while unpromoting the organizer.');
+    }
+  } catch (error) {
+    console.error('Error unpromoting organizer:', error);
+    return { success: false, message: error.response?.data?.message || 'An error occurred while unpromoting the organizer. Please try again.' };
+  }
+};
 

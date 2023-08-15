@@ -27,8 +27,10 @@ import {
   setAdmin,
   setOrganizer,
   deleteUserProfile,
+  unpromoteAdmin,
+  unpromoteOrganizer,
 } from "../../Services/userService";
-import GooglePlaceAutocomplete from '../../Services/Google/GooglePlaceAutocomplete'; // Make sure this path is correct
+import GooglePlaceAutocomplete from "../../Services/Google/GooglePlaceAutocomplete"; // Make sure this path is correct
 
 function UserManagement({ user }) {
   const [users, setUsers] = useState([]);
@@ -64,6 +66,23 @@ function UserManagement({ user }) {
   const handlePromoteToOrganizer = (userId) => {
     setSelectedUserId(userId);
     toggleModal();
+  };
+  const handleUnpromoteAdmin = async (userId) => {
+    await unpromoteAdmin(userId);
+    const updatedUsers = await fetchAllUsers();
+    setUsers(updatedUsers);
+  };
+
+  const handleUnpromoteOrganizer = async (userId) => {
+    await unpromoteOrganizer(userId);
+    const updatedUsers = await fetchAllUsers();
+    setUsers(updatedUsers);
+  };
+
+  const handleDeleteUser = async (userId) => {
+    await deleteUserProfile(userId);
+    const updatedUsers = await fetchAllUsers();
+    setUsers(updatedUsers);
   };
 
   return (
@@ -136,30 +155,43 @@ function UserManagement({ user }) {
                           <FontAwesomeIcon icon={faEnvelope} className="icon" />
                           Contact
                         </Button>
-  
-                        {!user.isAdmin && (
-                          <Button
-                            color="warning"
-                            className="action-button"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleSetAdmin(user._id);
-                            }}
-                          >
-                            <FontAwesomeIcon
-                              icon={faArrowUp}
-                              className="icon"
-                            />
-                            Promote to Admin
-                          </Button>
-                        )}
-  
-                         
+
+                       
+
                         {user.isOrganizer && (
-                          <Button color="primary" onClick={() => handlePromoteToOrganizer(user._id)}>
+                          <Button
+                            color="primary"
+                            onClick={() => handlePromoteToOrganizer(user._id)}
+                          >
                             Edit Location
                           </Button>
                         )}
+                       
+
+                        {user.isOrganizer && (
+                          <Button
+                            color="danger"
+                            className="action-button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleUnpromoteOrganizer(user._id);
+                            }}
+                          >
+                            Unpromote Organizer
+                          </Button>
+                        )}
+
+                        <Button
+                          color="danger"
+                          className="action-button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleDeleteUser(user._id);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faTrashAlt} className="icon" />
+                          Delete
+                        </Button>
                       </td>
                     </tr>
                   ))}
@@ -245,12 +277,13 @@ function UserManagement({ user }) {
           >
             Submit
           </Button>
-          <Button color="secondary" onClick={toggleModal}>Cancel</Button>
+          <Button color="secondary" onClick={toggleModal}>
+            Cancel
+          </Button>
         </ModalFooter>
       </Modal>
     </div>
   );
-  
 }
 
 export default UserManagement;

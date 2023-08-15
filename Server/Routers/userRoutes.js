@@ -33,7 +33,6 @@ router.get('/id/:userId', UserController.getUserById);
 router.post('/forgot-password', UserController.forgotPassword);
 router.post('/login', UserController.login);
 router.post('/reset-password', UserController.resetPassword);
-router.post('/set-admin', passport.authenticate('jwt', { session: false }), isAdmin, UserController.setAdmin);
 router.post('/signup', upload.single('photo'), UserController.signup);
 router.put('/update-profile', upload.single('photo'), passport.authenticate('jwt', { session: false }), UserController.updateUserProfile);
 router.post('/verify-email', UserController.verifyEmail);
@@ -81,5 +80,8 @@ router.put('/:userId/update-password', async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
+router.post('/unpromote-admin/:userId' ,UserController.unPromoteAdmin);
+router.post('/unpromote-organizer/:userId', UserController.unPromoteOrganizer);
+
 
 module.exports = router;

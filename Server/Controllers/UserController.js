@@ -322,6 +322,7 @@ exports.updateUserProfile = async (req, res) => {
 
 //To delte user
 exports.deleteUserProfile = async (req, res) => {
+  console.log(req);
   try {
     const userId = req.user._id;
     const user = await User.findByIdAndDelete(userId);
@@ -339,28 +340,6 @@ exports.deleteUserProfile = async (req, res) => {
         message:
           "An error occurred while deleting the user profile. Please try again.",
       });
-  }
-};
-//to set user type admin
-exports.setAdmin = async (req, res) => {
-  try {
-    const { userEmail } = req.body;
-
-    if (!userEmail) {
-      return res.status(400).json({ message: "User email is required." });
-    }
-
-    const user = await User.findOne({ email: userEmail });
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found." });
-    }
-
-    await User.setUserAsAdmin(user._id);
-
-    res.status(200).json({ message: "User set as admin successfully." });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
   }
 };
 
@@ -541,5 +520,39 @@ exports.uploadCV = async (req, res) => {
     return res.status(500).json({ error: 'Server error', detail: error.message });
   } finally {
     console.log('uploadCV - END');
+  }
+};
+
+exports.unPromoteAdmin = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.params.userId,
+      { $set: { isAdmin: false } },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.unPromoteOrganizer = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.params.userId,
+      { $set: { isOrganizer: false } },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
