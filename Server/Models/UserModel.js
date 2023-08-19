@@ -12,7 +12,18 @@ const UserSchema = new mongoose.Schema({
     type : String,
     default: image,
   },
-  location:{type:String},
+  location: {
+    name: {
+      type: String,
+    },
+    lat: {
+      type: Number,
+    },
+    lng: {
+      type: Number,
+    },
+  }
+,  
   isVerified: { type: Boolean, default: false },
   isAdmin: { type: Boolean, default: false },
   isOrganizer: { type: Boolean, default: false },
@@ -21,7 +32,6 @@ const UserSchema = new mongoose.Schema({
   resetPasswordExpires: Date,
   bio: { type: String },
   rating: { type: mongoose.Schema.Types.Decimal128, min: 0, max: 5 },
-  location: String,
   languages: [String],
   reviews: [
     {

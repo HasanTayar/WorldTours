@@ -42,7 +42,6 @@ const Home = ({ isLoggedIn  , user}) => {
 
   return (
     <div className="home-container">
-      {/* <Header /> */}
 
       {isLoggedIn && topPicks.length > 0 && (
         <div className="home-section">
@@ -50,12 +49,12 @@ const Home = ({ isLoggedIn  , user}) => {
           <TopPicks topPicks={topPicks} />
         </div>
       )}
-
-      <div className="home-section">
+      {popularTours && popularTours.length > 0 &&(
+        <div className="home-section">
         <h2>Popular Tours</h2>
         <PopularTours popularTours={popularTours} />
       </div>
-
+      )}
       {nearbyTours.length > 0 && (
         <div className="home-section">
           <h2>Nearby Tours</h2>

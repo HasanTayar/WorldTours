@@ -133,7 +133,7 @@ const AdminOrder = ({ admin }) => {
                       <td>{order.price}</td>
                       <td>{new Date(order.selectedDate).toLocaleDateString()}</td>
                       <td>{order.isCanceld ? 'Yes' : 'No'}</td>
-                      <td>{order.approved ? 'Yes' : 'No'}</td>
+                      <td>{order.aprroved ? 'Yes' : 'No'}</td>
                       <td>{order.isDone ? 'Yes' : 'No'}</td>
                     </tr>
                   ))}

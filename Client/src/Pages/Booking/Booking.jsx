@@ -8,9 +8,10 @@ import PaymentMethodForm from "../../Components/Booking/PaymentMethodForm";
 import { getTourById } from "../../Services/tourService";
 import { getPaymentMethods } from "../../Services/paymentService";
 import { addOrder } from "../../Services/orderService";
+
 import qs from "qs";
 import "./Booking.scss";
-const Booking = () => {
+const Booking = ({user}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const tourId = useRef("");
@@ -53,6 +54,7 @@ const Booking = () => {
         setTour(fetchedTour);
       }
     });
+
 
     // Fetch payment methods
     getPaymentMethods(userId.current).then((fetchedCards) => {
@@ -111,6 +113,7 @@ const Booking = () => {
       <BookingForm
         onSubmit={handleFormSubmit}
         setName={setName}
+        user={user}
         setEmail={setEmail}
         setPhone={setPhone}
       />

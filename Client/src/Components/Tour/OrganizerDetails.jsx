@@ -43,7 +43,7 @@ const OrganizerDetails = ({
             <p>
               Languages: {organizer.languages && organizer.languages.join(", ")}
             </p>
-            <p>Current Location: {organizer.location}</p>
+            <p>Current Location: {organizer.location && organizer.location.name}</p>
             {/* Add any other relevant details from your user schema */}
           </div>
         </Modal.Body>

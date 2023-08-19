@@ -445,7 +445,7 @@ exports.getUserById = async (req, res) => {
 };
 // Function to  user's prombot to become an organizer
 exports.setOrganizer = async (req, res) => {
-  console.log("set organizer start :")
+  console.log("set organizer start :");
   try {
     console.log(req.body);
     const { userId } = req.params;
@@ -461,7 +461,20 @@ exports.setOrganizer = async (req, res) => {
     user.isOrganizer = true;
     user.organizerRequest = false;
     
-    user.location = location.name; 
+    // Extract lat and lng from the correct location or set defaults
+    let lat = location.lat;
+    let lng = location.lng;
+    
+    if (location.geometry && location.geometry.location) {
+      lat = location.geometry.location.lat || lat;
+      lng = location.geometry.location.lng || lng;
+    }
+    
+    user.location = {
+      name: location.name,
+      lat: lat || 'Unknown', 
+      lng: lng || 'Unknown', 
+    }; 
 
     const organizerWelcomeEmail = {
       from: `"World Tours" <${process.env.EMAIL_USER}>`,
@@ -469,19 +482,21 @@ exports.setOrganizer = async (req, res) => {
       subject: "Congratulations on becoming an Organizer at World Tours!",
       html: `<p>Welcome, ${user.firstName}!</p>
              <p>Congratulations on becoming an Organizer.</p>
-             <p>You can now upload and manage your own tours. Enjoy the new possibilities!</p>
-     `
+             <p>You can now upload and manage your own tours. Enjoy the new possibilities!</p>`
     };
+
     await transporter.sendMail(organizerWelcomeEmail);
+
     // Save the updated user
     await user.save();
 
-    return res.status(200).json({ message: 'Organizer prombitet successfully' });
+    return res.status(200).json({ message: 'Organizer promoted successfully' });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: 'Server error' });
   }
 };
+
 
 
 // Function to handle user's CV upload

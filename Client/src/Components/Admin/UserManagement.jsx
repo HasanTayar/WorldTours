@@ -24,7 +24,6 @@ import classnames from "classnames";
 import "./UserManagement.css";
 import {
   fetchAllUsers,
-  setAdmin,
   setOrganizer,
   deleteUserProfile,
   unpromoteAdmin,
@@ -51,11 +50,7 @@ function UserManagement({ user }) {
     fetchAllUsers().then((users) => setUsers(users));
   }, []);
 
-  const handleSetAdmin = async (userId) => {
-    await setAdmin(userId);
-    const updatedUsers = await fetchAllUsers();
-    setUsers(updatedUsers);
-  };
+ 
 
   const handleSetOrganizer = async (userId) => {
     await setOrganizer(userId, place);

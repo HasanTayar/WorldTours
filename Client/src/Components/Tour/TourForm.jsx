@@ -1,6 +1,6 @@
 import { FormGroup, FormControl, FormLabel } from "react-bootstrap";
 
-const TourForm = ({ formData, handleInputChange, setTimelinePhoto }) => {
+const TourForm = ({ formData, handleInputChange ,setTimelinePhoto }) => {
   const handlePhotoChange = (event) => {
     const file = event.target.files[0];
     setTimelinePhoto(file);

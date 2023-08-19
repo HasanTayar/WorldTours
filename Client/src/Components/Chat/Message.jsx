@@ -36,7 +36,6 @@ const Message = ({ message, deleteMessage, markAsRead, senderId }) => {
     <div className={`message-block ${isOwnMessage ? 'own-message-block' : ''}`}>
       <div className={`message-content ${isOwnMessage ? 'own-message' : ''}`}>
         {renderMessageContent()}
-        <div className="message-time">{new Date(timestamp).toLocaleString()}</div>
         <FontAwesomeIcon icon={read ? faCheckDouble : faCheck} className={`read-indicator ${read ? 'double-check' : ''}`} />
       </div>
       {isOwnMessage && (

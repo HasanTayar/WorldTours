@@ -1,5 +1,6 @@
 const Tour = require("../Models/TourModel");
 const Review = require("../Models/Review");
+const User = require("../Models/UserModel");
 const updateIsPopular = async () => {
   try {
     const tours = await Tour.find();
@@ -20,14 +21,27 @@ const updateIsPopular = async () => {
     console.error("Error updating isPopular field:", err);
   }
 };
+
 exports.createTour = async (req, res) => {
   try {
     console.log(req.body);
-    const { organizerId, name, desc, days, locations, tags, price } = req.body;
+    const { organizerId, name, desc, days, tags, price } = req.body;
 
-    const parsedOrganizerId = organizerId;
+    // Fetch the user using organizerId
+    const user = await User.findById(organizerId);
+    if (!user || !user.location) {
+      return res.status(404).send({ message: "Organizer or their location not found." });
+    }
+
+    // Use the user's location for the tour
+    const userLocation = {
+      locationName: user.location.name,
+      long: user.location.lng,
+      lat: user.location.lat
+    };
+
     const tour = new Tour({
-      organizerId: parsedOrganizerId,
+      organizerId,
       name,
       desc,
       photoTimeline: "",
@@ -38,7 +52,7 @@ exports.createTour = async (req, res) => {
             photo: day.photo ? day.photo : [],
           }))
         : [],
-      locations: locations && locations !== "" ? JSON.parse(locations) : null,
+      locations: [userLocation],
       tags: tags,
     });
 
@@ -71,9 +85,7 @@ exports.createTour = async (req, res) => {
 
     const savedTour = await tour.save();
     await updateIsPopular();
-    res
-      .status(201)
-      .send({ message: "Tour created successfully.", tour: savedTour });
+    res.status(201).send({ message: "Tour created successfully.", tour: savedTour });
   } catch (error) {
     console.error(error);
     res.status(500).send({

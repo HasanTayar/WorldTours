@@ -6,7 +6,8 @@ const BookingForm = ({
   onSubmit,
   setName,
   setEmail,
-  setPhone
+  setPhone,
+  user,
 }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -23,6 +24,7 @@ const BookingForm = ({
               <Form.Control
                 type="text"
                 placeholder="Enter your name"
+                value={user && user.firstName + user.lastName }
                 onChange={(e) => setName(e.target.value)}
                 required
               />
@@ -36,6 +38,8 @@ const BookingForm = ({
               <Form.Control
                 type="email"
                 placeholder="Enter your email"
+                value={user && user.email }
+
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
@@ -48,6 +52,7 @@ const BookingForm = ({
               <Form.Label>Phone</Form.Label>
               <Form.Control
                 type="tel"
+                value={user && user.phone }
                 placeholder="Enter your phone number"
                 onChange={(e) => setPhone(e.target.value)}
                 required
